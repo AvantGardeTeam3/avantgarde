@@ -6,7 +6,7 @@ pool:
 
 variables:
   solution: 'avantgarde\avantgarde.sln'
-  buildPlatform: 'x64'
+  buildPlatform: 'x86'
   buildConfiguration: 'Release'
   appxPackageDir: 'avantgarde\AppxPackages\\'
 
