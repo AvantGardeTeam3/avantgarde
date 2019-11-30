@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'avantgarde.sln'
+  solution: 'avantgarde\avantgarde.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
   appxPackageDir: 'avantgarde\AppxPackages\\'
