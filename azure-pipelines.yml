@@ -8,7 +8,7 @@ variables:
   solution: 'avantgarde.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
-  appxPackageDir: '$avantgarde\AppxPackages\\'
+  appxPackageDir: 'avantgarde\AppxPackages\\'
 
 steps:
 - task: NuGetToolInstaller@0
