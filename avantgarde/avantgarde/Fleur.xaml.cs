@@ -65,16 +65,18 @@ namespace avantgarde
             IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
             List<InkStroke> ret = new List<InkStroke>();
             double thetaDiff = Math.PI * 2 / num;
-            for(int i = 0; i < num; i++)
+            for (int i = 0; i < num; i++)
             {
                 List<InkPoint> transformedInkPoints = new List<InkPoint>();
-                foreach(InkPoint ip in inkPoints)
+                foreach (InkPoint ip in inkPoints)
                 {
                     Single pressure = ip.Pressure;
                     Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i);
                     transformedInkPoints.Add(new InkPoint(transformedPoint, pressure));
                 }
-                ret.Add(inkStrokeBuilder.CreateStrokeFromInkPoints(transformedInkPoints, System.Numerics.Matrix3x2.Identity));
+                InkStroke transformedStroke = inkStrokeBuilder.CreateStrokeFromInkPoints(transformedInkPoints, System.Numerics.Matrix3x2.Identity, stroke.StrokeStartedTime, stroke.StrokeDuration);
+                transformedStroke.DrawingAttributes = stroke.DrawingAttributes;
+                ret.Add(transformedStroke);
             }
             return ret;
         }

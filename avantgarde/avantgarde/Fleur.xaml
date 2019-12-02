@@ -20,7 +20,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Fleur" Grid.Column="1" Grid.Row="0"/>
-        <Grid Background="White" Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="outputGrid" Background="White" Grid.Column="1" Grid.Row="1">
             <Canvas x:Name="canvas"></Canvas>
             <InkCanvas x:Name="inkCanvas"/>
         </Grid>
