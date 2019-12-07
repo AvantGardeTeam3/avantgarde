@@ -56,12 +56,12 @@ namespace avantgarde
             List<InkStroke> transformedStrokes = new List<InkStroke>();
             foreach (InkStroke stroke in u)
             {
-                transformedStrokes.AddRange(TransformStroke(stroke, 8));
+                transformedStrokes.AddRange(TransformStroke(stroke, 24));
             }
             return transformedStrokes;
         }
         private List<InkStroke> TransformStroke(InkStroke stroke, int num)
-        {
+        {   //turning a stroke into a set of transformed strokes
             IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
             List<InkStroke> ret = new List<InkStroke>();
             double thetaDiff = Math.PI * 2 / num;
@@ -81,14 +81,14 @@ namespace avantgarde
             return ret;
         }
         private Point TransformPoint(Point point, double thetaDiff)
-        {
+        {   //spinning the point to the centre
             Point relPoint = ToRelative(point);
             Point polarPoint = ToPolar(relPoint);
             polarPoint.Y += thetaDiff;
             return ToAbsolute(ToCoordinate(polarPoint));
         }
         private Point ToPolar(Point point)
-        {
+        {   //turn coordinate into polar form
             double distance = Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
             double x = point.X;
             double y = point.Y;
@@ -116,7 +116,7 @@ namespace avantgarde
             return new Point(distance, theta);
         }
         private Point ToCoordinate(Point point)
-        {
+        {   //turn polar form into cooridnate
             Point ret = new Point();
             double theta = point.Y;
             double r = point.X;
@@ -125,13 +125,13 @@ namespace avantgarde
             return ret;
         }
         private Point ToRelative(Point point)
-        {
+        {   //return coordinate relative to the centre point
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X - inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
         private Point ToAbsolute(Point point)
-        {
+        {   //return coordinate relative to origin point
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);

@@ -19,11 +19,15 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Fleur" Grid.Column="1" Grid.Row="0"/>
         <Grid x:Name="outputGrid" Background="White" Grid.Column="1" Grid.Row="1">
             <Canvas x:Name="canvas"></Canvas>
             <InkCanvas x:Name="inkCanvas"/>
         </Grid>
-        <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}" Grid.Column="1" Grid.Row="2"></InkToolbar>
+        <StackPanel Grid.Column ="1" Grid.Row="0" Orientation="Horizontal">
+            <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"></InkToolbar>
+            <Button Margin="5" Height="100" Width="100"></Button>
+            <Button Margin="5" Height="100" Width="100"/>
+            <Button Margin="5" Height="100" Width="100"/>
+        </StackPanel>
     </Grid>
 </Page>
