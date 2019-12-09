@@ -24,8 +24,11 @@ namespace avantgarde
     /// </summary>
     public sealed partial class Fleur : Page
     {
+        //the coordinate of the centre of the canvas
         private Point inkCanvasCentre;
+        //the stroke drew by the user
         List<InkStroke> userStrokes = new List<InkStroke>();
+        //used to build a stroke
         private InkStrokeBuilder inkStrokeBuilder;
 
         public Fleur()
@@ -35,6 +38,7 @@ namespace avantgarde
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
                 Windows.UI.Core.CoreInputDeviceTypes.Pen |
                 Windows.UI.Core.CoreInputDeviceTypes.Touch;
+            //register the event with UWP
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
@@ -43,6 +47,7 @@ namespace avantgarde
         }
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
         {
+            //called everytime user finishes a stroke
             IReadOnlyList<InkStroke> strokes = e.Strokes;
             foreach (InkStroke stroke in strokes)
             {

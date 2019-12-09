@@ -20,8 +20,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Margin="20" Width="100" Click="Play_Button_Click">Play</Button>
-            <Button Margin="20" Width="100" Click="Free_Button_Click">Free</Button>
+            <Button x:Name="playButton" Margin="20" Width="100" Click="Play_Button_Click">Play</Button>
+            <Button x:Name="freeButton" Margin="20" Width="100" Click="Free_Button_Click">Free</Button>
             <Button Margin="20" Width="100" Click="Exit_Button_Click">Exit</Button>
         </StackPanel>
         <Border Grid.Column="2"></Border>
