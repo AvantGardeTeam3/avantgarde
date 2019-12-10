@@ -17,18 +17,69 @@ using Windows.UI.Xaml.Navigation;
 
 namespace avantgarde
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+
+
     public sealed partial class Libre : Page
     {
+
         public Libre()
         {
-            this.InitializeComponent();
-            inkCanvas.InkPresenter.InputDeviceTypes =
-                Windows.UI.Core.CoreInputDeviceTypes.Mouse |
-                Windows.UI.Core.CoreInputDeviceTypes.Pen |
-                Windows.UI.Core.CoreInputDeviceTypes.Touch;
+        this.InitializeComponent();
+        this.DataContext = this;
+        inkCanvas.InkPresenter.InputDeviceTypes =
+            Windows.UI.Core.CoreInputDeviceTypes.Mouse |
+            Windows.UI.Core.CoreInputDeviceTypes.Pen |
+            Windows.UI.Core.CoreInputDeviceTypes.Touch;
         }
+
+
+        private void CloseColourPickerMenu(object sender, RoutedEventArgs e)
+        {
+            // if the Popup is open, then close it 
+            this.DataContext = this;
+            if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+        }
+        private void initColourPickerMenu(object sender, RoutedEventArgs e)
+        {
+            //this.DataContext = ColourPicker;
+            // open the Popup if it isn't open already 
+            DataContext = ColourPickerData.getColourPickerData();
+            if (!ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = true; }
+        }
+
     }
+
+    public class ColourPickerData
+    {
+        public int width { get; set; }
+        public int height { get; set; }
+        public int horizontalOffset { get; set; }
+        public int verticalOffset { get; set; }
+        public String[] prevColors { get; set; }
+
+        public static ColourPickerData getColourPickerData()
+        {
+            int w = 800;
+            int h = 600;
+            String[] p_c = {"#cdff59", "#4ffff6", "#ff728e", "#1d283f", "#2b061e", "#ffeed6", "#fbbfca", "#bfd0f0" };
+            
+
+            var cpd = new ColourPickerData()
+            {
+                width = w,
+                height = h,
+                horizontalOffset = (int)(Window.Current.Bounds.Width - w) / 2,
+                verticalOffset = (int)(Window.Current.Bounds.Height - h) / 2,
+                prevColors = p_c
+
+            };
+
+            return cpd;
+        }
+        
+    
+    }
+
 }
+
+
