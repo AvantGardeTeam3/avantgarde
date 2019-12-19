@@ -9,6 +9,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     
     
+    
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -78,12 +80,11 @@
                           
                             <StackPanel Grid.Column="1" Padding="15">
                                 <TextBlock/>
-                                <TextBlock Text="Dark Olive Green" FontSize="22" Foreground="White"/>
-                                <TextBlock Text="R: 50" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="G: 30" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="B: 20" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="Hex: #11ab3efs" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="Opacity: 100%" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{x:Bind ColourPicker.Color.ToString(), Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{x:Bind ColourPicker.Color.R, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{x:Bind ColourPicker.Color.G, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{x:Bind ColourPicker.Color.B, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{x:Bind ColourPicker.Color.A, Mode=OneWay}" FontSize="18" Foreground="White"/>
                             </StackPanel>
 
                         </Grid>
@@ -100,20 +101,21 @@
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
 
-                            <Button Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="0" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[1]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="0" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[2]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="0" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[3]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="1" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[4]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="1" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[5]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="1" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[6]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="1" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[7]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <!--<Button Command="{Binding setColour}" CommandParameter="0"  Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+                            <Button Click="setColour0" Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour1" Grid.Row="0" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[1]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour2" Grid.Row="0" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[2]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour3" Grid.Row="0" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[3]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour4" Grid.Row="1" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[4]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour5" Grid.Row="1" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[5]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour6" Grid.Row="1" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[6]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Click="setColour7" Grid.Row="1" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[7]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                         </Grid>
 
                         <StackPanel Padding ="15" Grid.Row ="2" Grid.Column ="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Content="Cancel" Margin ="5" Height="60" Width="60" Background="Red" Click="CloseColourPickerMenu"/>
-                            <Button Content="OK" Margin ="5" Height="60" Width="60" Background="Green" Click="CloseColourPickerMenu"/>
+                            <Button Content="Cancel" Margin ="5" Height="60" Width="60" Background="Red" Click="cancelColourPick"/>
+                            <Button Content="OK" Margin ="5" Height="60" Width="60" Background="Green" Click="selectColour"/>
                         </StackPanel>
 
 
@@ -129,9 +131,7 @@
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
             <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
             <StackPanel Orientation="Horizontal">
-                <Button Click="initColourPickerMenu" Content="Colour1" Margin="5" Height="100" Width="100"/>
-                <Button Content="Colour2" Margin="5" Height="100" Width="100"/>
-                <Button Content="Colour3" Margin="5" Height="100" Width="100"/>
+                <Button Click="initColourPickerMenu" Background="{x:Bind selection_hex, Mode=OneWay}" Margin="5" Height="100" Width="100"/>
             </StackPanel>
             
         </StackPanel>
