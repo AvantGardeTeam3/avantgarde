@@ -6,7 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    gaze:GazeInput.Interaction="Enabled"
+    gaze:GazeInput.IsCursorVisible="True"
+    >
 
     <Grid>
         <FlyoutBase.AttachedFlyout>
@@ -19,10 +23,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="playButton" Margin="20" Width="100" Click="Play_Button_Click">Play</Button>
-            <Button x:Name="freeButton" Margin="20" Width="100" Click="Free_Button_Click">Free</Button>
-            <Button Margin="20" Width="100" Click="Exit_Button_Click">Exit</Button>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button x:Name="playButton" Margin="20" Height="100" Width="100" Click="Play_Button_Click">Play</Button>
+            <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click">Free</Button>
+            <Button Margin="20" Height="100" Width="100" Click="Exit_Button_Click">Exit</Button>
         </StackPanel>
         <Border Grid.Column="2"></Border>
         <Border Grid.Column="0"></Border>

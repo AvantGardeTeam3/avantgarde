@@ -5,10 +5,14 @@
     xmlns:local="using:avantgarde"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <Grid>
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    gaze:GazeInput.Interaction="Enabled"
+    gaze:GazeInput.IsCursorVisible="false"
+    >
+    <Grid x:Name="TopGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -20,13 +24,25 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid Background="White" Grid.Column="1" Grid.Row="1">
-            <InkCanvas x:Name="inkCanvas"/>
+            <Canvas x:Name="canvas"  Background="Transparent" Canvas.ZIndex="1">
+                <controls:RadialProgressBar
+                    x:Name="radialProgressBar"
+                    Height="50"
+                    Width="50"
+                    Foreground="Black"
+                    Thickness="3"
+                    Value="0"
+                    Maximum="100"
+                    Minimum="0"
+                    Visibility="Visible"/>
+            </Canvas>
+            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
-            <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
-            <Button Margin="5" Height="100" Width="100"/>
-            <Button Margin="5" Height="100" Width="100"/>
-            <Button Margin="5" Height="100" Width="100"/>
+            <InkToolbar x:Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}"/>
+            <Button x:Name="Button1" Margin="10" Height="100" Width="100"/>
+            <Button x:Name="Button2" Margin="10" Height="100" Width="100"/>
+            <Button x:Name="Button3" Margin="10" Height="100" Width="100"/>
         </StackPanel>
     </Grid>
 </Page>

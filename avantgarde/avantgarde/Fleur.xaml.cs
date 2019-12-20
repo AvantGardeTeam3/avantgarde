@@ -42,7 +42,6 @@ namespace avantgarde
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
-            Debug.WriteLine("{0} : {1}", inkCanvasCentre.X, inkCanvasCentre.Y);
             inkStrokeBuilder = new InkStrokeBuilder();
         }
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)

@@ -80,14 +80,14 @@ namespace avantgarde
             double gazePointX = args.CurrentPoint.EyeGazePosition.Value.X;
             double gazePointY = args.CurrentPoint.EyeGazePosition.Value.Y;
             Point gazePoint = new Point(gazePointX, gazePointY);
-            if(DoesElementContainPoint(gazePoint, playButton.Name, playButton))
+            /*if(DoesElementContainPoint(gazePoint, playButton.Name, playButton))
             {
                 this.Frame.Navigate(typeof(Libre));
             }
             else if(DoesElementContainPoint(gazePoint, freeButton.Name, freeButton))
             {
                 this.Frame.Navigate(typeof(Fleur));
-            }
+            }*/
         }
 
         private void GazeExited(
