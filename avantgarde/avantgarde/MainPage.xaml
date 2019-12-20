@@ -5,8 +5,10 @@
     xmlns:local="using:avantgarde"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="using:avantgarde.Joysticks"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
 
     <Grid>
         <FlyoutBase.AttachedFlyout>
@@ -24,7 +26,8 @@
             <Button Margin="20" Width="100" Click="Free_Button_Click">Free</Button>
             <Button Margin="20" Width="100" Click="Exit_Button_Click">Exit</Button>
         </StackPanel>
-        <Border Grid.Column="2"></Border>
+        <uc:Joystick Height="200" Width="200"/>
         <Border Grid.Column="0"></Border>
+        
     </Grid>
 </Page>
