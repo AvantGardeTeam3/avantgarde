@@ -38,6 +38,7 @@ namespace avantgarde
         private Point gazePoint = new Point(0,0);
         private Point startPoint;
         private Point endPoint;
+        public List<Point> pointList = new List<Point>();
 
         private bool PenDown = false;
         private InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
@@ -143,8 +144,16 @@ namespace avantgarde
 
         private void StartDrawing()
         {
-            //inkPoints.Clear();
-            startPoint = ToCanvasPoint(gazePoint);
+            Point? sp = Snapping((ToCanvasPoint(gazePoint)));
+            if (sp.HasValue)
+            {
+                startPoint = sp.Value;
+            }
+            else
+            {
+                startPoint = ToCanvasPoint(gazePoint);
+            }
+            if (pointList.Count == 0) pointList.Add(startPoint);
             PenDown = true;
             GazeInput.SetIsCursorVisible(canvas, true);
         }
@@ -157,7 +166,17 @@ namespace avantgarde
             //inkStroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
             //inkCanvas.InkPresenter.StrokeContainer.AddStroke(inkStroke);
             //inkStrokes.Add(inkStroke);
-            endPoint = ToCanvasPoint(gazePoint);
+            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            Point? sp = Snapping(ToCanvasPoint(gazePoint));
+            if (sp.HasValue)
+            {
+                endPoint = sp.Value;
+            }
+            else
+            {
+                endPoint = ToCanvasPoint(gazePoint);
+            }
+            pointList.Add(endPoint);
             InkStroke stroke = MakeStroke(startPoint, endPoint);
             stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
@@ -187,6 +206,15 @@ namespace avantgarde
             }
             inkPoints.Add(new InkPoint(end, 0.5f));
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
+        }
+        private Point? Snapping(Point p)
+        {
+            foreach(Point ep in pointList)
+            {
+                double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
+                if (distance < 30) return ep;
+            }
+            return null;
         }
     }
 }
