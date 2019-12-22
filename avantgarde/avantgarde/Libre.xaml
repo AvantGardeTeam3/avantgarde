@@ -24,8 +24,8 @@
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
             <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
-            <Button Margin="5" Height="100" Width="100"/>
-            <Button Margin="5" Height="100" Width="100"/>
+            <Button Margin="5" Height="100" Width="100" Click="Redo_Button_Click"/>
+            <Button Margin="5" Height="100" Width="100" Click="UndoOne_Button_Click"/>
             <Button Margin="5" Height="100" Width="100"/>
         </StackPanel>
     </Grid>

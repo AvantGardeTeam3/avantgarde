@@ -27,7 +27,8 @@ namespace avantgarde
         private Point inkCanvasCentre;
         List<InkStroke> userStrokes = new List<InkStroke>();
         private InkStrokeBuilder inkStrokeBuilder;
-
+        private int numberOfLines = 24;
+        Stack<InkStroke> redoStack = new Stack<InkStroke>();
         public Fleur()
         {
             this.InitializeComponent();
@@ -136,5 +137,42 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
+        private async void Redo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (redoStack.Count() == 0)
+            {
+                return;
+            }
+            userStrokes.Add(redoStack.Pop());
+            InkCanvas_refresh();
+        }
+        private void InkCanvas_refresh()
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
+        }
+        private async void Undo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int containerSize = 0;
+            var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            foreach (InkStroke stroke in strokes)
+            {
+                containerSize++;
+            }
+            int index = 0;
+            foreach (InkStroke s in strokes)
+            {
+                index++;
+                if (index >= containerSize - (numberOfLines - 1))
+                {
+                    s.Selected = true;
+                }
+            }
+            int size = userStrokes.Count();
+            redoStack.Push(userStrokes.ElementAt(size-1));
+            userStrokes.RemoveAt(userStrokes.Count() - 1);
+            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+        }
+        
     }
 }
