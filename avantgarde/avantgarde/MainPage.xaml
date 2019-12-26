@@ -25,9 +25,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="playButton" Margin="20" Height="100" Width="100" Click="Play_Button_Click">Play</Button>
-            <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click">Free</Button>
-            <Button Margin="20" Height="100" Width="100" Click="Exit_Button_Click">Exit</Button>
+            <Button x:Name="playButton" Margin="20" Height="100" Width="100" Click="Play_Button_Click" Content="Play"/>
+            <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click" Content="Free"/>
+            <Button x:Name="exitButton" Margin="20" Height="100" Width="100" Click="Exit_Button_Click" Content="Exit"/>
         </StackPanel>
         <uc:Joystick Height="200" Width="200"/>
         <Border Grid.Column="0"></Border>

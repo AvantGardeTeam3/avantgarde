@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using System.Threading;
 using System.ComponentModel;
 
+using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
+
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Joysticks
@@ -45,64 +47,104 @@ namespace avantgarde.Joysticks
 
             //replace these events with GazeEntered and GazeExited from GazeInputSourcePreview class
 
-            UpKey.PointerEntered += UpKey_PointerEntered;
-            UpKey.PointerExited += UpKey_PointerExited;
-            DownKey.PointerEntered += DownKey_PointerEntered;
-            DownKey.PointerExited += DownKey_PointerExited;
-            LeftKey.PointerEntered += LeftKey_PointerEntered;
-            LeftKey.PointerExited += LeftKey_PointerExited;
-            RightKey.PointerEntered += RightKey_PointerEntered;
-            RightKey.PointerExited += RightKey_PointerExited;
+            UpKey.PointerEntered += KeyPointerEntered;
+            DownKey.PointerEntered += KeyPointerEntered;
+            LeftKey.PointerEntered += KeyPointerEntered;
+            RightKey.PointerEntered += KeyPointerEntered;
+
+            UpKey.PointerExited += KeyPointerExited;
+            DownKey.PointerExited += KeyPointerExited;
+            LeftKey.PointerExited += KeyPointerExited;
+            RightKey.PointerExited += KeyPointerExited;
         }
 
-        public void right() {
-            Debug.WriteLine("right");
-        }
-
-        private void RightKey_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void KeyPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            Debug.WriteLine("exited");
+            Button button = (Button)sender;
+            switch (button.Name)
+            {
+                case "UpKey":
+                    BallToUp();
+                    break;
+                case "DownKey":
+                    BallToDown();
+                    break;
+                case "LeftKey":
+                    BallToLeft();
+                    break;
+                case "RightKey":
+                    BallToRight();
+                    break;
+            }
+        }
+        
+        private void KeyPointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            BallToCentre();
+        }
+
+        private void BallToCentre()
+        {
             joystickStateX = 1;
+            joystickStateY = 1;
             NotifyPropertyChanged();
         }
 
-        private void RightKey_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void BallToUp()
         {
-            Debug.WriteLine("entered");
+            joystickStateX = 1;
+            joystickStateY = 0;
+            NotifyPropertyChanged();
+        }
+
+        private void BallToDown()
+        {
+            joystickStateX = 1;
+            joystickStateY = 2;
+            NotifyPropertyChanged();
+        }
+
+        private void BallToLeft()
+        {
+            joystickStateX = 0;
+            joystickStateY = 1;
+            NotifyPropertyChanged();
+        }
+
+        private void BallToRight()
+        {
             joystickStateX = 2;
+            joystickStateY = 1;
             NotifyPropertyChanged();
-            right();
         }
 
-        private void LeftKey_PointerExited(object sender, PointerRoutedEventArgs e)
+        
+        private void GazeElement_StateChanged(object sender, Microsoft.Toolkit.Uwp.Input.GazeInteraction.StateChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine(e.PointerState.ToString());
+            if(e.PointerState == PointerState.Exit)
+            {
+                Debug.WriteLine("to centre");
+                BallToCentre();
+                return;
+            }
+            Button button = (Button) sender;
+            switch (button.Name)
+            {
+                case "UpKey":
+                    BallToUp();
+                    break;
+                case "DownKey":
+                    BallToDown();
+                    break;
+                case "LeftKey":
+                    BallToLeft();
+                    break;
+                case "RightKey":
+                    BallToRight();
+                    break;
+            }
+            String name = button.Name;
         }
-
-        private void LeftKey_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DownKey_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DownKey_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void UpKey_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void UpKey_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
