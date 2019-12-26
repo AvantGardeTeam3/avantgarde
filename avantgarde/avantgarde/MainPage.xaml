@@ -29,7 +29,7 @@
             <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click" Content="Free"/>
             <Button x:Name="exitButton" Margin="20" Height="100" Width="100" Click="Exit_Button_Click" Content="Exit"/>
         </StackPanel>
-        <uc:Joystick Height="200" Width="200"/>
+        <uc:Joystick x:Name="joystick" Height="200" Width="200"/>
         <Border Grid.Column="0"></Border>
         
     </Grid>
