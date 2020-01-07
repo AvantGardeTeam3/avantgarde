@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:uc="using:avantgarde.Joysticks"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
@@ -138,6 +139,7 @@
                     Maximum="100"
                     Minimum="0"
                     Visibility="Visible"/>
+                <uc:Joystick x:Name="canvasJoyStick" Height="200" Width="200" Visibility="Collapsed"></uc:Joystick>
             </Canvas>
             <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
         </Grid>

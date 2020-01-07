@@ -164,6 +164,13 @@ namespace avantgarde
             Point? sp = Snapping((ToCanvasPoint(gazePoint)));
             if (sp.HasValue)
             {
+                Point p = sp.Value;
+                TranslateTransform translateTarget = new TranslateTransform();
+                Debug.WriteLine(String.Format("{0}:{1}", canvasJoyStick.Width, canvasJoyStick.Height));
+                translateTarget.X = p.X - canvasJoyStick.Width / 2;
+                translateTarget.Y = p.Y - canvasJoyStick.Height / 2;
+                canvasJoyStick.RenderTransform = translateTarget;
+                canvasJoyStick.Visibility = Visibility.Visible;
                 startPoint = sp.Value;
             }
             else
