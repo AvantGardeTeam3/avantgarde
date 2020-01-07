@@ -20,13 +20,27 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid Background="White" Grid.Column="1" Grid.Row="1">
-            <InkCanvas x:Name="inkCanvas"/>
+            <InkCanvas x:Name="inkCanvas"  />
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
             <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
-            <Button Margin="5" Height="100" Width="100" Click="Redo_Button_Click"/>
-            <Button Margin="5" Height="100" Width="100" Click="UndoOne_Button_Click"/>
-            <Button Margin="5" Height="100" Width="100"/>
+            <Button Margin="5" Height="100" Width="100" Click="Redo_Button_Click">
+                <Image Source="Assets/redo.png"/>
+            </Button>
+            <Button Margin="5" Height="100" Width="100" Click="UndoOne_Button_Click">
+                <Image Source="Assets/undo.png"/>
+            </Button>
+            <Button Margin="5" Height="100" Width="100" Click="Shape_Button_Click" >
+                <Popup x:Name="shape_popup"  KeyTipPlacementMode="Bottom" VerticalOffset="50" HorizontalOffset="-55" HorizontalAlignment="Left" VerticalAlignment="Top" IsOpen="False">
+                    <Border Background="Cyan" Width="{Binding width}" Height="{Binding height}">
+                        <StackPanel>
+                            <Button Name="btnCircle" Height="100" Width="100" Content="circle" Margin="10,5" Click="Circle_Button_Click"/>
+                            <Button Name="btnSquare" Height="100" Width="100" Content="square" Margin="10,5" Click="Square_Button_Click"/>
+                            <Button Name="btnTriangle" Height="100" Width="100" Content="Triangle" Margin="10,5" Click="Triangle_Button_Click"/>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

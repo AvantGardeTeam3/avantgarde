@@ -72,7 +72,7 @@ namespace avantgarde
                 foreach (InkPoint ip in inkPoints)
                 {
                     Single pressure = ip.Pressure;
-                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i);
+                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i); 
                     transformedInkPoints.Add(new InkPoint(transformedPoint, pressure));
                 }
                 InkStroke transformedStroke = inkStrokeBuilder.CreateStrokeFromInkPoints(transformedInkPoints, System.Numerics.Matrix3x2.Identity, stroke.StrokeStartedTime, stroke.StrokeDuration);
@@ -158,6 +158,10 @@ namespace avantgarde
             foreach (InkStroke stroke in strokes)
             {
                 containerSize++;
+            }
+            if (containerSize == 0)
+            {
+                return;
             }
             int index = 0;
             foreach (InkStroke s in strokes)
