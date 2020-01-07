@@ -126,6 +126,9 @@
     <Compile Include="Joysticks\Joystick.xaml.cs">
       <DependentUpon>Joystick.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Joysticks\VerticalJoystick.xaml.cs">
+      <DependentUpon>VerticalJoystick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Libre.xaml.cs">
       <DependentUpon>Libre.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,7 @@
     <Content Include="Assets\joystick.png" />
     <Content Include="Assets\joystick_ball.png" />
     <Content Include="Assets\smiling-face.png" />
+    <Content Include="Assets\vertical_joystick.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -162,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Joysticks\Joystick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Joysticks\VerticalJoystick.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
