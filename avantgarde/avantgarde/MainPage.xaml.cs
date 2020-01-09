@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Input.Preview;
 
 using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
+using Windows.ApplicationModel.Core;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -129,18 +130,19 @@ namespace avantgarde
             return false;
         }
 
-        private async void Play_Button_Click(object sender, RoutedEventArgs e)
+        private async void goLibreButtonClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Libre));
         }
-        private async void Free_Button_Click(object sender, RoutedEventArgs e)
+        private async void goFleurButtonClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Fleur));
         }
-        private async void Exit_Button_Click(object sender, RoutedEventArgs e)
+        private async void exitButtonClick(object sender, RoutedEventArgs e)
         {
-
+            CoreApplication.Exit();
         }
+
         private void DeviceAdded(GazeDeviceWatcherPreview source,
             GazeDeviceWatcherAddedPreviewEventArgs args)
         {

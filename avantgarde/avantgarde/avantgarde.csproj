@@ -135,6 +135,9 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\ColourManager.xaml.cs">
+      <DependentUpon>ColourManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,8 +146,19 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Avant-Garde.png" />
+    <Content Include="Assets\blue radial.png" />
+    <Content Include="Assets\Fleur Heading.png" />
+    <Content Include="Assets\coollogo_com-55241496.png" />
+    <Content Include="Assets\Libre Heading.png" />
+    <Content Include="Assets\exit.png" />
+    <Content Include="Assets\flower art png.png" />
+    <Content Include="Assets\flower.png" />
+    <Content Include="Assets\green radial.png" />
     <Content Include="Assets\joystick.png" />
     <Content Include="Assets\joystick_ball.png" />
+    <Content Include="Assets\paint.png" />
+    <Content Include="Assets\pink radial.png" />
     <Content Include="Assets\smiling-face.png" />
     <Content Include="Assets\vertical_joystick.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -180,6 +194,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Menus\ColourManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

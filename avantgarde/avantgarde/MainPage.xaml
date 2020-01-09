@@ -5,32 +5,27 @@
     xmlns:local="using:avantgarde"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uc="using:avantgarde.Joysticks"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.Interaction="Enabled"
     gaze:GazeInput.IsCursorVisible="True"
+    MinHeight="1080" MinWidth="1920"
     >
-
-    <Grid>
-        <FlyoutBase.AttachedFlyout>
-            <Flyout>
-                <Grid/>
-            </Flyout>
-        </FlyoutBase.AttachedFlyout>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="playButton" Margin="20" Height="100" Width="100" Click="Play_Button_Click" Content="Play"/>
-            <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click" Content="Free"/>
-            <Button x:Name="exitButton" Margin="20" Height="100" Width="100" Click="Exit_Button_Click" Content="Exit"/>
-        </StackPanel>
-        <uc:Joystick x:Name="joystick" Height="200" Width="200"/>
-        <Border Grid.Column="0"></Border>
-        
-    </Grid>
+    <Canvas>
+        <Border Height="1080" Width="1920" Background="Black"/>
+        <Image Source="Assets/green radial.png" Width="1080" Height="1080" Canvas.Left="420" Canvas.Top="10"/>
+        <Image Source="Assets/Avant-Garde.png" Width="1017" Height="116" Canvas.Left="452" Canvas.Top="89" />
+        <Image Source="Assets/paint.png" Width="450" Height="500" Canvas.Left="405" Canvas.Top="290" Opacity=".50"/>
+        <Image Source="Assets/flower.png" Width="450" Height="500" Canvas.Left="1005" Canvas.Top="290" Opacity=".50"/>
+        <Button x:Name="goLibreButton" Margin="20" Height="100" Width="300" Click="goLibreButtonClick" Canvas.Left="460" Canvas.Top="460">
+            <Image Source="Assets/Libre Heading.png"/>
+        </Button>
+        <Button x:Name="goFleurButton" Margin="20" Height="100" Width="300" Click="goFleurButtonClick" Canvas.Left="1060" Canvas.Top="460" >
+            <Image Source="Assets/Fleur Heading.png" />
+        </Button>
+        <Button x:Name="exitButton" Margin="20" Height="85" Width="201" Click="exitButtonClick" Canvas.Left="839" Canvas.Top="863" >
+            <Image Source="Assets/exit.png" />
+        </Button>
+    </Canvas>
 </Page>

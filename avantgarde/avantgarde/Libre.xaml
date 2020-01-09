@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:uc="using:avantgarde.Joysticks"
+    xmlns:uc1="using:avantgarde.Joysticks"
+    xmlns:uc2="using:avantgarde.Menus"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
@@ -24,109 +25,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <Popup VerticalOffset="{Binding verticalOffset}" HorizontalOffset="{Binding horizontalOffset}" x:Name="ColourPickerMenu">
-            <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" 
-                                Background="DarkGray"
-                                BorderThickness="2" Width="{Binding width}" Height="{Binding height}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="8*"/>
-                    </Grid.RowDefinitions>
 
-                    <TextBlock  Grid.Row="0" Foreground="HotPink" FontSize="25" Text="Colors" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*"/>
-                            <ColumnDefinition Width="6*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="7*"/>
-                            <RowDefinition Height="7*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
-
-                        <ColorPicker x:Name="ColourPicker"
-                         VerticalAlignment="Top"
-                         Grid.Column ="0" 
-                         Grid.RowSpan="3"
-                         ColorSpectrumShape="Box"
-                         IsColorPreviewVisible="False"
-                         IsColorSliderVisible="True"
-                         IsHexInputVisible ="False"
-                         IsColorChannelTextInputVisible="False"
-                         IsAlphaEnabled="True"
-                         IsAlphaSliderVisible ="True"
-                         IsAlphaTextInputVisible="False"
-                         HorizontalAlignment="Center"/>
-
-                        <Grid Grid.Column="1" Grid.Row ="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-
-
-                            <Rectangle Grid.Column="0" Margin="20">
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{x:Bind ColourPicker.Color, Mode=OneWay}"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-
-                          
-                            <StackPanel Grid.Column="1" Padding="15">
-                                <TextBlock/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.ToString(), Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.R, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.G, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.B, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.A, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                            </StackPanel>
-
-                        </Grid>
-
-                        <Grid Grid.Column="1" Grid.Row ="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-
-                            <!--<Button Command="{Binding setColour}" CommandParameter="0"  Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
-                            <Button Click="setColour0" Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour1" Grid.Row="0" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[1]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour2" Grid.Row="0" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[2]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour3" Grid.Row="0" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[3]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour4" Grid.Row="1" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[4]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour5" Grid.Row="1" Grid.Column ="1" Height="70" Width="70" Background="{Binding prevColors[5]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour6" Grid.Row="1" Grid.Column ="2" Height="70" Width="70" Background="{Binding prevColors[6]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour7" Grid.Row="1" Grid.Column ="3" Height="70" Width="70" Background="{Binding prevColors[7]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-                        </Grid>
-
-                        <StackPanel Padding ="15" Grid.Row ="2" Grid.Column ="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Content="Cancel" Margin ="5" Height="60" Width="60" Background="Red" Click="cancelColourPick"/>
-                            <Button Content="OK" Margin ="5" Height="60" Width="60" Background="Green" Click="selectColour"/>
-                        </StackPanel>
-
-
-                     </Grid>
-
-                    
-                </Grid>
-            </Border>
-        </Popup>
+        <uc2:ColourManager x:Name="colourManager"/>
         <Grid Background="White" Grid.Column="1" Grid.Row="1">
             <Canvas x:Name="canvas"  Background="Transparent" Canvas.ZIndex="1">
                 <controls:RadialProgressBar
@@ -139,18 +39,16 @@
                     Maximum="100"
                     Minimum="0"
                     Visibility="Visible"/>
-                <uc:VerticalJoystick x:Name="canvasJoyStick" Height="200" Width="200" Visibility="Collapsed"></uc:VerticalJoystick>
+                <uc1:VerticalJoystick x:Name="canvasJoyStick" Height="200" Width="200" Visibility="Collapsed"></uc1:VerticalJoystick>
             </Canvas>
             <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
             <InkToolbar x:Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}"/>
             <StackPanel Orientation="Horizontal">
-                <Button Click="initColourPickerMenu" Background="{x:Bind selection_hex, Mode=OneWay}" Margin="5" Height="100" Width="100"/>
+                <Button Click="initColourPickerMenu" Background="{x:Bind colourManager.selectionHex, Mode=OneWay}" Margin="5" Height="100" Width="100"/>
             </StackPanel>
         </StackPanel>
-        
+
     </Grid>
-    
-    
 </Page>
