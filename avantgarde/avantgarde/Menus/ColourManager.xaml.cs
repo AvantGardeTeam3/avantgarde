@@ -25,6 +25,8 @@ namespace avantgarde.Menus
         public Color selection { get; set; }
         public String selectionHex { get; set; }
 
+        public static Color defaultColour = Colors.Coral;
+
         ColourPickerData colourPickerData = new ColourPickerData();
 
         public String[] prevColours { get; set;}
@@ -36,13 +38,16 @@ namespace avantgarde.Menus
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public Color getColour() {
+            return selection;
+        }
 
         public ColourManager()
         {
             this.InitializeComponent();
             DataContext = colourPickerData.getColourPickerData();
             prevColours = colourPickerData.getDefaultPrevColours();
-            selection = Colors.Blue;
+            selection = defaultColour;
             selectionHex = selection.ToString();
         }
 

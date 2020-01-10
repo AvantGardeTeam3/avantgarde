@@ -15,10 +15,8 @@
     gaze:GazeInput.IsCursorVisible="false"
     >
 
-    <Popup VerticalOffset="{Binding verticalOffset}" HorizontalOffset="{Binding horizontalOffset}" x:Name="ColourPickerMenu">
-            <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" 
-                                Background="DarkGray"
-                                BorderThickness="2" Width="{Binding width}" Height="{Binding height}">
+    <Popup VerticalOffset="{Binding verticalOffset}" HorizontalOffset="{Binding horizontalOffset}" x:Name="ColourPickerMenu" >
+        <Border Background="#FF1D283F" BorderThickness="2" BorderBrush="#a3cfe3" Width="{Binding width}" Height="{Binding height}" CornerRadius="5,5,5,5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -28,7 +26,7 @@
                         <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock  Grid.Row="0" Foreground="HotPink" FontSize="25" Text="Colors" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock  Grid.Row="0" Foreground="White" FontFamily="Tahoma" FontSize="25" Text="Colors" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="5*"/>
@@ -40,7 +38,10 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
 
-                        <ColorPicker x:Name="ColourPicker"
+
+                    <Border Grid.Column="0" Grid.RowSpan="3" Background="#a3cfe3" Opacity="0.75"  Margin="15,0,15,70" CornerRadius="5,5,5,5"/>
+
+                    <ColorPicker x:Name="ColourPicker"
                          VerticalAlignment="Top"
                          Grid.Column ="0" 
                          Grid.RowSpan="3"
@@ -52,33 +53,46 @@
                          IsAlphaEnabled="True"
                          IsAlphaSliderVisible ="True"
                          IsAlphaTextInputVisible="False"
-                         HorizontalAlignment="Center"/>
+                         HorizontalAlignment="Center"
+                         Padding="40"
+                         Margin="15,10,15,10"
+                         />
 
                         <Grid Grid.Column="1" Grid.Row ="0">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
 
 
-                            <Rectangle Grid.Column="0" Margin="20">
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{x:Bind ColourPicker.Color, Mode=OneWay}"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
+                            <Border Grid.Column="0" Margin="20" BorderBrush="White" BorderThickness="2" CornerRadius="5,5,5,5">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{x:Bind ColourPicker.Color, Mode=OneWay}"/>
+                                    </Border.Background>
+                                </Border>
 
-                          
-                            <StackPanel Grid.Column="1" Padding="15">
+                            <StackPanel Grid.Column="1" Margin="20,20,0,0">
                                 <TextBlock/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.ToString(), Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.R, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.G, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.B, Mode=OneWay}" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{x:Bind ColourPicker.Color.A, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="Color: " FontSize="18" Foreground="White"/>
+                                <TextBlock Text="R: " FontSize="18" Foreground="White"/>
+                                <TextBlock Text="G: " FontSize="18" Foreground="White"/>
+                                <TextBlock Text="B: " FontSize="18" Foreground="White"/>
+                                <TextBlock Text="A: " FontSize="18" Foreground="White"/>
                             </StackPanel>
+
+                            <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Margin="10,20,0,0">
+                                    <TextBlock/>
+                                    <TextBlock Text="{x:Bind ColourPicker.Color.ToString(), Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind ColourPicker.Color.R, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind ColourPicker.Color.G, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind ColourPicker.Color.B, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                    <TextBlock Text="{x:Bind ColourPicker.Color.A, Mode=OneWay}" FontSize="18" Foreground="White"/>
+                                </StackPanel>
 
                         </Grid>
 
@@ -95,20 +109,24 @@
                             </Grid.RowDefinitions>
 
                             <!--<Button Command="{Binding setColour}" CommandParameter="0"  Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
-                            <Button Click="setColour0" Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{x:Bind prevColours[0], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour1" Grid.Row="0" Grid.Column ="1" Height="70" Width="70" Background="{x:Bind prevColours[1], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour2" Grid.Row="0" Grid.Column ="2" Height="70" Width="70" Background="{x:Bind prevColours[2], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour3" Grid.Row="0" Grid.Column ="3" Height="70" Width="70" Background="{x:Bind prevColours[3], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour4" Grid.Row="1" Grid.Column ="0" Height="70" Width="70" Background="{x:Bind prevColours[4], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour5" Grid.Row="1" Grid.Column ="1" Height="70" Width="70" Background="{x:Bind prevColours[5], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour6" Grid.Row="1" Grid.Column ="2" Height="70" Width="70" Background="{x:Bind prevColours[6], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Click="setColour7" Grid.Row="1" Grid.Column ="3" Height="70" Width="70" Background="{x:Bind prevColours[7], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour0" Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{x:Bind prevColours[0], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour1" Grid.Row="0" Grid.Column ="1" Height="70" Width="70" Background="{x:Bind prevColours[1], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour2" Grid.Row="0" Grid.Column ="2" Height="70" Width="70" Background="{x:Bind prevColours[2], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour3" Grid.Row="0" Grid.Column ="3" Height="70" Width="70" Background="{x:Bind prevColours[3], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour4" Grid.Row="1" Grid.Column ="0" Height="70" Width="70" Background="{x:Bind prevColours[4], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour5" Grid.Row="1" Grid.Column ="1" Height="70" Width="70" Background="{x:Bind prevColours[5], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour6" Grid.Row="1" Grid.Column ="2" Height="70" Width="70" Background="{x:Bind prevColours[6], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Button CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Click="setColour7" Grid.Row="1" Grid.Column ="3" Height="70" Width="70" Background="{x:Bind prevColours[7], Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                     </Grid>
 
                         <StackPanel Padding ="15" Grid.Row ="2" Grid.Column ="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Content="Cancel" Margin ="5" Height="60" Width="60" Background="Red" Click="cancelColourPick"/>
-                            <Button Content="OK" Margin ="5" Height="60" Width="60" Background="Green" Click="selectColour"/>
+                        <Button Grid.Column="8" Background="Transparent" Height="60" Width="80" HorizontalAlignment="Right" Click="cancelColourPick">
+                            <Image Source="/Assets/icons/icon_x.png" />
+                        </Button>
+                        <Button Grid.Column="8" Background="Transparent" Height="60" Width="80" HorizontalAlignment="Right" Click="selectColour">
+                            <Image Source="/Assets/icons/icon_checkmark.png" />
+                        </Button>
                         </StackPanel>
 
 

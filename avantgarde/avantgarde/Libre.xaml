@@ -26,8 +26,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <uc2:ColourManager x:Name="colourManager"/>
-        <Grid Background="White" Grid.Column="1" Grid.Row="1">
+        <Grid Background="{x:Bind backgroundHex, Mode=OneWay}" Grid.Column="1" Grid.Row="1">
             <Canvas x:Name="canvas"  Background="Transparent" Canvas.ZIndex="1">
                 <controls:RadialProgressBar
                     x:Name="radialProgressBar"
@@ -41,13 +40,15 @@
                     Visibility="Visible"/>
                 <uc1:VerticalJoystick x:Name="canvasJoyStick" Height="200" Width="200" Visibility="Collapsed"></uc1:VerticalJoystick>
             </Canvas>
-            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
+            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0" />
         </Grid>
-        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
-            <InkToolbar x:Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}"/>
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Orientation="Horizontal">
+
+            <uc2:ToolBar x:Name="toolbar" Width="{x:Bind WIDTH}"></uc2:ToolBar>
+            <!--<InkToolbar x:Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Click="initColourPickerMenu" Background="{x:Bind colourManager.selectionHex, Mode=OneWay}" Margin="5" Height="100" Width="100"/>
-            </StackPanel>
+            </StackPanel>-->
         </StackPanel>
 
     </Grid>

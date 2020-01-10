@@ -5,60 +5,75 @@
     xmlns:local="using:avantgarde.Menus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:uc="using:avantgarde.Menus"
     mc:Ignorable="d"
-    d:DesignHeight="100"
-    d:DesignWidth="1080">
+    d:DesignHeight="{x:Bind HEIGHT}"
+    d:DesignWidth="{x:Bind WIDTH}">
 
-    <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" 
-                                Background="#1D283F"
-                                BorderThickness="2" Width="{Binding width}" Height="{Binding height}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+    <!--<UserControl.Resources>
+        <Style x:Key="NoExpanderHeaderStyle" TargetType="ToggleButton">
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+    </UserControl.Resources>-->
 
-            <Button Grid.Column="0" Background="Transparent" Margin="5" Height="100" Width="100" HorizontalAlignment="Center">
-                <Image Source="/Assets/icons/icon_paintbrush.png" />
-            </Button>
-            <Button Grid.Column="1" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Center">
-                <Image Source="/Assets/icons/icon_pencil.png" />
-            </Button>
-            <Button Grid.Column="2" Background="Transparent" Margin="5" Height="100" Width="100" HorizontalAlignment="Center">
-                <Image Source="/Assets/icons/icon_highlighter.png" />
-            </Button>
-            <Button Grid.Column="3" Background="Transparent" Height="50" Width="80" HorizontalAlignment="Left">
-                <Image Source="/Assets/icons/icon_left.png" />
-            </Button>
-            <Button Grid.Column="3" Background="Transparent" Height="95" Width="100" HorizontalAlignment="Center" Content="13" FontSize="50" Foreground="White" Margin="0,-2,0,0" VerticalAlignment="Top">
-            </Button>
-            <Button Grid.Column="3" Background="Transparent" Height="50" Width="85" HorizontalAlignment="Right">
-                <Image Source="/Assets/icons/icon_right.png" />
-            </Button>
-            <Button Grid.Column="4"   Background="Coral" Margin="5"  Height="100" Width="90" HorizontalAlignment="Center" BorderBrush="White" BorderThickness="3,10,3,10">
+    <Canvas>
+        <uc:ColourManager  x:Name="colourManager"/>
+        <controls:Expander x:Name="expander" Background="#FF1D283F" FontSize="50" Header="Toolbar"  FontWeight="Bold" FontFamily="Tahoma" Foreground="White">
+            <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" 
+                                Background="#FF1D283F"
+                                BorderThickness="2" Width="{x:Bind WIDTH}" Height="100">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-            </Button>
-            <Button Grid.Column="5" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
-                <Image Source="/Assets/icons/icon_undo.jpg" />
-            </Button>
-            <Button Grid.Column="6" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
-                <Image Source="/Assets/icons/icon_redo.jpg" />
-            </Button>
-            <Button Grid.Column="7" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
-                <Image Source="/Assets/icons/icon_background.png" />
-            </Button>
-            <Button Grid.Column="8" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
-                <Image Source="/Assets/icons/icon_exit.png" />
-            </Button>
+                    <Border Grid.Column="0" Height="80" Width="80" CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Visibility="{x:Bind paintbrushButtonState, Mode=OneWay}"/>
+                    <Button Grid.Column="0" Background="Transparent" Margin="5" Height="75" Width="100" HorizontalAlignment="Center" Click="selectPaintbrush">
+                        <Image Source="/Assets/icons/icon_paintbrush.png" />
+                    </Button>
+                    <Border Grid.Column="1" Height="80" Width="80" CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Visibility="{x:Bind pencilButtonState, Mode=OneWay}"/>
+                    <Button Grid.Column="1" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Center" Click="selectPencil">
+                        <Image Source="/Assets/icons/icon_pencil.png" />
+                    </Button>
+                    <Border Grid.Column="2" Height="80" Width="80" CornerRadius="5,5,5,5" BorderBrush="White" BorderThickness="2" Visibility="{x:Bind highlighterButtonState, Mode=OneWay}"/>
+                    <Button Grid.Column="2" Background="Transparent" Margin="5" Height="75" Width="100" HorizontalAlignment="Center" Click="selectHighlighter">
+                        <Image Source="/Assets/icons/icon_highlighter.png" />
+                    </Button>
+                    <Button Grid.Column="3" Background="Transparent" Height="50" Width="80" HorizontalAlignment="Left" Click="decreaseBrushSize">
+                        <Image Source="/Assets/icons/icon_left.png" />
+                    </Button>
+                    <TextBlock Grid.Column="3" Height="80" Width="100" HorizontalAlignment="Center" FontSize="50" FontFamily="Tahoma" Foreground="White"  VerticalAlignment="Center" Text="{x:Bind brushSize, Mode=OneWay}" TextAlignment="Center"/>
+
+                    <Button Grid.Column="3" Background="Transparent" Height="50" Width="85" HorizontalAlignment="Right" Click="increaseBrushSize">
+                        <Image Source="/Assets/icons/icon_right.png" />
+                    </Button>
+                    <Button Grid.Column="4"   Background="{x:Bind colourManager.selectionHex, Mode=OneWay}" Margin="5"  Height="80" Width="80" HorizontalAlignment="Center" BorderBrush="White" BorderThickness="2" CornerRadius="5,5,5,5" Click="initColourManager"/>
+                    <Button Grid.Column="5" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center">
+                        <Image Source="/Assets/icons/icon_undo.png" />
+                    </Button>
+                    <Button Grid.Column="6" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center">
+                        <Image Source="/Assets/icons/icon_redo.png" />
+                    </Button>
+                    <Button Grid.Column="7" Background="Transparent" Height="90" Width="100" HorizontalAlignment="Center" CornerRadius="5,5,5,5" Click="setBackground">
+                        <Image Source="/Assets/icons/icon_background.png"  />
+                    </Button>
+                    <Button Grid.Column="8" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Right" Click="goHome">
+                        <Image Source="/Assets/icons/icon_x.png" />
+                    </Button>
 
 
-        </Grid>
-    </Border>
+                </Grid>
+            </Border>
+        </controls:Expander>
+
+    </Canvas>
 </UserControl>

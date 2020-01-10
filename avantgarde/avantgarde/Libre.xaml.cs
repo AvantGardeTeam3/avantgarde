@@ -37,7 +37,7 @@ namespace avantgarde
 
         public int MaxGazeHistorySize { get; set; }
 
-        private Point gazePoint = new Point(0,0);
+        private Point gazePoint = new Point(0, 0);
         private Point startPoint;
         private Point endPoint;
         public List<Point> pointList = new List<Point>();
@@ -54,23 +54,39 @@ namespace avantgarde
         private GazePointer gazePointer;
         private DispatcherTimer dispatchTimer = new DispatcherTimer();
 
-        public String colourSelectionHex { get; set; }
-        public static String colourSelectionTemp { get; set; }
+
+        private String backgroundHex { get; set; }
+
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public InkToolbar inkToolBar = new InkToolbar();
 
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+        }
         public Libre()
         {
-            Menus.ColourManager colourManager = new Menus.ColourManager();
-            colourSelectionHex = colourManager.selectionHex;
+            getWindowAttributes();
 
             this.InitializeComponent();
+
             this.DataContext = this;
+
+            backgroundHex = Colors.Black.ToString();
+
+            toolbar.goHomeButtonClicked += new EventHandler(toolbar_goHomeButtonClicked);
+            toolbar.setBackgroundButtonClicked += new EventHandler(toolbar_setBackgroundButtonClicked);
+
+
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
                 Windows.UI.Core.CoreInputDeviceTypes.Pen |
@@ -95,7 +111,7 @@ namespace avantgarde
             this.timer += 20;
             radialProgressBar.Value = Convert.ToDouble(timer) / Convert.ToDouble(dwellTime) * 120.0 - 20;
 
-            if(this.timer >= this.dwellTime)
+            if (this.timer >= this.dwellTime)
             {
                 if (!PenDown)
                 {
@@ -143,15 +159,15 @@ namespace avantgarde
             }
             else if (distance >= 5 && gazeTimerStarted)
             {
-                    gazeTimerStarted = false;
-                    gazeTimer.Stop();
-                    timer = 0;
+                gazeTimerStarted = false;
+                gazeTimer.Stop();
+                timer = 0;
             }
 
             if (PenDown)
             {
                 InkStroke stroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
-                stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
+                stroke.DrawingAttributes = toolbar.getDrawingAttributes();
                 stroke.Selected = true;
                 inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
                 inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
@@ -201,7 +217,7 @@ namespace avantgarde
             }
             pointList.Add(endPoint);
             InkStroke stroke = MakeStroke(startPoint, endPoint);
-            stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
+            stroke.DrawingAttributes = toolbar.getDrawingAttributes();
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
             PenDown = false;
             GazeInput.SetIsCursorVisible(canvas, false);
@@ -222,7 +238,7 @@ namespace avantgarde
             distance = Math.Sqrt(distance);
 
             int pointNum = Convert.ToInt32(Math.Ceiling(distance / 10.0));
-            for(int i = 0; i < pointNum; i++)
+            for (int i = 0; i < pointNum; i++)
             {
                 Point ip = new Point(start.X + i * deltaX / pointNum, start.Y + i * deltaY / pointNum);
                 inkPoints.Add(new InkPoint(ip, 0.5f));
@@ -232,7 +248,7 @@ namespace avantgarde
         }
         private Point? Snapping(Point p)
         {
-            foreach(Point ep in pointList)
+            foreach (Point ep in pointList)
             {
                 double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
                 if (distance < 30) return ep;
@@ -240,12 +256,17 @@ namespace avantgarde
             return null;
         }
 
-        private void initColourPickerMenu(object sender, RoutedEventArgs e)
+
+        private void toolbar_goHomeButtonClicked(object sender, EventArgs e)
         {
-            colourManager.openMenu();
+            Frame.Navigate(typeof(MainPage));
+        }
+
+        private void toolbar_setBackgroundButtonClicked(object sender, EventArgs e)
+        {
+            backgroundHex = toolbar.getColourHex();
+            NotifyPropertyChanged();
         }
 
     }
-
-
 }
