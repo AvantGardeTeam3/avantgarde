@@ -14,8 +14,10 @@
     >
     <Canvas>
         <Border Height="1080" Width="1920" Background="Black"/>
-        <Image Source="Assets/green radial.png" Width="1080" Height="1080" Canvas.Left="420" Canvas.Top="10"/>
-        <Image Source="Assets/Avant-Garde.png" Width="1017" Height="116" Canvas.Left="452" Canvas.Top="89" />
+        <Image Source="Assets/background.png" Height="1000" Width=" 1920"/>
+        
+
+            <Image Source="Assets/Avant-Garde.png" Width="1017" Height="116" Canvas.Left="452" Canvas.Top="89" />
         <Image Source="Assets/paint.png" Width="450" Height="500" Canvas.Left="405" Canvas.Top="290" Opacity=".50"/>
         <Image Source="Assets/flower.png" Width="450" Height="500" Canvas.Left="1005" Canvas.Top="290" Opacity=".50"/>
         <Button x:Name="goLibreButton" Margin="20" Height="100" Width="300" Click="goLibreButtonClick" Canvas.Left="460" Canvas.Top="460">
