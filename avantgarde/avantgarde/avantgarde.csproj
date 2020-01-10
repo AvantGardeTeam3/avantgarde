@@ -138,6 +138,9 @@
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\ToolBar.xaml.cs">
+      <DependentUpon>ToolBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +199,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Menus\ColourManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\ToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

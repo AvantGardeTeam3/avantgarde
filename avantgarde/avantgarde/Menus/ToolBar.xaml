@@ -21,11 +21,44 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="2" Background="Coral"  x:Name="paintbrush"  Height="100" Width="100" HorizontalAlignment="Center">
-                
+            <Button Grid.Column="0" Background="Transparent" Margin="5" Height="100" Width="100" HorizontalAlignment="Center">
+                <Image Source="/Assets/icons/icon_paintbrush.png" />
             </Button>
+            <Button Grid.Column="1" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Center">
+                <Image Source="/Assets/icons/icon_pencil.png" />
+            </Button>
+            <Button Grid.Column="2" Background="Transparent" Margin="5" Height="100" Width="100" HorizontalAlignment="Center">
+                <Image Source="/Assets/icons/icon_highlighter.png" />
+            </Button>
+            <Button Grid.Column="3" Background="Transparent" Height="50" Width="80" HorizontalAlignment="Left">
+                <Image Source="/Assets/icons/icon_left.png" />
+            </Button>
+            <Button Grid.Column="3" Background="Transparent" Height="95" Width="100" HorizontalAlignment="Center" Content="13" FontSize="50" Foreground="White" Margin="0,-2,0,0" VerticalAlignment="Top">
+            </Button>
+            <Button Grid.Column="3" Background="Transparent" Height="50" Width="85" HorizontalAlignment="Right">
+                <Image Source="/Assets/icons/icon_right.png" />
+            </Button>
+            <Button Grid.Column="4"   Background="Coral" Margin="5"  Height="100" Width="90" HorizontalAlignment="Center" BorderBrush="White" BorderThickness="3,10,3,10">
+
+            </Button>
+            <Button Grid.Column="5" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
+                <Image Source="/Assets/icons/icon_undo.jpg" />
+            </Button>
+            <Button Grid.Column="6" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
+                <Image Source="/Assets/icons/icon_redo.jpg" />
+            </Button>
+            <Button Grid.Column="7" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
+                <Image Source="/Assets/icons/icon_background.png" />
+            </Button>
+            <Button Grid.Column="8" Background="Transparent" Height="100" Width="100" HorizontalAlignment="Right">
+                <Image Source="/Assets/icons/icon_exit.png" />
+            </Button>
+
+
         </Grid>
     </Border>
 </UserControl>
