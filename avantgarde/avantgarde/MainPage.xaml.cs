@@ -40,6 +40,16 @@ namespace avantgarde
             this.InitializeComponent();
         }
 
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
+
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+            HEIGHT = (int)Window.Current.Bounds.Height;
+        }
+
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             StartGazeDeviceWatcher();
@@ -234,5 +244,6 @@ namespace avantgarde
                      gazeDevice.ConfigurationState ==
                      GazeDeviceConfigurationStatePreview.Ready);
         }
+
     }
 }

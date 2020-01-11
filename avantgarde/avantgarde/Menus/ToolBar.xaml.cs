@@ -25,6 +25,8 @@ namespace avantgarde.Menus
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private String visibility { get; set; }
+
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -51,7 +53,9 @@ namespace avantgarde.Menus
             pencilButtonState = "Collapsed";
             highlighterButtonState = "Collapsed";
             getWindowAttributes();
+            visibility = "Collapsed";
             this.InitializeComponent();
+            expander.IsExpanded = false;
         }
 
         public InkDrawingAttributes getDrawingAttributes() {
@@ -117,7 +121,8 @@ namespace avantgarde.Menus
 
         private void goHome(object sender, RoutedEventArgs e)
         {
-            goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
+            expander.IsExpanded = false;
+            //goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void setBackground(object sender, RoutedEventArgs e)
@@ -127,6 +132,13 @@ namespace avantgarde.Menus
 
         public String getColourHex() {
             return colourManager.getColour().ToString();
+        }
+
+        private void expandToolbar(object sender, RoutedEventArgs e)
+        {
+            expander.IsExpanded = true;
+            //visibility = "Visible";
+            NotifyPropertyChanged();
         }
     }
 }

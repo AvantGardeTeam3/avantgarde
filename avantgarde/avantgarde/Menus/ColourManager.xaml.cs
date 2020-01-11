@@ -153,7 +153,7 @@ namespace avantgarde.Menus
 
             public ColourPickerData getColourPickerData()
             {
-                int w = 800;
+                int w = 850;
                 int h = 600;
 
                 var cpd = new ColourPickerData()

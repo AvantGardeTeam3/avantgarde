@@ -149,24 +149,27 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Avant-Garde.png" />
     <Content Include="Assets\background.png" />
+    <Content Include="Assets\headings\Avant-Garde.png" />
     <Content Include="Assets\blue radial.png" />
-    <Content Include="Assets\Fleur Heading.png" />
-    <Content Include="Assets\coollogo_com-55241496.png" />
+    <Content Include="Assets\headings\Fleur Heading.png" />
+    <Content Include="Assets\headings\coollogo_com-55241496.png" />
     <Content Include="Assets\icons\icon_background.png" />
     <Content Include="Assets\icons\icon_checkmark.png" />
     <Content Include="Assets\icons\icon_highlighter.png" />
     <Content Include="Assets\icons\icon_left.png" />
+    <Content Include="Assets\icons\icon_menu2.png" />
     <Content Include="Assets\icons\icon_paintbrush.png" />
     <Content Include="Assets\icons\icon_pencil.png" />
     <Content Include="Assets\icons\icon_redo.png" />
     <Content Include="Assets\icons\icon_right.png" />
     <Content Include="Assets\icons\icon_undo.png" />
     <Content Include="Assets\icons\icon_x.png" />
-    <Content Include="Assets\icon_undo.jpg" />
-    <Content Include="Assets\Libre Heading.png" />
-    <Content Include="Assets\exit.png" />
+    <Content Include="Assets\microsoft footer.png" />
+    <Content Include="Assets\ucl footer.png" />
+    <Content Include="Assets\icons\icon_undo.jpg" />
+    <Content Include="Assets\headings\Libre Heading.png" />
+    <Content Include="Assets\headings\exit.png" />
     <Content Include="Assets\flower art png.png" />
     <Content Include="Assets\flower.png" />
     <Content Include="Assets\green radial.png" />
@@ -175,7 +178,6 @@
     <Content Include="Assets\loading screen.png" />
     <Content Include="Assets\paint.png" />
     <Content Include="Assets\pink radial.png" />
-    <Content Include="Assets\smiling-face.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />
