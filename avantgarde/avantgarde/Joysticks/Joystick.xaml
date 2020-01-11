@@ -31,29 +31,25 @@
 
             <Image Grid.Row="{x:Bind joystickStateY, Mode=OneWay}" Grid.Column="{x:Bind joystickStateX, Mode=OneWay}" Source="/Assets/joystick_ball.png"/>
 
-            <Button x:Name="UpKey" Grid.Row="0" Grid.Column="1" Visibility="Visible" Background="Transparent">
+            <Button x:Name="UpKey" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="1" Visibility="Visible" Background="Transparent">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged"></gaze:GazeElement>
                 </gaze:GazeInput.GazeElement>
-                <Rectangle Fill="Transparent" Width="66" Height="66"/>
             </Button>
-            <Button x:Name="DownKey" Grid.Row="2" Grid.Column="1" Visibility="Visible" Background="Transparent">
+            <Button x:Name="DownKey" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Visibility="Visible" Background="Transparent">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged"/>
                 </gaze:GazeInput.GazeElement>
-                <Rectangle Fill="Transparent" Width="66" Height="66"/>
             </Button>
-            <Button x:Name="LeftKey" Grid.Row="1" Grid.Column="0" Visibility="Visible" Background="Transparent">
+            <Button x:Name="LeftKey" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Visibility="Visible" Background="Transparent">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged"/>
                 </gaze:GazeInput.GazeElement>
-                <Rectangle Fill="Transparent" Width="66" Height="66"/>
             </Button>
-            <Button x:Name="RightKey" Grid.Row="1" Grid.Column="2" Visibility="Visible" Background="Transparent">
+            <Button x:Name="RightKey" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2" Visibility="Visible" Background="Transparent">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged"/>
                 </gaze:GazeInput.GazeElement>
-                <Rectangle Fill="Transparent" Width="66" Height="66"/>
             </Button>
 
 
