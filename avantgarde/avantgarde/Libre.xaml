@@ -139,7 +139,7 @@
                     Maximum="100"
                     Minimum="0"
                     Visibility="Visible"/>
-                <uc:VerticalJoystick x:Name="canvasJoyStick" Height="200" Width="200" Visibility="Collapsed"></uc:VerticalJoystick>
+                <uc:VerticalJoystick x:Name="canvasJoystick" Height="200" Width="200" Visibility="Collapsed"></uc:VerticalJoystick>
             </Canvas>
             <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
         </Grid>

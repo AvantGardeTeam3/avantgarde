@@ -37,12 +37,14 @@ namespace avantgarde
 
         public int MaxGazeHistorySize { get; set; }
 
-        private Point gazePoint = new Point(0,0);
+        private Point gazePoint = new Point(0, 0);
         private Point startPoint;
         private Point endPoint;
+        private Point joystickPoint;
         public List<Point> pointList = new List<Point>();
 
         private bool PenDown = false;
+        private bool JoystickInvoked = false;
         private InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
         private List<InkStroke> inkStrokes = new List<InkStroke>();
         //private List<InkPoint> inkPoints = new List<InkPoint>();
@@ -96,18 +98,9 @@ namespace avantgarde
             this.timer += 20;
             radialProgressBar.Value = Convert.ToDouble(timer) / Convert.ToDouble(dwellTime) * 120.0 - 20;
 
-            if(this.timer >= this.dwellTime)
+            if (this.timer >= this.dwellTime)
             {
-                if (!PenDown)
-                {
-                    StartDrawing();
-                    PenDown = true;
-                }
-                else
-                {
-                    EndDrawing();
-                    PenDown = false;
-                }
+                GazeDwell();
                 timer = 0;
             }
         }
@@ -137,16 +130,18 @@ namespace avantgarde
             {
                 GazeHistory.RemoveAt(0);
             }
-            if (distance < 300 && !gazeTimerStarted)
+            if (distance < 5 && !gazeTimerStarted && !JoystickInvoked)
             {
+                radialProgressBar.Visibility = Visibility.Visible;
                 gazeTimerStarted = true;
                 gazeTimer.Start();
             }
-            else if (distance >= 5 && gazeTimerStarted)
+            else if (distance > 5 && gazeTimerStarted)
             {
-                    gazeTimerStarted = false;
-                    gazeTimer.Stop();
-                    timer = 0;
+                radialProgressBar.Visibility = Visibility.Collapsed;
+                gazeTimerStarted = false;
+                gazeTimer.Stop();
+                timer = 0;
             }
 
             if (PenDown)
@@ -159,30 +154,46 @@ namespace avantgarde
             }
         }
 
-        private void StartDrawing()
+        private void GazeDwell()
         {
-            Point? sp = Snapping((ToCanvasPoint(gazePoint)));
-            if (sp.HasValue)
+            Point point = ToCanvasPoint(gazePoint);
+            Point? sp = Snapping(point);
+            if (PenDown)
             {
-                Point p = sp.Value;
-                TranslateTransform translateTarget = new TranslateTransform();
-                Debug.WriteLine(String.Format("{0}:{1}", canvasJoyStick.Width, canvasJoyStick.Height));
-                translateTarget.X = p.X - canvasJoyStick.Width / 2;
-                translateTarget.Y = p.Y - canvasJoyStick.Height / 2;
-                canvasJoyStick.RenderTransform = translateTarget;
-                canvasJoyStick.Visibility = Visibility.Visible;
-                startPoint = sp.Value;
+                // drawing
+                if (sp.HasValue)
+                {
+                    point = sp.Value;
+                }
+                EndDrawing(point);
             }
             else
             {
-                startPoint = ToCanvasPoint(gazePoint);
+                // not drawing
+                if (sp.HasValue)
+                {
+                    // snap to existing point
+                    point = sp.Value;
+                    InvokeJoystick(point);
+
+                }
+                else
+                {
+                    // no snapping
+                    this.StartDrawing(point);
+                }
             }
-            if (pointList.Count == 0) pointList.Add(startPoint);
+        }
+
+        private void StartDrawing(Point start)
+        {
             PenDown = true;
+            startPoint = start;
+            if (pointList.Count == 0) pointList.Add(startPoint);
             GazeInput.SetIsCursorVisible(canvas, true);
         }
 
-        private void EndDrawing()
+        private void EndDrawing(Point end)
         {
             //if (inkPoints.Count == 0) return;
             //InkStroke inkStroke = 
@@ -190,23 +201,63 @@ namespace avantgarde
             //inkStroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
             //inkCanvas.InkPresenter.StrokeContainer.AddStroke(inkStroke);
             //inkStrokes.Add(inkStroke);
+            PenDown = false;
             inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
-            Point? sp = Snapping(ToCanvasPoint(gazePoint));
-            if (sp.HasValue)
-            {
-                endPoint = sp.Value;
-            }
-            else
-            {
-                endPoint = ToCanvasPoint(gazePoint);
-            }
+            endPoint = end;
             pointList.Add(endPoint);
             InkStroke stroke = MakeStroke(startPoint, endPoint);
             stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
-            PenDown = false;
             GazeInput.SetIsCursorVisible(canvas, false);
         }
+
+        private void InvokeJoystick(Point center)
+        {
+            JoystickInvoked = true;
+            joystickPoint = center;
+            TranslateTransform translateTarget = new TranslateTransform();
+            translateTarget.X = center.X - canvasJoystick.Width / 2;
+            translateTarget.Y = center.Y - canvasJoystick.Height / 2;
+            canvasJoystick.RenderTransform = translateTarget;
+            canvasJoystick.Visibility = Visibility.Visible;
+            canvasJoystick.GazeStateChangeHandler.Add(JoystickGazeEventHandler);
+        }
+
+        private void DismissJoystick()
+        {
+            JoystickInvoked = false;
+            canvasJoystick.Visibility = Visibility.Collapsed;
+            canvasJoystick.GazeStateChangeHandler.Remove(JoystickGazeEventHandler);
+        }
+
+        private void JoystickGazeEventHandler(object sender, StateChangedEventArgs args)
+        {
+            if(args.PointerState != PointerState.Dwell)
+            {
+                return;
+            }
+            Button button = (Button)sender;
+            switch(button.Name)
+            {
+                case "UpKey":
+                    this.StartDrawing(joystickPoint);
+                    this.DismissJoystick();
+                    break;
+                case "DownKey":
+                    break;
+            }
+        }
+
+        private void StartNewLine()
+        {
+
+        }
+
+        private void MovePoint()
+        {
+
+        }
+
         private Point ToCanvasPoint(Point point)
         {
             Double x = point.X;
@@ -223,7 +274,7 @@ namespace avantgarde
             distance = Math.Sqrt(distance);
 
             int pointNum = Convert.ToInt32(Math.Ceiling(distance / 10.0));
-            for(int i = 0; i < pointNum; i++)
+            for (int i = 0; i < pointNum; i++)
             {
                 Point ip = new Point(start.X + i * deltaX / pointNum, start.Y + i * deltaY / pointNum);
                 inkPoints.Add(new InkPoint(ip, 0.5f));
@@ -233,7 +284,7 @@ namespace avantgarde
         }
         private Point? Snapping(Point p)
         {
-            foreach(Point ep in pointList)
+            foreach (Point ep in pointList)
             {
                 double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
                 if (distance < 30) return ep;
@@ -298,7 +349,8 @@ namespace avantgarde
 
 
 
-        private void selectColour(object sender, RoutedEventArgs e) {
+        private void selectColour(object sender, RoutedEventArgs e)
+        {
             selection = ColourPicker.Color;
             selection_hex = selection.ToString();
             colourPickerData.addColourToPrevColours(selection.ToString());
@@ -311,7 +363,7 @@ namespace avantgarde
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
         }
 
-        
+
         private void initColourPickerMenu(object sender, RoutedEventArgs e)
         {
             DataContext = colourPickerData.getColourPickerData();
@@ -334,7 +386,8 @@ namespace avantgarde
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public String getDefaultPrevColours(int i) {
+        public String getDefaultPrevColours(int i)
+        {
             return defaultPrevColours[i];
         }
 

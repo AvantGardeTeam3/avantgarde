@@ -45,9 +45,9 @@ namespace avantgarde.Joysticks
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public List<Action<object, PointerRoutedEventArgs>> PointerEnteredHandler { get; private set; }
-        public List<Action<object, PointerRoutedEventArgs>> PointerExitedHandler { get; private set; }
-        public List<Action<object, StateChangedEventArgs>> GazeStateChangeHandler { get; private set; }
+        public List<Action<object, PointerRoutedEventArgs>> PointerEnteredHandler { get; set; }
+        public List<Action<object, PointerRoutedEventArgs>> PointerExitedHandler { get; set; }
+        public List<Action<object, StateChangedEventArgs>> GazeStateChangeHandler { get; set; }
 
         void JoystickUI_Loaded(object sender, RoutedEventArgs e)
         {
@@ -126,7 +126,7 @@ namespace avantgarde.Joysticks
                         break;
                 }
             }
-            foreach (Action<object, StateChangedEventArgs> action in GazeStateChangeHandler)
+            foreach (Action<object, StateChangedEventArgs> action in GazeStateChangeHandler.ToArray())
             {
                 action.Invoke(sender, e);
             }
