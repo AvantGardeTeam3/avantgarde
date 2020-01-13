@@ -79,7 +79,7 @@
                                 </Rectangle.Fill>
                             </Rectangle>
 
-                          
+
                             <StackPanel Grid.Column="1" Padding="15">
                                 <TextBlock/>
                                 <TextBlock Text="{x:Bind ColourPicker.Color.ToString(), Mode=OneWay}" FontSize="18" Foreground="White"/>
@@ -121,9 +121,9 @@
                         </StackPanel>
 
 
-                     </Grid>
+                    </Grid>
 
-                    
+
                 </Grid>
             </Border>
         </Popup>
@@ -140,13 +140,30 @@
                     Minimum="0"
                     Visibility="Visible"/>
                 <uc:VerticalJoystick x:Name="canvasJoystick" Height="200" Width="200" Visibility="Collapsed"></uc:VerticalJoystick>
-            </Canvas>
-            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
+                </Canvas>
+                <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0"/>
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
             <InkToolbar x:Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}"/>
             <StackPanel Orientation="Horizontal">
                 <Button Click="initColourPickerMenu" Background="{x:Bind selection_hex, Mode=OneWay}" Margin="5" Height="100" Width="100"/>
+                <Button Margin="5" Height="100" Width="100" Click="Redo_Button_Click">
+                    <Image Source="Assets/redo.png"/>
+                </Button>
+                <Button Margin="5" Height="100" Width="100" Click="UndoOne_Button_Click">
+                    <Image Source="Assets/undo.png"/>
+                </Button>
+                <Button Margin="5" Height="100" Width="100" Click="Button_Click" >
+                    <Popup x:Name="shape_popup"  KeyTipPlacementMode="Bottom" VerticalOffset="50" HorizontalOffset="-55" HorizontalAlignment="Left" VerticalAlignment="Top" IsOpen="False">
+                        <Border Background="Cyan" Width="{Binding width}" Height="{Binding height}">
+                            <StackPanel>
+                                <Button Name="btnCircle" Height="100" Width="100" Content="circle" Margin="10,5" Click="btnCircle_Click"/>
+                                <Button Name="btnSquare" Height="100" Width="100" Content="square" Margin="10,5" Click="Square_Button_Click"/>
+                                <Button Name="btnTriangle" Height="100" Width="100" Content="Triangle" Margin="10,5" Click="Triangle_Button_Click"/>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </Button>
             </StackPanel>
         </StackPanel>
         

@@ -30,7 +30,8 @@ namespace avantgarde
         List<InkStroke> userStrokes = new List<InkStroke>();
         //used to build a stroke
         private InkStrokeBuilder inkStrokeBuilder;
-
+        private int numberOfLines = 24;
+        Stack<InkStroke> redoStack = new Stack<InkStroke>();
         public Fleur()
         {
             this.InitializeComponent();
@@ -75,7 +76,7 @@ namespace avantgarde
                 foreach (InkPoint ip in inkPoints)
                 {
                     Single pressure = ip.Pressure;
-                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i);
+                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i); 
                     transformedInkPoints.Add(new InkPoint(transformedPoint, pressure));
                 }
                 InkStroke transformedStroke = inkStrokeBuilder.CreateStrokeFromInkPoints(transformedInkPoints, System.Numerics.Matrix3x2.Identity, stroke.StrokeStartedTime, stroke.StrokeDuration);
@@ -140,5 +141,46 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
+        private async void Redo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (redoStack.Count() == 0)
+            {
+                return;
+            }
+            userStrokes.Add(redoStack.Pop());
+            InkCanvas_refresh();
+        }
+        private void InkCanvas_refresh()
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
+        }
+        private async void Undo_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int containerSize = 0;
+            var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            foreach (InkStroke stroke in strokes)
+            {
+                containerSize++;
+            }
+            if (containerSize == 0)
+            {
+                return;
+            }
+            int index = 0;
+            foreach (InkStroke s in strokes)
+            {
+                index++;
+                if (index >= containerSize - (numberOfLines - 1))
+                {
+                    s.Selected = true;
+                }
+            }
+            int size = userStrokes.Count();
+            redoStack.Push(userStrokes.ElementAt(size-1));
+            userStrokes.RemoveAt(userStrokes.Count() - 1);
+            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+        }
+        
     }
 }

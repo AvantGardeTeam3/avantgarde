@@ -147,6 +147,8 @@
     <Content Include="Assets\joystick_ball.png" />
     <Content Include="Assets\smiling-face.png" />
     <Content Include="Assets\vertical_joystick.png" />
+    <Content Include="Assets\redo.png" />
+    <Content Include="Assets\undo.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
