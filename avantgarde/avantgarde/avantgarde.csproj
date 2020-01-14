@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DrawingModel.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>

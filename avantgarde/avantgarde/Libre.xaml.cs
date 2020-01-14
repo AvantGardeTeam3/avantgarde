@@ -43,27 +43,21 @@ namespace avantgarde
 
         private GazeInputSourcePreview gazeInputSourcePreview;
 
-        public ObservableCollection<Point> GazeHistory { get; set; } = new ObservableCollection<Point>();
-
-        public int MaxGazeHistorySize { get; set; }
-
         private Point gazePoint = new Point(0, 0);
         private Point startPoint;
-        private Point endPoint;
         private Point joystickPoint;
-        public List<Point> pointList = new List<Point>();
+
+        private InkStroke indicatingStroke = null;
 
         private bool PenDown = false;
         private bool JoystickInvoked = false;
-        private InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
-        private List<InkStroke> inkStrokes = new List<InkStroke>();
-        //private List<InkPoint> inkPoints = new List<InkPoint>();
         private DispatcherTimer gazeTimer = new DispatcherTimer();
         private bool gazeTimerStarted = false;
         private int timer = 0;
         private int dwellTime = 400;
 
-        private GazePointer gazePointer;
+        private DrawingModel drawingModel;
+
         private DispatcherTimer dispatchTimer = new DispatcherTimer();
 
         ColourPickerData colourPickerData = new ColourPickerData();
@@ -78,10 +72,6 @@ namespace avantgarde
         public Color selection { get; set; }
         public String selection_hex { get; set; }
 
-
-        private Stack<InkStroke> redoStack = new Stack<InkStroke>();
-        private Point iniP;
-
         public Libre()
         {
             selection = Colors.Blue;
@@ -94,18 +84,18 @@ namespace avantgarde
                 Windows.UI.Core.CoreInputDeviceTypes.Touch;
             DataContext = this;
 
-            MaxGazeHistorySize = 100;
-
             gazeInputSourcePreview = GazeInputSourcePreview.GetForCurrentView();
             gazeInputSourcePreview.GazeMoved += GazeInputSourcePreview_GazeMoved;
 
             gazeTimer.Tick += GazeTimer_Tick;
             gazeTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
 
-            gazePointer = GazeInput.GetGazePointer(null);
             dispatchTimer.Tick += DispatchTimer_Tick;
             dispatchTimer.Interval = new TimeSpan(0, 0, 1);
             dispatchTimer.Start();
+
+            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer);
+            indicators = new List<Ellipse>();
         }
         private void GazeTimer_Tick(object sender, object e)
         {
@@ -132,7 +122,6 @@ namespace avantgarde
             distance = Math.Sqrt(distance);
             gazePoint.X = point.Value.X;
             gazePoint.Y = point.Value.Y;
-            GazeHistory.Add(point.Value);
 
             Point p = ToCanvasPoint(gazePoint);
             TranslateTransform translateTarget = new TranslateTransform();
@@ -140,10 +129,6 @@ namespace avantgarde
             translateTarget.Y = p.Y - radialProgressBar.ActualHeight / 2;
             radialProgressBar.RenderTransform = translateTarget;
 
-            if (GazeHistory.Count > MaxGazeHistorySize)
-            {
-                GazeHistory.RemoveAt(0);
-            }
             if (distance < 5 && !gazeTimerStarted && !JoystickInvoked)
             {
                 radialProgressBar.Visibility = Visibility.Visible;
@@ -157,72 +142,98 @@ namespace avantgarde
                 gazeTimer.Stop();
                 timer = 0;
             }
-
-            if (PenDown)
+            if (PenDown && !JoystickInvoked)
             {
-                InkStroke stroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
-                stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
-                stroke.Selected = true;
-                inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
-                inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
+                if(indicatingStroke != null)
+                {
+                    indicatingStroke.Selected = true;
+                    inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+                    indicatingStroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
+                    inkCanvas.InkPresenter.StrokeContainer.AddStroke(indicatingStroke);
+                } else
+                {
+                    indicatingStroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
+                    inkCanvas.InkPresenter.StrokeContainer.AddStroke(indicatingStroke);
+                }
             }
         }
 
         private void GazeDwell()
         {
-            Point point = ToCanvasPoint(gazePoint);
-            Point? sp = Snapping(point);
-            if (PenDown)
-            {
-                // drawing
-                if (sp.HasValue)
-                {
-                    point = sp.Value;
-                }
-                EndDrawing(point);
-            }
-            else
+            if (!PenDown)
             {
                 // not drawing
+                PenDown = true;
+                Point? sp = Snapping(ToCanvasPoint(gazePoint));
                 if (sp.HasValue)
                 {
-                    // snap to existing point
-                    point = sp.Value;
-                    InvokeJoystick(point);
-
+                    InvokeJoystick(sp.Value);
                 }
                 else
                 {
-                    // no snapping
-                    this.StartDrawing(point);
+                    StartDrawing(ToCanvasPoint(gazePoint));
                 }
+            }
+            else
+            {
+                // drawing
+                PenDown = false;
+                EndDrawing(gazePoint);
             }
         }
 
         private void StartDrawing(Point start)
         {
-            PenDown = true;
             startPoint = start;
-            if (pointList.Count == 0) pointList.Add(startPoint);
-            GazeInput.SetIsCursorVisible(canvas, true);
         }
 
         private void EndDrawing(Point end)
         {
-            //if (inkPoints.Count == 0) return;
-            //InkStroke inkStroke = 
-            //inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
-            //inkStroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
-            //inkCanvas.InkPresenter.StrokeContainer.AddStroke(inkStroke);
-            //inkStrokes.Add(inkStroke);
-            PenDown = false;
-            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
-            endPoint = end;
-            pointList.Add(endPoint);
-            InkStroke stroke = MakeStroke(startPoint, endPoint);
-            stroke.DrawingAttributes = inkToolBar.InkDrawingAttributes;
-            inkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
-            GazeInput.SetIsCursorVisible(canvas, false);
+            Point? sp = Snapping(ToCanvasPoint(gazePoint));
+            if (sp.HasValue)
+            {
+                drawingModel.newLine(startPoint, sp.Value);
+            }
+            else
+            {
+                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint));
+            }
+            List<Point> points = drawingModel.getPoints();
+            System.Console.WriteLine(points.Count.ToString());
+            AddPointIndicators(points);
+            if (indicatingStroke != null)
+            {
+                indicatingStroke.Selected = true;
+                inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+                indicatingStroke = null;
+            }
+        }
+        private List<Ellipse> indicators;
+        private void ClearPointIndicators()
+        {
+            foreach (var ellipse in indicators)
+            {
+                canvas.Children.Remove(ellipse);
+            }
+            indicators.Clear();
+        }
+        private void AddPointIndicators(List<Point> points)
+        {
+            foreach (var point in points)
+            {
+                var ellipse = new Ellipse();
+                ellipse.Width = 20;
+                ellipse.Height = 20;
+                ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+                ellipse.Visibility = Visibility.Visible;
+                TranslateTransform translateTarget = new TranslateTransform();
+                translateTarget.X = point.X - ellipse.Width / 2;
+                translateTarget.Y = point.Y - ellipse.Height / 2;
+                ellipse.RenderTransform = translateTarget;
+                indicators.Add(ellipse);
+                canvas.Children.Add(ellipse);
+            }
+            System.Console.WriteLine(points.Count.ToString());
         }
 
         private void InvokeJoystick(Point center)
@@ -246,12 +257,12 @@ namespace avantgarde
 
         private void JoystickGazeEventHandler(object sender, StateChangedEventArgs args)
         {
-            if(args.PointerState != PointerState.Dwell)
+            if (args.PointerState != PointerState.Dwell)
             {
                 return;
             }
             Button button = (Button)sender;
-            switch(button.Name)
+            switch (button.Name)
             {
                 case "UpKey":
                     this.StartDrawing(joystickPoint);
@@ -261,23 +272,22 @@ namespace avantgarde
                     break;
             }
         }
-
-        private void StartNewLine()
-        {
-
-        }
-
-        private void MovePoint()
-        {
-
-        }
-
         private Point ToCanvasPoint(Point point)
         {
             Double x = point.X;
             Double y = point.Y;
             y -= TopGrid.RowDefinitions[0].ActualHeight;
             return new Point(x, y);
+        }
+        private Point? Snapping(Point p)
+        {
+            List<Point> points = drawingModel.getPoints();
+            foreach (Point ep in points)
+            {
+                double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
+                if (distance < 30) return ep;
+            }
+            return null;
         }
         private InkStroke MakeStroke(Point start, Point end)
         {
@@ -294,18 +304,9 @@ namespace avantgarde
                 inkPoints.Add(new InkPoint(ip, 0.5f));
             }
             inkPoints.Add(new InkPoint(end, 0.5f));
+            InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
         }
-        private Point? Snapping(Point p)
-        {
-            foreach (Point ep in pointList)
-            {
-                double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
-                if (distance < 30) return ep;
-            }
-            return null;
-        }
-
         public Color hexToColor(string hex)
         {
             //replace # occurences
@@ -386,35 +387,18 @@ namespace avantgarde
         }
         private async void Redo_Button_Click(object sender, RoutedEventArgs e)
         {
-            if (redoStack.Count() == 0)
-            {
-                return;
-            }
-            inkCanvas.InkPresenter.StrokeContainer.AddStroke(redoStack.Pop());
+            drawingModel.redo();
+            ClearPointIndicators();
+            List<Point> points = drawingModel.getPoints();
+            AddPointIndicators(points);
         }
         private async void UndoOne_Button_Click(object sender, RoutedEventArgs e)
         {
-            int containerSize = 0;
-            var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-            foreach (var stroke in strokes)
-            {
-                containerSize++;
-            }
-            int index = 0;
-            foreach (var s in strokes)
-            {
-                index++;
-                if (index == containerSize)
-                {
-                    s.Selected = true;
-                    redoStack.Push(s.Clone());
-                }
-            }
-            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            drawingModel.undo();
+            ClearPointIndicators();
+            List<Point> points = drawingModel.getPoints();
+            AddPointIndicators(points);
         }
-
-        private Point startP = new Point(50, 100);
-        private Point endP = new Point(100, 200);
 
         private void Square_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -423,41 +407,12 @@ namespace avantgarde
 
         private void Triangle_Button_Click(object sender, RoutedEventArgs e)
         {
-            Ellipse aaaa = new Ellipse();
-
-            Point p = new Point(0, 1);
 
         }
 
         private void btnCircle_Click(object sender, RoutedEventArgs e)
         {
-            Ellipse ellipse = new Ellipse()
-            {
-                Height = 10,
-                Width = 10
-            };
-            if (endP.X >= startP.X)
-            {
-                ellipse.SetValue(Canvas.LeftProperty, startP.X);
-                ellipse.Width = endP.X - startP.X;
-            }
-            else
-            {
-                ellipse.SetValue(Canvas.LeftProperty, startP.X);
-                ellipse.Width = startP.X - endP.X;
-            }
-            if (endP.Y >= startP.Y)
-            {
-                ellipse.SetValue(Canvas.TopProperty, startP.Y);
-                ellipse.Height = endP.Y - startP.Y;
-            }
-            else
-            {
-                ellipse.SetValue(Canvas.TopProperty, startP.Y);
-                ellipse.Height = startP.Y - endP.Y;
-            }
-            Canvas canvas = new Canvas();
-            canvas.Children.Add(ellipse);
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
