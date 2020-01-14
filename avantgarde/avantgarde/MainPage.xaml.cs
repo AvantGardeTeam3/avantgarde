@@ -18,6 +18,7 @@ using Windows.Devices.Input.Preview;
 
 using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
 using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -37,6 +38,7 @@ namespace avantgarde
 
         public MainPage()
         {
+            ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 1600 };
             this.InitializeComponent();
         }
 

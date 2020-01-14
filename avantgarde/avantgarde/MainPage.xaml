@@ -9,26 +9,39 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.Interaction="Enabled"
-    gaze:GazeInput.IsCursorVisible="True"
-    MinHeight="{x:Bind HEIGHT}" MinWidth="{x:Bind HEIGHT}" Height="1092" Width="1914"
+    gaze:GazeInput.IsCursorVisible="True" Height="835"
     >
-    <Canvas Height="1080" Width="1920">
-        <Image Source="Assets/background.png" Height="{x:Bind HEIGHT}" Width="{x:Bind WIDTH}"/>
 
-        <Canvas x:Name="holder" Width="940" Height="1080" HorizontalAlignment="Center">
-            <Image Source="Assets/headings/Avant-Garde.png" Width="1017" Height="116" Canvas.Left="452" Canvas.Top="89" />
-            <Image Source="Assets/paint.png" Width="450" Height="500" Canvas.Left="405" Canvas.Top="290" Opacity=".50"/>
-            <Image Source="Assets/flower.png" Width="450" Height="500" Canvas.Left="1005" Canvas.Top="290" Opacity=".50"/>
-            <Button x:Name="goLibreButton" Margin="20" Height="100" Width="300" Click="goLibreButtonClick" Canvas.Left="460" Canvas.Top="460">
-                <Image Source="Assets/headings/Libre Heading.png"/>
-            </Button>
-            <Button x:Name="goFleurButton" Margin="20" Height="100" Width="300" Click="goFleurButtonClick" Canvas.Left="1060" Canvas.Top="460" >
-                <Image Source="Assets/headings/Fleur Heading.png" />
-            </Button>
-            <Button x:Name="exitButton" Margin="20" Height="85" Width="201" Click="exitButtonClick" Canvas.Left="839" Canvas.Top="863" >
-                <Image Source="Assets/headings/exit.png" />
-            </Button>
-            <TextBlock Canvas.Left="861" Canvas.Top="210" Text="Handsfree Canvas" FontFamily="Corbel Light" FontSize="25" Foreground="White" Height="57" Width="204"/>
-        </Canvas>
-    </Canvas>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="2*"/>
+
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="4*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4" Source="Assets/background.png" Stretch="UniformToFill"/>
+		<Image Source="Assets/headings/Avant-Garde.png" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Height="120"/>
+		<Image Source="Assets/paint.png" Stretch="Uniform" Grid.Row="1" Grid.Column="1" Opacity=".50"/>
+		<Image Source="Assets/flower.png" Stretch="Uniform" Grid.Row="1" Grid.Column="2" Opacity=".50"/>
+		<Button x:Name="goLibreButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goLibreButtonClick" Grid.Row="1" Grid.Column="1">
+			<Image Source="Assets/headings/Libre Heading.png"/>
+		</Button>
+		<Button x:Name="goFleurButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goFleurButtonClick" Grid.Row="1" Grid.Column="2" >
+			<Image Source="Assets/headings/Fleur Heading.png" />
+		</Button>
+		<Button x:Name="exitButton" Margin="20" Height="85" Width="200" Click="exitButtonClick" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+			<Image Source="Assets/headings/exit.png" />
+		</Button>
+		<!--<Image Source="Assets/microsoft footer.png" Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="20"/>
+		<Image Source="Assets/ucl footer.png" Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="20,417,0,40"/>-->
+
+	</Grid>
 </Page>
