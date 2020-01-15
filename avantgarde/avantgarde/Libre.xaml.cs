@@ -49,6 +49,7 @@ namespace avantgarde
 
         private InkStroke indicatingStroke = null;
 
+        private bool IsMoving = false;
         private bool PenDown = false;
         private bool JoystickInvoked = false;
         private DispatcherTimer gazeTimer = new DispatcherTimer();
@@ -124,6 +125,12 @@ namespace avantgarde
             gazePoint.Y = point.Value.Y;
 
             Point p = ToCanvasPoint(gazePoint);
+            if(p.Y < 0)
+            {
+                gazeTimer.Stop();
+                this.gazeTimerStarted = false;
+                this.timer = 0;
+            }
             TranslateTransform translateTarget = new TranslateTransform();
             translateTarget.X = p.X - radialProgressBar.ActualWidth / 2;
             translateTarget.Y = p.Y - radialProgressBar.ActualHeight / 2;
@@ -160,10 +167,19 @@ namespace avantgarde
 
         private void GazeDwell()
         {
+            if (JoystickInvoked)
+            {
+                return;
+            }
+            if (IsMoving)
+            {
+                EndMoving(ToCanvasPoint(gazePoint));
+                return;
+            }
             if (!PenDown)
             {
                 // not drawing
-                PenDown = true;
+                
                 Point? sp = Snapping(ToCanvasPoint(gazePoint));
                 if (sp.HasValue)
                 {
@@ -177,18 +193,34 @@ namespace avantgarde
             else
             {
                 // drawing
-                PenDown = false;
                 EndDrawing(gazePoint);
             }
         }
 
+        private void StartMoving(Point start)
+        {
+            IsMoving = true;
+            startPoint = start;
+        }
+
+        private void EndMoving(Point end)
+        {
+            IsMoving = false;
+            drawingModel.move(startPoint, end);
+            this.ClearPointIndicators();
+            List<Point> points = drawingModel.getPoints();
+            this.AddPointIndicators(points);
+        }
+
         private void StartDrawing(Point start)
         {
+            PenDown = true;
             startPoint = start;
         }
 
         private void EndDrawing(Point end)
         {
+            PenDown = false;
             Point? sp = Snapping(ToCanvasPoint(gazePoint));
             if (sp.HasValue)
             {
@@ -199,7 +231,6 @@ namespace avantgarde
                 drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint));
             }
             List<Point> points = drawingModel.getPoints();
-            System.Console.WriteLine(points.Count.ToString());
             AddPointIndicators(points);
             if (indicatingStroke != null)
             {
@@ -269,6 +300,8 @@ namespace avantgarde
                     this.DismissJoystick();
                     break;
                 case "DownKey":
+                    this.StartMoving(joystickPoint);
+                    this.DismissJoystick();
                     break;
             }
         }
