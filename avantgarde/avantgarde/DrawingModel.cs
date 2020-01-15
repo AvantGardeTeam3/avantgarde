@@ -93,7 +93,7 @@ namespace avantgarde
             }
             container.DeleteSelected();
         }
-        public void newLine(Point p1, Point p2)
+        public void newLine(Point p1, Point p2, InkDrawingAttributes attributes)
         {
             undoStack.Clear();
             DrawingPoint dp1;
@@ -118,18 +118,20 @@ namespace avantgarde
                 points.Add(dp2);
             }
 
-            DrawingLine drawingLine = new DrawingLine(dp1, dp2);
+            DrawingLine drawingLine = new DrawingLine(dp1, dp2, attributes);
             lines.Add(drawingLine);
             container.AddStroke(drawingLine.inkStroke);
         }
         private class DrawingLine
         {
-            public DrawingLine(DrawingPoint p1, DrawingPoint p2)
+            public DrawingLine(DrawingPoint p1, DrawingPoint p2, InkDrawingAttributes attributes)
             {
                 this.p1 = p1;
                 this.p2 = p2;
+                this.attributes = attributes;
                 this.UpdateStroke();
             }
+            private InkDrawingAttributes attributes;
             public DrawingPoint p1 { get; set; }
             public DrawingPoint p2 { get; set; }
             public InkStroke inkStroke { get; set; }
@@ -139,9 +141,9 @@ namespace avantgarde
             }
             public void UpdateStroke()
             {
-                this.inkStroke = MakeStroke(p1.pos, p2.pos);
+                this.inkStroke = MakeStroke(p1.pos, p2.pos, this.attributes);
             }
-            private InkStroke MakeStroke(Point start, Point end)
+            private static InkStroke MakeStroke(Point start, Point end, InkDrawingAttributes attributes)
             {
                 List<InkPoint> inkPoints = new List<InkPoint>();
                 Double deltaX = end.X - start.X;
@@ -157,7 +159,9 @@ namespace avantgarde
                 }
                 inkPoints.Add(new InkPoint(end, 0.5f));
                 InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
-                return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
+                InkStroke stroke = inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
+                stroke.DrawingAttributes = attributes;
+                return stroke;
             }
         }
         private class DrawingPoint

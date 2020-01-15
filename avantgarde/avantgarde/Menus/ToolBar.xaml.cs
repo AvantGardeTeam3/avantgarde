@@ -23,6 +23,8 @@ namespace avantgarde.Menus
     {
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
+        public InkDrawingAttributes GetDrawingAttributes() { return this.drawingAttributes; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private String visibility { get; set; }
@@ -39,6 +41,11 @@ namespace avantgarde.Menus
 
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
+
+        public bool IsExpanded()
+        {
+            return expander.IsExpanded;
+        }
 
         private void getWindowAttributes()
         {

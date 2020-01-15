@@ -141,8 +141,11 @@ namespace avantgarde
             gazePoint.Y = point.Value.Y;
 
             Point p = ToCanvasPoint(gazePoint);
-            if(p.Y < 0)
+            Menus.ToolBar tb = toolbar;
+            if(p.Y < 100 || toolbar.IsExpanded())
             {
+                // the value 100 is from toolbar
+                // TODO : find a better way to do this
                 gazeTimer.Stop();
                 this.gazeTimerStarted = false;
                 this.timer = 0;
@@ -240,11 +243,11 @@ namespace avantgarde
             Point? sp = Snapping(ToCanvasPoint(gazePoint));
             if (sp.HasValue)
             {
-                drawingModel.newLine(startPoint, sp.Value);
+                drawingModel.newLine(startPoint, sp.Value, toolbar.getDrawingAttributes());
             }
             else
             {
-                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint));
+                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
             }
             List<Point> points = drawingModel.getPoints();
             AddPointIndicators(points);
