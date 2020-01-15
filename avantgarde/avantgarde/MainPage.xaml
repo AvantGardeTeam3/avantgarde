@@ -5,32 +5,43 @@
     xmlns:local="using:avantgarde"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uc="using:avantgarde.Joysticks"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.Interaction="Enabled"
-    gaze:GazeInput.IsCursorVisible="True"
+    gaze:GazeInput.IsCursorVisible="True" Height="835"
     >
 
-    <Grid>
-        <FlyoutBase.AttachedFlyout>
-            <Flyout>
-                <Grid/>
-            </Flyout>
-        </FlyoutBase.AttachedFlyout>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="playButton" Margin="20" Height="100" Width="100" Click="Play_Button_Click" Content="Play"/>
-            <Button x:Name="freeButton" Margin="20" Height="100" Width="100" Click="Free_Button_Click" Content="Free"/>
-            <Button x:Name="exitButton" Margin="20" Height="100" Width="100" Click="Exit_Button_Click" Content="Exit"/>
-        </StackPanel>
-        <uc:Joystick x:Name="joystick" Height="200" Width="200"/>
-        <Border Grid.Column="0"></Border>
-        
-    </Grid>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="2*"/>
+
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="4*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4" Source="Assets/background.png" Stretch="UniformToFill"/>
+		<Image Source="Assets/headings/Avant-Garde.png" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Height="120"/>
+		<Image Source="Assets/paint.png" Stretch="Uniform" Grid.Row="1" Grid.Column="1" Opacity=".50"/>
+		<Image Source="Assets/flower.png" Stretch="Uniform" Grid.Row="1" Grid.Column="2" Opacity=".50"/>
+		<Button x:Name="goLibreButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goLibreButtonClick" Grid.Row="1" Grid.Column="1">
+			<Image Source="Assets/headings/Libre Heading.png"/>
+		</Button>
+		<Button x:Name="goFleurButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goFleurButtonClick" Grid.Row="1" Grid.Column="2" >
+			<Image Source="Assets/headings/Fleur Heading.png" />
+		</Button>
+		<Button x:Name="exitButton" Margin="20" Height="85" Width="200" Click="exitButtonClick" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+			<Image Source="Assets/headings/exit.png" />
+		</Button>
+		<!--<Image Source="Assets/microsoft footer.png" Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="20"/>
+		<Image Source="Assets/ucl footer.png" Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="20,417,0,40"/>-->
+
+	</Grid>
 </Page>

@@ -61,24 +61,39 @@ namespace avantgarde
 
         private DispatcherTimer dispatchTimer = new DispatcherTimer();
 
-        ColourPickerData colourPickerData = new ColourPickerData();
+
+        private String backgroundHex { get; set; }
+
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public InkToolbar inkToolBar = new InkToolbar();
 
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Color selection { get; set; }
-        public String selection_hex { get; set; }
-
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+        }
         public Libre()
         {
-            selection = Colors.Blue;
-            selection_hex = selection.ToString();
+            getWindowAttributes();
+
             this.InitializeComponent();
+
             this.DataContext = this;
+
+            backgroundHex = Colors.Black.ToString();
+
+            toolbar.goHomeButtonClicked += new EventHandler(toolbar_goHomeButtonClicked);
+            toolbar.setBackgroundButtonClicked += new EventHandler(toolbar_setBackgroundButtonClicked);
+
+
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
                 Windows.UI.Core.CoreInputDeviceTypes.Pen |
@@ -340,205 +355,16 @@ namespace avantgarde
             InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
         }
-        public Color hexToColor(string hex)
+        private void toolbar_goHomeButtonClicked(object sender, EventArgs e)
         {
-            //replace # occurences
-            if (hex.IndexOf('#') != -1)
-                hex = hex.Replace("#", "");
-
-
-            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
-            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
-            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
-            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
-
-            return Color.FromArgb(a, r, g, b);
+            Frame.Navigate(typeof(MainPage));
         }
 
-        private void setColour0(object sender, RoutedEventArgs e)
+        private void toolbar_setBackgroundButtonClicked(object sender, EventArgs e)
         {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(0));
-        }
-
-        private void setColour1(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(1));
-        }
-
-        private void setColour2(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(2));
-        }
-
-        private void setColour3(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(3));
-        }
-
-        private void setColour4(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(4));
-        }
-
-        private void setColour5(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(5));
-        }
-
-        private void setColour6(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(6));
-        }
-
-        private void setColour7(object sender, RoutedEventArgs e)
-        {
-            ColourPicker.Color = hexToColor(colourPickerData.getDefaultPrevColours(7));
-        }
-
-
-
-        private void selectColour(object sender, RoutedEventArgs e)
-        {
-            selection = ColourPicker.Color;
-            selection_hex = selection.ToString();
-            colourPickerData.addColourToPrevColours(selection.ToString());
-            if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+            backgroundHex = toolbar.getColourHex();
             NotifyPropertyChanged();
         }
 
-        private void cancelColourPick(object sender, RoutedEventArgs e)
-        {
-            if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
-        }
-
-
-        private void initColourPickerMenu(object sender, RoutedEventArgs e)
-        {
-            DataContext = colourPickerData.getColourPickerData();
-            if (!ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = true; }
-            ColourPicker.Color = selection;
-        }
-        private async void Redo_Button_Click(object sender, RoutedEventArgs e)
-        {
-            drawingModel.redo();
-            ClearPointIndicators();
-            List<Point> points = drawingModel.getPoints();
-            AddPointIndicators(points);
-        }
-        private async void UndoOne_Button_Click(object sender, RoutedEventArgs e)
-        {
-            drawingModel.undo();
-            ClearPointIndicators();
-            List<Point> points = drawingModel.getPoints();
-            AddPointIndicators(points);
-        }
-
-        private void Square_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Triangle_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnCircle_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (shape_popup.IsOpen == false)
-            {
-                shape_popup.IsOpen = true;
-            }
-            else
-            {
-                shape_popup.IsOpen = false;
-            }
-        }
-    }
-
-    public class ColourPickerData : INotifyPropertyChanged
-    {
-        public ICommand setColour { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-        public int horizontalOffset { get; set; }
-        public int verticalOffset { get; set; }
-        public String[] prevColors { get; set; }
-
-        public static String[] defaultPrevColours = { "#ffcdff59", "#ff4ffff6", "#ffff728e", "#ff1d283f", "#ff2b061e", "#ffffeed6", "#fffbbfca", "#ffbfd0f0" };
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public String getDefaultPrevColours(int i)
-        {
-            return defaultPrevColours[i];
-        }
-
-        public ColourPickerData getColourPickerData()
-        {
-            int w = 800;
-            int h = 600;
-
-            var cpd = new ColourPickerData()
-            {
-                width = w,
-                height = h,
-                horizontalOffset = (int)(Window.Current.Bounds.Width - w) / 2,
-                verticalOffset = (int)(Window.Current.Bounds.Height - h) / 2,
-                prevColors = defaultPrevColours,
-                setColour = new SetColourCommand()
-
-            };
-
-            return cpd;
-        }
-
-        public void addColourToPrevColours(String c)
-        {
-            if (c.Equals(defaultPrevColours[0]))
-            {
-                return;
-            }
-
-            for (int i = (defaultPrevColours.Length - 1); i > 0; i--)
-            {
-                defaultPrevColours[i] = defaultPrevColours[i - 1];
-            }
-            defaultPrevColours[0] = c;
-        }
-
-
-    }
-
-    class SetColourCommand : Libre, ICommand
-    {
-        public event EventHandler CanExecuteChanged;
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-        public void Execute(object parameter)
-        {
-            //   ColourPicker.Color = Colors.Beige;
-            //   setColour20();
-            String c = ColourPickerData.defaultPrevColours[Int32.Parse(parameter.ToString())];
-            selection = hexToColor(c);
-            selection_hex = selection.ToString();
-
-
-            //if (ColourPickerMenu.IsOpen)
-            //{
-            //    Debug.WriteLine("hello");
-            //    ColourPickerMenu.IsOpen = false;
-            //}
-
-            Debug.WriteLine(selection_hex);
-        }
     }
 }

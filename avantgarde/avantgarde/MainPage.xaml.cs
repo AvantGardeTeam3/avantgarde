@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Input.Preview;
 
 using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
+using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -36,8 +38,19 @@ namespace avantgarde
 
         public MainPage()
         {
+            ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 1600 };
             this.InitializeComponent();
         }
+
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
+
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+            HEIGHT = (int)Window.Current.Bounds.Height;
+        }
+
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -129,18 +142,19 @@ namespace avantgarde
             return false;
         }
 
-        private async void Play_Button_Click(object sender, RoutedEventArgs e)
+        private async void goLibreButtonClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Libre));
         }
-        private async void Free_Button_Click(object sender, RoutedEventArgs e)
+        private async void goFleurButtonClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Fleur));
         }
-        private async void Exit_Button_Click(object sender, RoutedEventArgs e)
+        private async void exitButtonClick(object sender, RoutedEventArgs e)
         {
-
+            CoreApplication.Exit();
         }
+
         private void DeviceAdded(GazeDeviceWatcherPreview source,
             GazeDeviceWatcherAddedPreviewEventArgs args)
         {
@@ -232,5 +246,6 @@ namespace avantgarde
                      gazeDevice.ConfigurationState ==
                      GazeDeviceConfigurationStatePreview.Ready);
         }
+
     }
 }
