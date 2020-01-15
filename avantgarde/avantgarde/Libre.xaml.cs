@@ -92,7 +92,8 @@ namespace avantgarde
 
             toolbar.goHomeButtonClicked += new EventHandler(toolbar_goHomeButtonClicked);
             toolbar.setBackgroundButtonClicked += new EventHandler(toolbar_setBackgroundButtonClicked);
-
+            toolbar.undoButtonClicked += new EventHandler(toolbar_undoButtonClicker);
+            toolbar.redoButtonClicked += new EventHandler(toolbar_redoButtonClicked);
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
@@ -366,5 +367,18 @@ namespace avantgarde
             NotifyPropertyChanged();
         }
 
+        private void toolbar_redoButtonClicked(object sender, EventArgs e)
+        {
+            drawingModel.redo();
+            this.ClearPointIndicators();
+            this.AddPointIndicators(drawingModel.getPoints());
+        }
+
+        private void toolbar_undoButtonClicker(object sender, EventArgs e)
+        {
+            drawingModel.undo();
+            this.ClearPointIndicators();
+            this.AddPointIndicators(drawingModel.getPoints());
+        }
     }
 }

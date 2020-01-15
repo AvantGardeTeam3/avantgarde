@@ -60,10 +60,10 @@
                         <Image Source="/Assets/icons/icon_right.png" />
                     </Button>
                     <Button Grid.Column="4"   Background="{x:Bind colourManager.selectionHex, Mode=OneWay}" Margin="5"  Height="80" Width="80" HorizontalAlignment="Center" BorderBrush="White" BorderThickness="2" CornerRadius="5,5,5,5" Click="initColourManager"/>
-                    <Button Grid.Column="5" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center">
+                    <Button Grid.Column="5" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center" Click="undo">
                         <Image Source="/Assets/icons/icon_undo.png" />
                     </Button>
-                    <Button Grid.Column="6" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center">
+                    <Button Grid.Column="6" Background="Transparent" Height="80" Width="100" HorizontalAlignment="Center" Click="redo">
                         <Image Source="/Assets/icons/icon_redo.png" />
                     </Button>
                     <Button Grid.Column="7" Background="Transparent" Height="90" Width="100" HorizontalAlignment="Center" CornerRadius="5,5,5,5" Click="setBackground">

@@ -119,6 +119,8 @@ namespace avantgarde.Menus
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
+        public event EventHandler undoButtonClicked;
+        public event EventHandler redoButtonClicked;
 
         private void goHome(object sender, RoutedEventArgs e)
         {
@@ -129,6 +131,16 @@ namespace avantgarde.Menus
         private void setBackground(object sender, RoutedEventArgs e)
         {
             setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void undo(object sender, RoutedEventArgs e)
+        {
+            undoButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void redo(object sender, RoutedEventArgs e)
+        {
+            redoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         public String getColourHex() {
