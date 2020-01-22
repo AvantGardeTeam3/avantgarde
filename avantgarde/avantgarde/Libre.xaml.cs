@@ -79,6 +79,7 @@ namespace avantgarde
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
+            HEIGHT = (int)Window.Current.Bounds.Height;
         }
         public Libre()
         {
@@ -113,6 +114,11 @@ namespace avantgarde
 
             drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer);
             indicators = new List<Ellipse>();
+
+            toolbar.expanded += this.ToolBarExpanded;
+            toolbar.collapsed += this.ToolBarCollapsed;
+
+            ShowGrid();
         }
         private void GazeTimer_Tick(object sender, object e)
         {
@@ -259,6 +265,74 @@ namespace avantgarde
             }
         }
         private List<Ellipse> indicators;
+
+        private List<Line> GridLines = new List<Line>();
+
+        private void InitGrid()
+        {
+            int interval = 50;
+            // horizontal grid lines
+            for(int y = 0; y < HEIGHT; y+= interval)
+            {
+                Line line = new Line();
+                line.X1 = 0;
+                line.X2 = WIDTH;
+                line.Y1 = y;
+                line.Y2 = y;
+                line.Stroke = new SolidColorBrush(Colors.LightSteelBlue);
+                line.StrokeThickness = 1;
+                Canvas.SetTop(line, 0);
+                Canvas.SetLeft(line, 0);
+                canvas.Children.Add(line);
+                this.GridLines.Add(line);
+            }
+            // vertical grid lines
+            for(int x = 0; x < WIDTH; x += interval)
+            {
+                Line line = new Line();
+                line.X1 = x;
+                line.X2 = x;
+                line.Y1 = 0;
+                line.Y2 = HEIGHT;
+                line.Stroke = new SolidColorBrush(Colors.LightSteelBlue);
+                line.StrokeThickness = 1;
+                Canvas.SetTop(line, 0);
+                Canvas.SetLeft(line, 0);
+                canvas.Children.Add(line);
+                this.GridLines.Add(line);
+            }
+        }
+
+        private void ShowGrid()
+        {
+            if(GridLines.Count == 0)
+            {
+                InitGrid();
+            }
+            foreach(Line line in GridLines)
+            {
+                line.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void HideGrid()
+        {
+            foreach (Line line in GridLines)
+            {
+                line.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ToolBarExpanded(object sender, EventArgs e)
+        {
+            HideGrid();
+        }
+
+        private void ToolBarCollapsed(object sender, EventArgs e)
+        {
+            ShowGrid();
+        }
+
         private void ClearPointIndicators()
         {
             foreach (var ellipse in indicators)

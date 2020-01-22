@@ -128,11 +128,14 @@ namespace avantgarde.Menus
         public event EventHandler setBackgroundButtonClicked;
         public event EventHandler undoButtonClicked;
         public event EventHandler redoButtonClicked;
+        public event EventHandler expanded;
+        public event EventHandler collapsed;
 
         private void goHome(object sender, RoutedEventArgs e)
         {
             expander.IsExpanded = false;
             //goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
+            collapsed?.Invoke(this, EventArgs.Empty);
         }
 
         private void setBackground(object sender, RoutedEventArgs e)
@@ -159,6 +162,7 @@ namespace avantgarde.Menus
             expander.IsExpanded = true;
             //visibility = "Visible";
             NotifyPropertyChanged();
+            expanded?.Invoke(this, EventArgs.Empty);
         }
     }
 }
