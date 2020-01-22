@@ -55,7 +55,7 @@ namespace avantgarde
         private DispatcherTimer gazeTimer = new DispatcherTimer();
         private bool gazeTimerStarted = false;
         private int timer = 0;
-        private int dwellTime = 400;
+        private int dwellTime = 600;
 
         private DrawingModel drawingModel;
 
@@ -326,11 +326,13 @@ namespace avantgarde
         private void ToolBarExpanded(object sender, EventArgs e)
         {
             HideGrid();
+            HidePointIndicators();
         }
 
         private void ToolBarCollapsed(object sender, EventArgs e)
         {
             ShowGrid();
+            ShowPointIndicators();
         }
 
         private void ClearPointIndicators()
@@ -357,9 +359,23 @@ namespace avantgarde
                 indicators.Add(ellipse);
                 canvas.Children.Add(ellipse);
             }
-            System.Console.WriteLine(points.Count.ToString());
         }
 
+        private void HidePointIndicators()
+        {
+            foreach(Ellipse ellipse in indicators)
+            {
+                ellipse.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ShowPointIndicators()
+        {
+            foreach(Ellipse ellipse in indicators)
+            {
+                ellipse.Visibility = Visibility.Visible;
+            }
+        }
         private void InvokeJoystick(Point center)
         {
             JoystickInvoked = true;
