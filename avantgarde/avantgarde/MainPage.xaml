@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.Interaction="Enabled"
-    gaze:GazeInput.IsCursorVisible="True" Height="835"
+    gaze:GazeInput.IsCursorVisible="True"
     >
 
 	<Grid>

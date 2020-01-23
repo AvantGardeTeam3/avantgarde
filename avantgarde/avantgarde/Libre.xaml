@@ -12,7 +12,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.Interaction="Enabled"
-    gaze:GazeInput.IsCursorVisible="false"
+    gaze:GazeInput.IsCursorVisible="True"
     >
     <Grid x:Name="TopGrid">
         <Grid.RowDefinitions>
