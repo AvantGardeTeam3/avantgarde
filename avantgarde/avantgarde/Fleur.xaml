@@ -5,6 +5,9 @@
     xmlns:local="using:avantgarde"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:uc1="using:avantgarde.Joysticks"
+    xmlns:uc2="using:avantgarde.Menus"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -19,19 +22,12 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="outputGrid" Background="Black" Grid.Column="1" Grid.Row="1">
+        <Grid x:Name="outputGrid" Background="{x:Bind backgroundHex, Mode=OneWay}" Grid.Column="1" Grid.Row="1">
             <Canvas x:Name="canvas"></Canvas>
             <InkCanvas x:Name="inkCanvas"/>
         </Grid>
         <StackPanel Grid.Column ="1" Grid.Row="0" Orientation="Horizontal">
-            <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"></InkToolbar>
-            <Button Margin="5" Height="100" Width="100" Click="Redo_Button_Click">
-                <Image Source="Assets/redo.png"/>
-            </Button>
-            <Button Margin="5" Height="100" Width="100" Click="Undo_Button_Click">
-                <Image Source="Assets/undo.png"/>
-            </Button>
-            <Button Margin="5" Height="100" Width="100"/>
+            <uc2:ToolBar x:Name="toolbar" Width="{x:Bind Width}"/>
         </StackPanel>
     </Grid>
 </Page>

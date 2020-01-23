@@ -23,8 +23,6 @@ namespace avantgarde.Menus
     {
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
-        public InkDrawingAttributes GetDrawingAttributes() { return this.drawingAttributes; }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private String visibility { get; set; }
@@ -66,6 +64,7 @@ namespace avantgarde.Menus
         }
 
         public InkDrawingAttributes getDrawingAttributes() {
+            updateSizeAndColour();
             return drawingAttributes;
         }
 

@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
+using System.ComponentModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,8 +24,15 @@ namespace avantgarde
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Fleur : Page
+    public sealed partial class Fleur : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private String backgroundHex { get; set; }
+        private int WIDTH { get; set; }
         //the coordinate of the centre of the canvas
         private Point inkCanvasCentre;
         //the stroke drew by the user
@@ -44,6 +53,12 @@ namespace avantgarde
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             inkStrokeBuilder = new InkStrokeBuilder();
+
+            WIDTH = (int)Window.Current.Bounds.Width;
+            backgroundHex = Colors.Black.ToString();
+            this.toolbar.redoButtonClicked += this.Redo_Button_Click;
+            this.toolbar.undoButtonClicked += this.Undo_Button_Click;
+            this.toolbar.setBackgroundButtonClicked += this.toolbar_setBackgroundButtonClicked;
         }
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
         {
@@ -51,6 +66,7 @@ namespace avantgarde
             IReadOnlyList<InkStroke> strokes = e.Strokes;
             foreach (InkStroke stroke in strokes)
             {
+                stroke.DrawingAttributes = toolbar.getDrawingAttributes();
                 userStrokes.Add(stroke);
             }
             inkCanvas.InkPresenter.StrokeContainer.Clear();
@@ -141,7 +157,7 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
-        private async void Redo_Button_Click(object sender, RoutedEventArgs e)
+        private async void Redo_Button_Click(object sender, EventArgs e)
         {
             if (redoStack.Count() == 0)
             {
@@ -155,7 +171,7 @@ namespace avantgarde
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
         }
-        private async void Undo_Button_Click(object sender, RoutedEventArgs e)
+        private async void Undo_Button_Click(object sender, EventArgs e)
         {
             int containerSize = 0;
             var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -181,6 +197,10 @@ namespace avantgarde
             userStrokes.RemoveAt(userStrokes.Count() - 1);
             inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
         }
-        
+        private void toolbar_setBackgroundButtonClicked(object sender, EventArgs e)
+        {
+            backgroundHex = toolbar.getColourHex();
+            NotifyPropertyChanged();
+        }
     }
 }
