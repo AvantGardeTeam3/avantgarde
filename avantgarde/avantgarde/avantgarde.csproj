@@ -139,8 +139,14 @@
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\LibreToolBox.xaml.cs">
+      <DependentUpon>LibreToolBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menus\ToolBar.xaml.cs">
       <DependentUpon>ToolBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Menus\UI.xaml.cs">
+      <DependentUpon>UI.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -157,6 +163,7 @@
     <Content Include="Assets\headings\coollogo_com-55241496.png" />
     <Content Include="Assets\icons\icon_background.png" />
     <Content Include="Assets\icons\icon_checkmark.png" />
+    <Content Include="Assets\icons\icon_exit.png" />
     <Content Include="Assets\icons\icon_highlighter.png" />
     <Content Include="Assets\icons\icon_left.png" />
     <Content Include="Assets\icons\icon_menu2.png" />
@@ -164,8 +171,11 @@
     <Content Include="Assets\icons\icon_pencil.png" />
     <Content Include="Assets\icons\icon_redo.png" />
     <Content Include="Assets\icons\icon_right.png" />
+    <Content Include="Assets\icons\icon_save.png" />
     <Content Include="Assets\icons\icon_undo.png" />
     <Content Include="Assets\icons\icon_x.png" />
+    <Content Include="Assets\icons\icon_play.png" />
+    <Content Include="Assets\icons\icon_pause.png" />
     <Content Include="Assets\microsoft footer.png" />
     <Content Include="Assets\ucl footer.png" />
     <Content Include="Assets\icons\icon_undo.jpg" />
@@ -224,7 +234,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Menus\LibreToolBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Menus\ToolBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\UI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,7 +261,9 @@
       <Version>6.0.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Assets\data\COLORS.csv" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

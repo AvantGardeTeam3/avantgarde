@@ -15,17 +15,26 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
-    public sealed partial class ToolBar : UserControl, INotifyPropertyChanged
-
+    public sealed partial class LibreToolBox : UserControl, INotifyPropertyChanged
     {
+        public LibreToolBox()
+        {
+            brushSize = 10;
+            paintbrushButtonState = "Visible";
+            pencilButtonState = "Collapsed";
+            highlighterButtonState = "Collapsed";
+            getWindowAttributes();
+            this.InitializeComponent();
+            this.InitializeComponent();
+        }
+
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private String visibility { get; set; }
 
         private void NotifyPropertyChanged(String propertyName = "")
         {
@@ -40,30 +49,14 @@ namespace avantgarde.Menus
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
-        public bool IsExpanded()
-        {
-            return expander.IsExpanded;
-        }
-
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
             HEIGHT = (int)Window.Current.Bounds.Height;
         }
 
-        public ToolBar()
+        public InkDrawingAttributes getDrawingAttributes()
         {
-            brushSize = 10;
-            paintbrushButtonState = "Visible";
-            pencilButtonState = "Collapsed";
-            highlighterButtonState = "Collapsed";
-            getWindowAttributes();
-            visibility = "Collapsed";
-            this.InitializeComponent();
-            expander.IsExpanded = false;
-        }
-
-        public InkDrawingAttributes getDrawingAttributes() {
             updateSizeAndColour();
             return drawingAttributes;
         }
@@ -113,28 +106,31 @@ namespace avantgarde.Menus
             updateSizeAndColour();
         }
 
-        private void updateSizeAndColour() { 
+        private void updateSizeAndColour()
+        {
             drawingAttributes.Size = new Size(brushSize, brushSize);
-            drawingAttributes.Color = colourManager.getColour();
+          //  drawingAttributes.Color = colourManager.getColour();
         }
 
         private void initColourManager(object sender, RoutedEventArgs e)
         {
-            colourManager.openMenu();
+         //   colourManager.openMenu();
         }
+
+        public String getColourHex()
+        {
+            //   return colourManager.getColour().ToString();
+
+            return "";
+        }
+
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
-        public event EventHandler undoButtonClicked;
-        public event EventHandler redoButtonClicked;
-        public event EventHandler expanded;
-        public event EventHandler collapsed;
 
         private void goHome(object sender, RoutedEventArgs e)
         {
-            expander.IsExpanded = false;
-            //goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
-            collapsed?.Invoke(this, EventArgs.Empty);
+            goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void setBackground(object sender, RoutedEventArgs e)
@@ -142,25 +138,5 @@ namespace avantgarde.Menus
             setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void undo(object sender, RoutedEventArgs e)
-        {
-            undoButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void redo(object sender, RoutedEventArgs e)
-        {
-            redoButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        public String getColourHex() {
-            return colourManager.getColour().ToString();
-        }
-
-        private void expandToolbar(object sender, RoutedEventArgs e)
-        {
-            expander.IsExpanded = true;
-            NotifyPropertyChanged();
-            expanded?.Invoke(this, EventArgs.Empty);
-        }
     }
 }
