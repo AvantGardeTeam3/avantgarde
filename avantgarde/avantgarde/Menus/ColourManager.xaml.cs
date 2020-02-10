@@ -39,6 +39,7 @@ namespace avantgarde.Menus
         public String[] prevColours { get; set;}
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler updateColourSelection;
 
         private void NotifyPropertyChanged(String propertyName = "")
         { 
@@ -53,7 +54,7 @@ namespace avantgarde.Menus
         {
             brightness = 5;
             opacity = 100;
-            colourProfile = 6;
+            colourProfile = 1;
             this.InitializeComponent();
             DataContext = colourPickerData.getColourPickerData();
             prevColours = colourPickerData.getDefaultPrevColours();
@@ -286,8 +287,8 @@ namespace avantgarde.Menus
             selectionHex = selection.ToString();
             colourPickerData.addColourToPrevColours(selection.ToString());
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+            updateColourSelection?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
-
         }
 
         private void cancelColourPick(object sender, RoutedEventArgs e)
@@ -295,6 +296,9 @@ namespace avantgarde.Menus
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
             selection = hexToColor(selectionHex);
         }
+
+       
+
 
         public class ColourPickerData
         {

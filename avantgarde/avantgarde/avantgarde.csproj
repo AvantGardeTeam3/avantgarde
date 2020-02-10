@@ -162,8 +162,10 @@
     <Content Include="Assets\headings\Fleur Heading.png" />
     <Content Include="Assets\headings\coollogo_com-55241496.png" />
     <Content Include="Assets\icons\icon_background.png" />
+    <Content Include="Assets\icons\icon_book.png" />
     <Content Include="Assets\icons\icon_checkmark.png" />
     <Content Include="Assets\icons\icon_exit.png" />
+    <Content Include="Assets\icons\icon_file.png" />
     <Content Include="Assets\icons\icon_highlighter.png" />
     <Content Include="Assets\icons\icon_left.png" />
     <Content Include="Assets\icons\icon_menu2.png" />

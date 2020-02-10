@@ -9,15 +9,15 @@
     d:DesignWidth="600"
     mc:Ignorable="d">
 
-    <!--<Popup
-        x:Name="ColourPickerMenu"
-        HorizontalOffset="{Binding horizontalOffset}"
-        VerticalOffset="{Binding verticalOffset}">
-        <uc:ColourManager x:Name="colourManager" />
-    -->
+    <Popup
+        x:Name="libreToolBox"
+        HorizontalOffset="{x:Bind horizontalOffset}"
+        VerticalOffset="{x:Bind verticalOffset}">
+        
+    
     <Border
-        Width="{Binding width}"
-        Height="{Binding height}"
+        Width="{x:Bind width}"
+        Height="{x:Bind height}"
         Background="Black"
         BorderBrush="#4ffff6"
         BorderThickness="2"
@@ -32,7 +32,6 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" />
-                <RowDefinition Height="1.5*" />
                 <RowDefinition Height="3.2*" />
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="3*" />
@@ -51,160 +50,148 @@
                 Foreground="White"
                 Text="ToolBox" />
             <TextBlock
-                Grid.Row="1"
-                Grid.Column="1"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="Tahoma"
-                FontSize="20"
-                Foreground="White"
-                Text="Brush Style" />
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="3"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="Tahoma"
-                FontSize="20"
-                Foreground="White"
-                Text="Color" />
-            <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
                 Text="Brush Size" />
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
                 Text="Background" />
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
-                Text="Placeholder" />
+                Text="Tutorial" />
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
                 Text="Save" />
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="4"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Tahoma"
+                FontSize="15"
+                Foreground="White"
+                Text="Load" />
+            <TextBlock
+                Grid.Row="4"
                 Grid.Column="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
                 Text="Close" />
             
             <TextBlock
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Tahoma"
-                FontSize="20"
+                FontSize="15"
                 Foreground="White"
-                Text="Exit Libre" />
-            <Border
-                Grid.Row="2"
-                Grid.Column="0"
-                Width="90"
-                Height="90"
-                Background="#4ffff6"
-                BorderBrush="White"
-                BorderThickness="2"
-                CornerRadius="5,5,5,5"
-                Opacity="0.60"
-                Visibility="{x:Bind paintbrushButtonState, Mode=OneWay}" />
-            <Button
-                Grid.Row="2"
-                Grid.Column="0"
-                Width="90"
-                Height="90"
-                Margin="5"
-                HorizontalAlignment="Center"
-                Background="Transparent"
-                Click="selectPaintbrush">
-                <Image Source="/Assets/icons/icon_paintbrush.png" />
-            </Button>
-            <Border
-                Grid.Row="2"
-                Grid.Column="1"
-                Width="90"
-                Height="90"
-                Background="#4ffff6"
-                BorderBrush="White"
-                BorderThickness="2"
-                CornerRadius="5,5,5,5"
-                Opacity="0.60"
-                Visibility="{x:Bind pencilButtonState, Mode=OneWay}" />
-            <Button
-                Grid.Row="2"
-                Grid.Column="1"
-                Width="90"
-                Height="90"
-                HorizontalAlignment="Center"
-                Background="Transparent"
-                Click="selectPencil">
-                <Image Source="/Assets/icons/icon_pencil.png" />
-            </Button>
-            <Border
-                Grid.Row="2"
-                Grid.Column="2"
-                Width="90"
-                Height="90"
-                Background="#4ffff6"
-                BorderBrush="White"
-                BorderThickness="2"
-                CornerRadius="5,5,5,5"
-                Opacity="0.60"
-                Visibility="{x:Bind highlighterButtonState, Mode=OneWay}" />
-            <Button
-                Grid.Row="2"
-                Grid.Column="2"
-                Width="90"
-                Height="90"
-                Margin="5"
-                HorizontalAlignment="Center"
-                Background="Transparent"
-                Click="selectHighlighter">
-                <Image Source="/Assets/icons/icon_highlighter.png" />
-            </Button>
+                Text="Exit" />
 
-            <Button
-                Grid.Row="2"
-                Grid.Column="3"
-                Width="80"
-                Height="80"
-                Margin="5"
-                HorizontalAlignment="Center"
-                Background="Green"
-                BorderBrush="White"
-                BorderThickness="2"
-                Click="initColourManager"
-                CornerRadius="5,5,5,5" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Center" Spacing="50">
+                <Grid>
+                    <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Width="90"
+                    Height="90"
+                    Background="#4ffff6"
+                    BorderBrush="White"
+                    BorderThickness="2"
+                    CornerRadius="5,5,5,5"
+                    Opacity="0.60"
+                    Visibility="{x:Bind paintbrushButtonState, Mode=OneWay}" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Width="90"
+                    Height="90"
+                    Margin="5"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    Click="selectPaintbrush">
+                    <Image Source="/Assets/icons/icon_paintbrush.png" />
+                </Button>
+                    </Grid>
+                <Grid>
+                    <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="90"
+                    Height="90"
+                    Background="#4ffff6"
+                    BorderBrush="White"
+                    BorderThickness="2"
+                    CornerRadius="5,5,5,5"
+                    Opacity="0.60"
+                    Visibility="{x:Bind pencilButtonState, Mode=OneWay}" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="90"
+                    Height="90"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    Click="selectPencil">
+                    <Image Source="/Assets/icons/icon_pencil.png" />
+                </Button>
+                    </Grid>
+                <Grid>
+                    <Border
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="90"
+                    Height="90"
+                    Background="#4ffff6"
+                    BorderBrush="White"
+                    BorderThickness="2"
+                    CornerRadius="5,5,5,5"
+                    Opacity="0.60"
+                    Visibility="{x:Bind highlighterButtonState, Mode=OneWay}" />
+                    <Button
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="90"
+                    Height="90"
+                    Margin="5"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    Click="selectHighlighter">
+                        <Image Source="/Assets/icons/icon_highlighter.png" />
+                    </Button>
+                </Grid>
 
-            <Button
-                Grid.Row="4"
+            </StackPanel>
+
+                        <Button
+                Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Width="80"
@@ -215,7 +202,7 @@
                 <Image Source="/Assets/icons/icon_left.png" />
             </Button>
             <TextBlock
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Width="100"
@@ -225,10 +212,10 @@
                 FontFamily="Tahoma"
                 FontSize="50"
                 Foreground="White"
-                Text="10"
+                Text="{x:Bind brushSize, Mode=OneWay}"
                 TextAlignment="Center" />
             <Button
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Width="85"
@@ -240,7 +227,7 @@
             </Button>
 
             <Button
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="3"
                 Width="100"
                 Height="90"
@@ -248,11 +235,11 @@
                 Background="Transparent"
                 Click="setBackground"
                 CornerRadius="5,5,5,5">
-                <Image Source="/Assets/icons/icon_background.png" />
+                <Image Source="/Assets/icons/icon_book.png" />
             </Button>
 
             <Button
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="2"
                 Width="90"
                 Height="90"
@@ -264,45 +251,58 @@
             </Button>
 
             <Button
-                Grid.Row="6"
+                Grid.Row="5"
                 Grid.Column="0"
-                Width="90"
-                Height="90"
+                Width="100"
+                Height="100"
                 HorizontalAlignment="Center"
                 Background="Transparent"
                 Click="setBackground"
                 CornerRadius="5,5,5,5"
-                Padding="0,0,0,10">
+                Padding="0,0,0,20">
                 <Image Source="/Assets/icons/icon_save.png" />
             </Button>
 
             <Button
-                Grid.Row="6"
+                Grid.Row="5"
                 Grid.Column="2"
                 Width="80"
                 Height="80"
                 HorizontalAlignment="Center"
                 Background="Transparent"
-                Click="setBackground"
+                Click="goHome"
                 CornerRadius="5,5,5,5"
                 Padding="0,0,0,10">
                 <Image Source="/Assets/icons/icon_exit.png" />
             </Button>
 
             <Button
-                Grid.Row="6"
+                Grid.Row="5"
                 Grid.Column="3"
                 Width="70"
                 Height="70"
                 HorizontalAlignment="Center"
                 Background="Transparent"
-                Click="setBackground"
+                Click="closeToolbox"
                 CornerRadius="5,5,5,5"
                 Padding="0,0,0,10">
                 <Image Source="/Assets/icons/icon_x.png" />
             </Button>
 
+            <Button
+                Grid.Row="5"
+                Grid.Column="1"
+                Width="70"
+                Height="70"
+                HorizontalAlignment="Center"
+                Background="Transparent"
+                Click="closeToolbox"
+                CornerRadius="5,5,5,5"
+                Padding="0,0,0,10">
+                <Image Source="/Assets/icons/icon_file.png" />
+            </Button>
+
         </Grid>
     </Border>
-    <!--</Popup>-->
+    </Popup>
 </UserControl>

@@ -61,15 +61,17 @@ namespace avantgarde
 
         private DispatcherTimer dispatchTimer = new DispatcherTimer();
 
+        private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         private String backgroundHex { get; set; }
 
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private bool drawState { get; set; }
+        public static Color colourSelection {get; set;}
 
-        public InkToolbar inkToolBar = new InkToolbar();
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(String propertyName = "")
         {
@@ -83,18 +85,26 @@ namespace avantgarde
         }
         public Libre()
         {
+
+            drawState = false;
+            colourSelection = Menus.ColourManager.defaultColour;
             getWindowAttributes();
 
             this.InitializeComponent();
 
             this.DataContext = this;
 
-            backgroundHex = Colors.Black.ToString();
+            backgroundHex = Colors.LightGreen.ToString();
 
-            toolbar.goHomeButtonClicked += new EventHandler(toolbar_goHomeButtonClicked);
-            toolbar.setBackgroundButtonClicked += new EventHandler(toolbar_setBackgroundButtonClicked);
-            toolbar.undoButtonClicked += new EventHandler(toolbar_undoButtonClicker);
-            toolbar.redoButtonClicked += new EventHandler(toolbar_redoButtonClicked);
+            ui.goHomeButtonClicked += new EventHandler(goHomeButtonClicked);
+            ui.drawStateChanged += new EventHandler(drawStateButtonClicked);
+            ui.drawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);
+            ui.undoButtonClicked += new EventHandler(undoButtonClicked);
+            ui.redoButtonClicked += new EventHandler(redoButtonClicked);
+            ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
+          
+
+            
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
@@ -114,11 +124,6 @@ namespace avantgarde
 
             drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer);
             indicators = new List<Ellipse>();
-
-            toolbar.expanded += this.ToolBarExpanded;
-            toolbar.collapsed += this.ToolBarCollapsed;
-
-            ShowGrid();
         }
         private void GazeTimer_Tick(object sender, object e)
         {
@@ -147,11 +152,8 @@ namespace avantgarde
             gazePoint.Y = point.Value.Y;
 
             Point p = ToCanvasPoint(gazePoint);
-            Menus.ToolBar tb = toolbar;
-            if(p.Y < 100 || toolbar.IsExpanded())
+            if(!drawState)
             {
-                // the value 100 is from toolbar
-                // TODO : find a better way to do this
                 gazeTimer.Stop();
                 this.gazeTimerStarted = false;
                 this.timer = 0;
@@ -249,11 +251,11 @@ namespace avantgarde
             Point? sp = Snapping(ToCanvasPoint(gazePoint));
             if (sp.HasValue)
             {
-                drawingModel.newLine(startPoint, sp.Value, toolbar.getDrawingAttributes());
+                drawingModel.newLine(startPoint, sp.Value, drawingAttributes);
             }
             else
             {
-                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
+                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), drawingAttributes);
             }
             List<Point> points = drawingModel.getPoints();
             AddPointIndicators(points);
@@ -322,19 +324,6 @@ namespace avantgarde
                 line.Visibility = Visibility.Collapsed;
             }
         }
-
-        private void ToolBarExpanded(object sender, EventArgs e)
-        {
-            HideGrid();
-            HidePointIndicators();
-        }
-
-        private void ToolBarCollapsed(object sender, EventArgs e)
-        {
-            ShowGrid();
-            ShowPointIndicators();
-        }
-
         private void ClearPointIndicators()
         {
             foreach (var ellipse in indicators)
@@ -358,6 +347,11 @@ namespace avantgarde
                 ellipse.RenderTransform = translateTarget;
                 indicators.Add(ellipse);
                 canvas.Children.Add(ellipse);
+            }
+
+            if (!drawState)
+            {
+                HidePointIndicators();
             }
         }
 
@@ -449,29 +443,52 @@ namespace avantgarde
             InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
         }
-        private void toolbar_goHomeButtonClicked(object sender, EventArgs e)
+        private void goHomeButtonClicked(object sender, EventArgs e)
         {
             Frame.Navigate(typeof(MainPage));
         }
-
-        private void toolbar_setBackgroundButtonClicked(object sender, EventArgs e)
-        {
-            backgroundHex = toolbar.getColourHex();
-            NotifyPropertyChanged();
-        }
-
-        private void toolbar_redoButtonClicked(object sender, EventArgs e)
+        private void redoButtonClicked(object sender, EventArgs e)
         {
             drawingModel.redo();
             this.ClearPointIndicators();
             this.AddPointIndicators(drawingModel.getPoints());
         }
 
-        private void toolbar_undoButtonClicker(object sender, EventArgs e)
+        private void undoButtonClicked(object sender, EventArgs e)
         {
             drawingModel.undo();
             this.ClearPointIndicators();
             this.AddPointIndicators(drawingModel.getPoints());
         }
+
+        private void drawStateButtonClicked(object sender, EventArgs e)
+        {
+            drawState = !drawState;
+            updateDrawState();
+        }
+
+        private void drawingPropertiesUpdated(object sender, EventArgs e) {
+            drawingAttributes = ui.getDrawingAttributes();
+        }
+
+        private void backgroundColourUpdated(object sender, EventArgs e)
+        {
+            backgroundHex = ui.getBackgroundHex();
+            NotifyPropertyChanged();
+        }
+
+        private void updateDrawState() {
+            if (drawState)
+            {
+                ShowGrid();
+                ShowPointIndicators();
+            }
+            else {
+                HideGrid();
+                HidePointIndicators();
+            }
+        }
+
+
     }
 }

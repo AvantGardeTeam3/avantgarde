@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,14 +20,17 @@ using Windows.UI.Xaml.Navigation;
 namespace avantgarde.Menus
 {
     public sealed partial class UI : UserControl, INotifyPropertyChanged
-    
+
     {
+        public String colourHex { get; set; }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
         public bool drawState { get; set; }
 
         public String drawStateIcon { get; set; }
+
+       
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -44,11 +48,26 @@ namespace avantgarde.Menus
 
         public UI()
         {
+            colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
             this.InitializeComponent();
             drawState = false;
             drawStateIcon = "/Assets/icons/icon_play.png";
 
+            colourManager.updateColourSelection += new EventHandler(updateColourSelection);
+
+            libreToolBox.goHomeButtonClicked += new EventHandler(toolboxGoHomeButtonClicked);
+            libreToolBox.propertiesUpdated += new EventHandler(toolboxPropertiesUpdated);
+            libreToolBox.setBackgroundButtonClicked += new EventHandler(backgroundColourUpdated);
+
+        }
+
+        public InkDrawingAttributes getDrawingAttributes() {
+            return libreToolBox.getDrawingAttributes();
+        }
+
+        public String getBackgroundHex() {
+            return colourManager.getColour().ToString();
         }
 
         private void updateDrawStateIcon() {
@@ -62,16 +81,21 @@ namespace avantgarde.Menus
             }
         }
 
+        public event EventHandler undoButtonClicked;
+        public event EventHandler redoButtonClicked;
+        public event EventHandler backgroundButtonClicked;
+        public event EventHandler goHomeButtonClicked;
+        public event EventHandler drawStateChanged;
+        public event EventHandler drawingPropertiesUpdated;
+        
+
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
             drawState = !drawState;
             updateDrawStateIcon();
+            drawStateChanged?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
-
-
-        public event EventHandler undoButtonClicked;
-        public event EventHandler redoButtonClicked;
 
         private void undo(object sender, RoutedEventArgs e)
         {
@@ -82,5 +106,37 @@ namespace avantgarde.Menus
         {
             redoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
+
+        private void toolboxGoHomeButtonClicked(object sender, EventArgs e)
+        {
+            goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void toolboxPropertiesUpdated(object sender, EventArgs e)
+        {
+            drawingPropertiesUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void initToolbox(object sender, RoutedEventArgs e)
+        {
+            libreToolBox.openToolbox();
+        }
+
+
+        private void initColourManager(object sender, RoutedEventArgs e)
+        {
+            colourManager.openMenu();
+        }
+
+        private void updateColourSelection(object sender, EventArgs e) {
+            colourHex = colourManager.getColour().ToString();
+            NotifyPropertyChanged();
+        }
+
+        private void backgroundColourUpdated(object sender, EventArgs e) {
+
+            backgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
     }
 }

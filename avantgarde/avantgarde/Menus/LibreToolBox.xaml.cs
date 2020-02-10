@@ -23,6 +23,7 @@ namespace avantgarde.Menus
     {
         public LibreToolBox()
         {
+            
             brushSize = 10;
             paintbrushButtonState = "Visible";
             pencilButtonState = "Collapsed";
@@ -31,6 +32,8 @@ namespace avantgarde.Menus
             this.InitializeComponent();
             this.InitializeComponent();
         }
+
+        private DependencyObject parent;
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
@@ -46,18 +49,26 @@ namespace avantgarde.Menus
         private String pencilButtonState { get; set; }
         private String highlighterButtonState { get; set; }
 
-        private int WIDTH { get; set; }
-        private int HEIGHT { get; set; }
+        private String backgroundColourHex { get; set; }
+
+        private int width { get; set; }
+        private int height { get; set; }
+
+        private int horizontalOffset { get; set; }
+
+        private int verticalOffset { get; set; }
 
         private void getWindowAttributes()
         {
-            WIDTH = (int)Window.Current.Bounds.Width;
-            HEIGHT = (int)Window.Current.Bounds.Height;
+            width = (int)(Window.Current.Bounds.Width * 0.3);
+            height = (int)(Window.Current.Bounds.Height * 0.55);
+            horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
+            verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
         }
 
         public InkDrawingAttributes getDrawingAttributes()
         {
-            updateSizeAndColour();
+            updateSize();
             return drawingAttributes;
         }
 
@@ -66,6 +77,7 @@ namespace avantgarde.Menus
             brushSize++;
             NotifyPropertyChanged();
             drawingAttributes.Size = new Size(brushSize, brushSize);
+            propertyUpdate();
         }
 
         private void decreaseBrushSize(object sender, RoutedEventArgs e)
@@ -74,6 +86,8 @@ namespace avantgarde.Menus
             brushSize--;
             NotifyPropertyChanged();
             drawingAttributes.Size = new Size(brushSize, brushSize);
+            propertyUpdate();
+         
         }
 
         private void selectPaintbrush(object sender, RoutedEventArgs e)
@@ -83,7 +97,7 @@ namespace avantgarde.Menus
             highlighterButtonState = "Collapsed";
             NotifyPropertyChanged();
             drawingAttributes = new InkDrawingAttributes();
-            updateSizeAndColour();
+            propertyUpdate();
         }
 
         private void selectPencil(object sender, RoutedEventArgs e)
@@ -93,7 +107,8 @@ namespace avantgarde.Menus
             highlighterButtonState = "Collapsed";
             NotifyPropertyChanged();
             drawingAttributes = InkDrawingAttributes.CreateForPencil();
-            updateSizeAndColour();
+            propertyUpdate();
+
         }
 
         private void selectHighlighter(object sender, RoutedEventArgs e)
@@ -102,31 +117,32 @@ namespace avantgarde.Menus
             pencilButtonState = "Collapsed";
             highlighterButtonState = "Visible";
             NotifyPropertyChanged();
-            drawingAttributes.PenTip = PenTipShape.Rectangle;
-            updateSizeAndColour();
+            //drawingAttributes.PenTip = PenTipShape.Rectangle;
+            propertyUpdate();
         }
 
-        private void updateSizeAndColour()
+        private void updateSize()
         {
             drawingAttributes.Size = new Size(brushSize, brushSize);
-          //  drawingAttributes.Color = colourManager.getColour();
         }
 
-        private void initColourManager(object sender, RoutedEventArgs e)
-        {
-         //   colourManager.openMenu();
+        public void openToolbox() {
+            if (!libreToolBox.IsOpen) { libreToolBox.IsOpen = true; }
         }
 
-        public String getColourHex()
+        private void closeToolbox(object sender, RoutedEventArgs e)
         {
-            //   return colourManager.getColour().ToString();
-
-            return "";
+            if (libreToolBox.IsOpen) { libreToolBox.IsOpen = false; }
         }
 
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
+        public event EventHandler propertiesUpdated;
+
+        private void propertyUpdate() {
+            propertiesUpdated?.Invoke(this, EventArgs.Empty);
+        }
 
         private void goHome(object sender, RoutedEventArgs e)
         {
