@@ -231,7 +231,7 @@ namespace avantgarde
         private void EndMoving(Point end)
         {
             IsMoving = false;
-            drawingModel.move(startPoint, end);
+            drawingModel.moveControlPoint(startPoint, end);
             this.ClearPointIndicators();
             List<Point> points = drawingModel.getPoints();
             this.AddPointIndicators(points);
@@ -249,11 +249,17 @@ namespace avantgarde
             Point? sp = Snapping(ToCanvasPoint(gazePoint));
             if (sp.HasValue)
             {
-                drawingModel.newLine(startPoint, sp.Value, toolbar.getDrawingAttributes());
+                Double midX = (startPoint.X + sp.Value.X) / 2;
+                Double midY = (startPoint.Y + sp.Value.Y) / 2;
+                drawingModel.newCurve(startPoint, sp.Value, new Point(midX, midY), toolbar.getDrawingAttributes());
+                // drawingModel.newLine(startPoint, sp.Value, toolbar.getDrawingAttributes());
             }
             else
             {
-                drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
+                Double midX = (startPoint.X + ToCanvasPoint(gazePoint).X) / 2;
+                Double midY = (startPoint.Y + ToCanvasPoint(gazePoint).Y) / 2;
+                drawingModel.newCurve(startPoint, ToCanvasPoint(gazePoint), new Point(midX, midY), toolbar.getDrawingAttributes());
+                // drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
             }
             List<Point> points = drawingModel.getPoints();
             AddPointIndicators(points);

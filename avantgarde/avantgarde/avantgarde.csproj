@@ -119,10 +119,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BezierCurve.cs" />
     <Compile Include="DrawingModel.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InkPointGenerator.cs" />
     <Compile Include="Joysticks\AbstractJoystick.cs" />
     <Compile Include="Joysticks\Joystick.xaml.cs">
       <DependentUpon>Joystick.xaml</DependentUpon>
