@@ -11,7 +11,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid x:Name="TopGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -23,10 +23,33 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="outputGrid" Background="{x:Bind backgroundHex, Mode=OneWay}" Grid.Column="1" Grid.Row="1">
-            <Canvas x:Name="canvas"></Canvas>
+            <Canvas x:Name="canvas" Background="Transparent"
+                Canvas.ZIndex="1">
+                
+                
+                    <controls:RadialProgressBar
+                    x:Name="radialProgressBar"
+                    Width="50"
+                    Height="50"
+                    Foreground="Black"
+                    Maximum="100"
+                    Minimum="0"
+                    Thickness="3"
+                    Visibility="Visible"
+                    Value="0" />
+                    <uc1:VerticalJoystick
+                    x:Name="canvasJoystick"
+                    Width="200"
+                    Height="200"
+                    Visibility="Collapsed"></uc1:VerticalJoystick>
+
+
+
+            </Canvas>
             <InkCanvas x:Name="inkCanvas"/>
+            <uc2:UI x:Name="ui"  Width="{x:Bind WIDTH}" Height="{x:Bind HEIGHT}" Canvas.ZIndex="2"/>
         </Grid>
-        <StackPanel Grid.Column ="1" Grid.Row="0" Orientation="Horizontal">
+        <StackPanel Grid.Column ="1" Grid.Row="0" Orientation="Horizontal" Visibility="Collapsed">
             <uc2:ToolBar x:Name="toolbar" Width="{x:Bind Width}"/>
         </StackPanel>
     </Grid>
