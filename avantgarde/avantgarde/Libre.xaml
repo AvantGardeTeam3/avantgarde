@@ -25,17 +25,17 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid
             Grid.Row="1"
             Grid.Column="1"
             Background="{x:Bind backgroundHex, Mode=OneWay}">
-            
-                <Canvas
+
+            <Canvas
                 x:Name="canvas"
                 Background="Transparent"
                 Canvas.ZIndex="1">
-                    <controls:RadialProgressBar
+                <controls:RadialProgressBar
                     x:Name="radialProgressBar"
                     Width="50"
                     Height="50"
@@ -45,27 +45,17 @@
                     Thickness="3"
                     Visibility="Visible"
                     Value="0" />
-                    <uc1:VerticalJoystick
+                <uc1:VerticalJoystick
                     x:Name="canvasJoystick"
                     Width="200"
                     Height="200"
                     Visibility="Collapsed" />
-                </Canvas>
+            </Canvas>
             <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0" />
 
             <uc2:UI x:Name="ui"  Width="{x:Bind WIDTH}" Height="{x:Bind HEIGHT}" Canvas.ZIndex="2"/>
 
         </Grid>
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Orientation="Horizontal">
-            <uc2:ToolBar
-                x:Name="toolbar"
-                Width="{x:Bind WIDTH}"
-                Visibility="Collapsed" />
-        </StackPanel>
 
     </Grid>
 </Page>

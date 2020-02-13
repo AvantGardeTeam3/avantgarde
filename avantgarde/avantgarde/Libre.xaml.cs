@@ -65,6 +65,8 @@ namespace avantgarde
 
         private String backgroundHex { get; set; }
 
+        private List<Ellipse> indicators;
+        private List<Line> GridLines = new List<Line>();
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
@@ -102,9 +104,7 @@ namespace avantgarde
             ui.undoButtonClicked += new EventHandler(undoButtonClicked);
             ui.redoButtonClicked += new EventHandler(redoButtonClicked);
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
-          
-
-            
+            ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
@@ -180,6 +180,7 @@ namespace avantgarde
             {
                 if(indicatingStroke != null)
                 {
+                    
                     indicatingStroke.Selected = true;
                     inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
                     indicatingStroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
@@ -266,9 +267,7 @@ namespace avantgarde
                 indicatingStroke = null;
             }
         }
-        private List<Ellipse> indicators;
-
-        private List<Line> GridLines = new List<Line>();
+        
 
         private void InitGrid()
         {
@@ -441,6 +440,9 @@ namespace avantgarde
             }
             inkPoints.Add(new InkPoint(end, 0.5f));
             InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
+            
+
+            inkStrokeBuilder.SetDefaultDrawingAttributes(drawingAttributes);
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
         }
         private void goHomeButtonClicked(object sender, EventArgs e)
@@ -475,6 +477,11 @@ namespace avantgarde
         {
             backgroundHex = ui.getBackgroundHex();
             NotifyPropertyChanged();
+        }
+
+        private void updateColourSelection(object sender, EventArgs e) {
+            colourSelection = ui.getColour();
+            drawingAttributes.Color = colourSelection;
         }
 
         private void updateDrawState() {

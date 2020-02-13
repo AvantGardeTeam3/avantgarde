@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,9 +28,9 @@ namespace avantgarde.Menus
         private int HEIGHT { get; set; }
 
         public bool drawState { get; set; }
-
         public String drawStateIcon { get; set; }
 
+        public Color colourSelection;
        
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -70,6 +71,10 @@ namespace avantgarde.Menus
             return colourManager.getColour().ToString();
         }
 
+        public Color getColour() {
+            return colourSelection;
+        }
+
         private void updateDrawStateIcon() {
             if (drawState)
             {
@@ -87,7 +92,8 @@ namespace avantgarde.Menus
         public event EventHandler goHomeButtonClicked;
         public event EventHandler drawStateChanged;
         public event EventHandler drawingPropertiesUpdated;
-        
+        public event EventHandler colourSelectionUpdated;
+
 
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
@@ -130,6 +136,8 @@ namespace avantgarde.Menus
 
         private void updateColourSelection(object sender, EventArgs e) {
             colourHex = colourManager.getColour().ToString();
+            colourSelection = colourManager.getColour();
+            colourSelectionUpdated?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
 
