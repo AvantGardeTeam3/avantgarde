@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,19 +22,22 @@ namespace avantgarde.Menus
 {
     public sealed partial class LibreToolBox : UserControl, INotifyPropertyChanged
     {
+
+        public Color colourSelection;
+        public String colourHex { get; set; }
         public LibreToolBox()
         {
-            
+            this.InitializeComponent();
+            colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
             paintbrushButtonState = "Visible";
             pencilButtonState = "Collapsed";
             highlighterButtonState = "Collapsed";
             getWindowAttributes();
-            this.InitializeComponent();
-            this.InitializeComponent();
-        }
+            
 
-        private DependencyObject parent;
+            colourManager.updateColourSelection += new EventHandler(updateColourSelection);
+        }
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
@@ -49,21 +53,13 @@ namespace avantgarde.Menus
         private String pencilButtonState { get; set; }
         private String highlighterButtonState { get; set; }
 
-        private String backgroundColourHex { get; set; }
-
-        private int width { get; set; }
-        private int height { get; set; }
-
-        private int horizontalOffset { get; set; }
-
-        private int verticalOffset { get; set; }
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
 
         private void getWindowAttributes()
         {
-            width = (int)(Window.Current.Bounds.Width * 0.3);
-            height = (int)(Window.Current.Bounds.Height * 0.55);
-            horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
-            verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
+            WIDTH = (int)(Window.Current.Bounds.Width);
+            HEIGHT = (int)(Window.Current.Bounds.Height);
         }
 
         public InkDrawingAttributes getDrawingAttributes()
@@ -126,19 +122,43 @@ namespace avantgarde.Menus
             drawingAttributes.Size = new Size(brushSize, brushSize);
         }
 
+        public bool isOpen() {
+            return libreToolBox.IsOpen;
+        }
         public void openToolbox() {
             if (!libreToolBox.IsOpen) { libreToolBox.IsOpen = true; }
         }
 
-        private void closeToolbox(object sender, RoutedEventArgs e)
+        public void closeToolbox(object sender, RoutedEventArgs e)
         {
             if (libreToolBox.IsOpen) { libreToolBox.IsOpen = false; }
+            toolboxClosed?.Invoke(this, EventArgs.Empty);
         }
 
+        public ColourManager getColourManager() {
+
+            return colourManager;
+        }
+
+      
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
         public event EventHandler propertiesUpdated;
+        public event EventHandler undoButtonClicked;
+        public event EventHandler redoButtonClicked;
+        public event EventHandler toolboxClosed;
+        public event EventHandler colourSelectionUpdated;
+        public event EventHandler clearCanvasButtonClicked;
+
+        private void updateColourSelection(object sender, EventArgs e)
+        {
+            colourHex = colourManager.getColour().ToString();
+            colourSelection = colourManager.getColour();
+            colourSelectionUpdated?.Invoke(this, EventArgs.Empty);
+            NotifyPropertyChanged();
+        }
+
 
         private void propertyUpdate() {
             propertiesUpdated?.Invoke(this, EventArgs.Empty);
@@ -154,5 +174,23 @@ namespace avantgarde.Menus
             setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
+        private void undo(object sender, RoutedEventArgs e)
+        {
+            undoButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void redo(object sender, RoutedEventArgs e)
+        {
+            redoButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void clearCanvas(object sender, RoutedEventArgs e) { 
+            clearCanvasButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void initColourManager(object sender, RoutedEventArgs e)
+        {
+            colourManager.openMenu();
+        }
     }
 }

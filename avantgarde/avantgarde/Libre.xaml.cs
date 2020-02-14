@@ -43,6 +43,7 @@ namespace avantgarde
 
         private GazeInputSourcePreview gazeInputSourcePreview;
 
+        
         private Point gazePoint = new Point(0, 0);
         private Point startPoint;
         private Point joystickPoint;
@@ -71,6 +72,7 @@ namespace avantgarde
         private int HEIGHT { get; set; }
 
         private bool drawState { get; set; }
+
         public static Color colourSelection {get; set;}
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,7 +89,7 @@ namespace avantgarde
         }
         public Libre()
         {
-
+            
             drawState = false;
             colourSelection = Menus.ColourManager.defaultColour;
             getWindowAttributes();
@@ -105,6 +107,7 @@ namespace avantgarde
             ui.redoButtonClicked += new EventHandler(redoButtonClicked);
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            ui.clearCanvas += new EventHandler(clearCanvas);
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
@@ -180,13 +183,14 @@ namespace avantgarde
             {
                 if(indicatingStroke != null)
                 {
-                    
+                     
                     indicatingStroke.Selected = true;
                     inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
                     indicatingStroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
                     inkCanvas.InkPresenter.StrokeContainer.AddStroke(indicatingStroke);
                 } else
                 {
+                    
                     indicatingStroke = MakeStroke(startPoint, ToCanvasPoint(gazePoint));
                     inkCanvas.InkPresenter.StrokeContainer.AddStroke(indicatingStroke);
                 }
@@ -440,7 +444,12 @@ namespace avantgarde
             }
             inkPoints.Add(new InkPoint(end, 0.5f));
             InkStrokeBuilder inkStrokeBuilder = new InkStrokeBuilder();
-            
+
+            InkDrawingAttributes tempAttributes = drawingAttributes;
+
+            if (ui.isDrawing) {
+                tempAttributes.Size = new Size(5,5);
+            }
 
             inkStrokeBuilder.SetDefaultDrawingAttributes(drawingAttributes);
             return inkStrokeBuilder.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
@@ -482,6 +491,12 @@ namespace avantgarde
         private void updateColourSelection(object sender, EventArgs e) {
             colourSelection = ui.getColour();
             drawingAttributes.Color = colourSelection;
+        }
+
+        private void clearCanvas(object sender, EventArgs e)
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+
         }
 
         private void updateDrawState() {

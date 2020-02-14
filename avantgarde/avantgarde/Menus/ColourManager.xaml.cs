@@ -54,7 +54,7 @@ namespace avantgarde.Menus
         {
             brightness = 5;
             opacity = 100;
-            colourProfile = 1;
+            colourProfile = 6;
             this.InitializeComponent();
             DataContext = colourPickerData.getColourPickerData();
             prevColours = colourPickerData.getDefaultPrevColours();
