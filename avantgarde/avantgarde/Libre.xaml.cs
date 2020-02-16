@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Shapes;
 using Windows.UI.Input.Inking;
 
 using Windows.Devices.Input.Preview;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using avantgarde.Menus;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -70,17 +72,14 @@ namespace avantgarde
             DataContext = this;
 
             drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer);
-            controller = new Controller.GazeController(this, GazeInputSourcePreview.GetForCurrentView(), drawingModel, ui);         
+            controller = new Controller.GazeController(this);         
         }
-
-        private Point ToCanvasPoint(Point point)
-        {
-            Double x = point.X;
-            Double y = point.Y;
-            y -= TopGrid.RowDefinitions[0].ActualHeight;
-            return new Point(x, y);
-        }
-        
+        public GazeInputSourcePreview GetGazeInputSourcePreview() { return GazeInputSourcePreview.GetForCurrentView(); }
+        public DrawingModel GetDrawingModel() { return this.drawingModel; }
+        public UI GetUI() { return this.ui; }
+        public RadialProgressBar GetRadialProgressBar() { return this.radialProgressBar; }
+        public InkCanvas GetInkCanvas() { return inkCanvas; }
+        public Canvas GetCanvas() { return this.canvas; }
         private void goHomeButtonClicked(object sender, EventArgs e)
         {
             Frame.Navigate(typeof(MainPage));
@@ -89,27 +88,22 @@ namespace avantgarde
         {
             drawingModel.redo();
         }
-
         private void undoButtonClicked(object sender, EventArgs e)
         {
             drawingModel.undo();
         }
-
         private void drawStateButtonClicked(object sender, EventArgs e)
         {
-            
+            controller.Paused = !controller.Paused;
         }
-
         private void drawingPropertiesUpdated(object sender, EventArgs e) {
             drawingAttributes = ui.getDrawingAttributes();
         }
-
         private void backgroundColourUpdated(object sender, EventArgs e)
         {
             backgroundHex = ui.getBackgroundHex();
             NotifyPropertyChanged();
         }
-
         private void updateColourSelection(object sender, EventArgs e) {
             colourSelection = ui.getColour();
             drawingAttributes.Color = colourSelection;

@@ -155,6 +155,8 @@ namespace avantgarde
                 endPoints.Add(p0);
             }
             if (!endPoints.Contains(p3)) { endPoints.Add(p3); }
+            // controlPoints.Add(p1);
+            // controlPoints.Add(p2);
 
             curves.Add(curve);
             container.AddStroke(curve.InkStroke);
