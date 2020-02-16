@@ -119,8 +119,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BezierCurve.cs" />
-    <Compile Include="DrawingModel.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Controller\GazeController.cs" />
+    <Compile Include="Drawing\BezierCurve.cs" />
+    <Compile Include="Drawing\DrawingModel.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
@@ -151,6 +153,7 @@
       <DependentUpon>UI.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
