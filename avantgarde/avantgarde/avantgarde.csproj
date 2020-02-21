@@ -139,6 +139,9 @@
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\ConfirmTool.xaml.cs">
+      <DependentUpon>ConfirmTool.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menus\LibreToolBox.xaml.cs">
       <DependentUpon>LibreToolBox.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Menus\ColourManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\ConfirmTool.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

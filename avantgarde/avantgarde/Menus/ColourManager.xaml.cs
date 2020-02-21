@@ -40,6 +40,7 @@ namespace avantgarde.Menus
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler updateColourSelection;
+        public event EventHandler colourManagerClosed;
 
         private void NotifyPropertyChanged(String propertyName = "")
         { 
@@ -288,15 +289,20 @@ namespace avantgarde.Menus
             colourPickerData.addColourToPrevColours(selection.ToString());
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
             updateColourSelection?.Invoke(this, EventArgs.Empty);
+            colourManagerClosed?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
 
         private void cancelColourPick(object sender, RoutedEventArgs e)
         {
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+            colourManagerClosed?.Invoke(this, EventArgs.Empty);
             selection = hexToColor(selectionHex);
         }
 
+        public void close() {
+            if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+        }
        
 
 

@@ -23,11 +23,20 @@ namespace avantgarde.Menus
     public sealed partial class LibreToolBox : UserControl, INotifyPropertyChanged
     {
 
+
+        private int restrictedID = 0;
+        private int RESTRICTED_NONE = 0;
+        private int RESTRICTED_CLEAR_CANVAS = 1;
+        private int RESTRICTED_GO_HOME = 2;
+
+
         public Color colourSelection;
         public String colourHex { get; set; }
         public LibreToolBox()
         {
+            
             this.InitializeComponent();
+            //styleFlyout();
             colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
             paintbrushButtonState = "Visible";
@@ -36,7 +45,10 @@ namespace avantgarde.Menus
             getWindowAttributes();
             
 
+            colourManager.colourManagerClosed += new EventHandler(colourManagerClosed);
             colourManager.updateColourSelection += new EventHandler(updateColourSelection);
+
+            confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
         }
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
@@ -66,6 +78,13 @@ namespace avantgarde.Menus
         {
             updateSize();
             return drawingAttributes;
+        }
+
+        private void styleFlyout() {
+            Style s = new Style { TargetType = typeof(Flyout) };
+            s.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(Colors.Red)));
+            brushSizeFlyout.FlyoutPresenterStyle = s;
+            NotifyPropertyChanged();
         }
 
         private void increaseBrushSize(object sender, RoutedEventArgs e)
@@ -140,7 +159,19 @@ namespace avantgarde.Menus
             return colourManager;
         }
 
-      
+        private void executeRestricted() {
+            if (restrictedID == RESTRICTED_NONE) {
+                return;
+            }else if (restrictedID == RESTRICTED_CLEAR_CANVAS)
+            {
+                clearCanvasButtonClicked?.Invoke(this, EventArgs.Empty);
+            }
+            else if (restrictedID == RESTRICTED_GO_HOME)
+            {
+                goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
+            }
+            
+        }
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
@@ -150,7 +181,18 @@ namespace avantgarde.Menus
         public event EventHandler toolboxClosed;
         public event EventHandler colourSelectionUpdated;
         public event EventHandler clearCanvasButtonClicked;
+        public event EventHandler popupOpened;
+        public event EventHandler popupClosed;
 
+
+        private void confirmDecisionMade(object sender, EventArgs e)
+        {
+            popupClosed?.Invoke(this, EventArgs.Empty);
+            if (confirmTool.decision) {
+                executeRestricted();
+            }
+            restrictedID = RESTRICTED_NONE;
+        }
         private void updateColourSelection(object sender, EventArgs e)
         {
             colourHex = colourManager.getColour().ToString();
@@ -166,7 +208,14 @@ namespace avantgarde.Menus
 
         private void goHome(object sender, RoutedEventArgs e)
         {
-            goHomeButtonClicked?.Invoke(this, EventArgs.Empty);
+            restrictedID = 2;
+
+            colourManager.close();
+
+            confirmTool.setMessage("Are you sure you wish to exit Libre?");
+            confirmTool.openConfirmTool();
+            popupOpened?.Invoke(this, EventArgs.Empty);
+
         }
 
         private void setBackground(object sender, RoutedEventArgs e)
@@ -184,13 +233,29 @@ namespace avantgarde.Menus
             redoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void clearCanvas(object sender, RoutedEventArgs e) { 
-            clearCanvasButtonClicked?.Invoke(this, EventArgs.Empty);
+        private void clearCanvas(object sender, RoutedEventArgs e) {
+            restrictedID = 1;
+
+            colourManager.close();
+            confirmTool.setMessage("Are you sure you want to clear the canvas?");
+            confirmTool.openConfirmTool();
+            popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
         private void initColourManager(object sender, RoutedEventArgs e)
         {
+            if (confirmTool.isOpen()) {
+                confirmTool.closeConfirmTool();
+            }
             colourManager.openMenu();
+            popupOpened?.Invoke(this, EventArgs.Empty);
         }
+
+        private void colourManagerClosed(object sender, EventArgs e)
+        {
+            popupClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+
     }
 }

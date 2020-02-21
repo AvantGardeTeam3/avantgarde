@@ -20,8 +20,12 @@
             Background="LightGray"
             Click="initToolbox"
             CornerRadius="5,5,5,5"
-            Opacity=".50"
-            Visibility="{x:Bind toolBoxButtonVisibility, Mode=OneWay}">
+            Opacity=".40"
+            Visibility="{x:Bind toolBoxButtonVisibility, Mode=OneWay}"
+            BorderBrush="Coral"
+            BorderThickness="2"
+            
+            >
 
             <Image
                 Width="80"
@@ -38,9 +42,10 @@
             Background="LightGray"
             Click="changeDrawState"
             CornerRadius="5,5,5,5"
-            GettingFocus="checkForSwap2"
-            GotFocus="checkForSwap"
-            Opacity="0.50">
+            Opacity="0.40"
+            BorderBrush="Coral"
+            BorderThickness="2"
+            Visibility="{x:Bind playButtonVisibility, Mode=OneWay}">
             <Image
                 Width="80"
                 Height="80"

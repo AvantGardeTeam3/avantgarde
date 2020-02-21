@@ -25,6 +25,8 @@ namespace avantgarde.Menus
 
     {
         public bool isDrawing;
+
+        private String playButtonVisibility { get; set; }
         private String playButtonPosition { get; set; }
         private String toolBoxButtonVisibility { get; set; }
         public String colourHex { get; set; }
@@ -56,6 +58,7 @@ namespace avantgarde.Menus
             isDrawing = false;
             playButtonPosition = "Center";
             toolBoxButtonVisibility = "Collapsed";
+            playButtonVisibility = "Visible";
             colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
             this.InitializeComponent();
@@ -74,6 +77,8 @@ namespace avantgarde.Menus
             libreToolBox.setBackgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             libreToolBox.toolboxClosed += new EventHandler(toolboxClosed);
             libreToolBox.clearCanvasButtonClicked += new EventHandler(clearCanvasButtonClicked);
+            libreToolBox.popupOpened += new EventHandler(hidePlayButton);
+            libreToolBox.popupClosed += new EventHandler(showPlayButton);
 
         }
 
@@ -191,39 +196,16 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
-        private void checkForSwap(object sender, RoutedEventArgs e) {
-
-            
-            if (isDrawing) {
-                Debug.WriteLine("11111111");
-                if (String.Compare(playButtonPosition, "Right") == 0) {
-                    playButtonPosition = "Left";
-                }
-                else
-                {
-                    playButtonPosition = "Right";
-                }
-                NotifyPropertyChanged();
-            }
+        private void hidePlayButton(object sender, EventArgs e)
+        {
+            playButtonVisibility = "Collapsed";
+            NotifyPropertyChanged();
         }
 
-        private void checkForSwap2(object sender, RoutedEventArgs e)
+        private void showPlayButton(object sender, EventArgs e)
         {
-           
-
-            if (isDrawing)
-            {
-                Debug.WriteLine("22222222");
-                if (String.Compare(playButtonPosition, "Right") == 0)
-                {
-                    playButtonPosition = "Left";
-                }
-                else
-                {
-                    playButtonPosition = "Right";
-                }
-                NotifyPropertyChanged();
-            }
+            playButtonVisibility = "Visible";
+            NotifyPropertyChanged();
         }
 
     }
