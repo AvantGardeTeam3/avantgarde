@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Media;
 using avantgarde.Joysticks;
 using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI;
 
 namespace avantgarde.Controller
 {
@@ -28,8 +30,19 @@ namespace avantgarde.Controller
         private InkStrokeContainer container;
         private int TimerValue = 0;
         private bool TimerStarted = false;
-
-        public bool Paused { get; set; }
+        private bool _paused;
+        public bool Paused
+        {
+            get
+            {
+                return _paused;
+            }
+            set
+            {
+                UpdateView();
+                _paused = value;
+            }
+        }
         private ControllerState state;
         private Point GazePoint = new Point(0, 0);
 
@@ -38,6 +51,9 @@ namespace avantgarde.Controller
         private InkStroke StrokeIndication = null;
         private VerticalJoystick ActiveVerticalJoystick = null;
         private Point joystickPosition;
+
+        private List<Line> gridLines = null;
+        private List<Ellipse> indicators = new List<Ellipse>();
         public GazeController(Libre page)
         {
             this.page = page;
@@ -50,10 +66,17 @@ namespace avantgarde.Controller
             this.gazeInputSourcePreview.GazeMoved += GazeMoved;
             Timer.Tick += GazeTimer_Tick;
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            ui.drawStateChanged += this.DrawStateChanged;
+            InitGrid();
+            DrawStateChanged(null, null);
+        }
+        private void DrawStateChanged(object sender, EventArgs e)
+        {
+            Paused = !ui.drawState;
         }
         private void GazeMoved(GazeInputSourcePreview sender, GazeMovedPreviewEventArgs args)
         {
-            if (Paused) return;
+            // if (Paused) return;
             var point = args.CurrentPoint.EyeGazePosition;
             if (!point.HasValue)
             {
@@ -61,12 +84,12 @@ namespace avantgarde.Controller
             }
             double distance = Util.distance(GazePoint, point.Value);
             GazePoint = point.Value;
-            if (distance < 5 && !TimerStarted)
+            if (distance < 5 && !TimerStarted && !Paused)
             {
-                if (state == ControllerState.idle || 
-                    state == ControllerState.drawing || 
-                    state == ControllerState.movingP0P3 || 
-                    state == ControllerState.movingMid || 
+                if (state == ControllerState.idle ||
+                    state == ControllerState.drawing ||
+                    state == ControllerState.movingP0P3 ||
+                    state == ControllerState.movingMid ||
                     state == ControllerState.movingControl)
                 {
                     // start timer
@@ -75,7 +98,7 @@ namespace avantgarde.Controller
                     this.progressBar.Visibility = Visibility.Visible;
                 }
             }
-            else if(distance >= 5 && TimerStarted)
+            if ((Paused || distance >= 5) && TimerStarted)
             {
                 // reset timer
                 TimerStarted = false;
@@ -96,7 +119,7 @@ namespace avantgarde.Controller
             switch (state)
             {
                 case ControllerState.drawing:
-                    if(StrokeIndication != null)
+                    if (StrokeIndication != null)
                     {
                         StrokeIndication.Selected = true;
                         container.DeleteSelected();
@@ -183,7 +206,7 @@ namespace avantgarde.Controller
         private void EndLine(Point point)
         {
             this.progressBar.Visibility = Visibility.Collapsed;
-            if(StrokeIndication != null)
+            if (StrokeIndication != null)
             {
                 StrokeIndication.Selected = true;
                 this.container.DeleteSelected();
@@ -205,6 +228,7 @@ namespace avantgarde.Controller
                 // drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
             }
             this.state = ControllerState.idle;
+            UpdateView();
         }
 
         private void StartMovingP0P3(Point point)
@@ -292,8 +316,12 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    this.state = ControllerState.idle;
                     break;
                 case "DownKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    this.state = ControllerState.idle;
                     break;
             }
         }
@@ -311,6 +339,113 @@ namespace avantgarde.Controller
                 case "DownKey":
                     break;
             }
+        }
+
+        private void UpdateView()
+        {
+            if (Paused)
+            {
+                HideGrid();
+                HideIndicator();
+            }
+            else
+            {
+                ShowGrid();
+                UpdateIndicator();
+                ShowIndicator();
+            }
+        }
+
+        private void InitGrid()
+        {
+            this.gridLines = new List<Line>();
+            int interval = 50;
+            int height = (int)Window.Current.Bounds.Height;
+            int width = (int)Window.Current.Bounds.Width;
+            Canvas canvas = page.GetCanvas();
+            // horizontal grid lines
+            for (int y = 0; y < height; y += interval)
+            {
+                Line line = new Line();
+                line.X1 = 0;
+                line.X2 = width;
+                line.Y1 = y;
+                line.Y2 = y;
+                line.Stroke = new SolidColorBrush(Colors.LightSteelBlue);
+                line.StrokeThickness = 1;
+                line.Visibility = Visibility.Collapsed;
+                Canvas.SetTop(line, 0);
+                Canvas.SetLeft(line, 0);
+                canvas.Children.Add(line);
+                this.gridLines.Add(line);
+            }
+            // vertical grid lines
+            for (int x = 0; x < width; x += interval)
+            {
+                Line line = new Line();
+                line.X1 = x;
+                line.X2 = x;
+                line.Y1 = 0;
+                line.Y2 = height;
+                line.Stroke = new SolidColorBrush(Colors.LightSteelBlue);
+                line.StrokeThickness = 1;
+                line.Visibility = Visibility.Collapsed;
+                Canvas.SetTop(line, 0);
+                Canvas.SetLeft(line, 0);
+                canvas.Children.Add(line);
+                this.gridLines.Add(line);
+            }
+        }
+
+        private void ShowGrid()
+        {
+            if (gridLines == null) return;
+            gridLines.ForEach(x => x.Visibility = Visibility.Visible);
+        }
+
+        private void HideGrid()
+        {
+            if (gridLines == null) return;
+            gridLines.ForEach(x => x.Visibility = Visibility.Collapsed);
+        }
+
+        private void UpdateIndicator()
+        {
+            ClearIndicator();
+            List<Point> points = drawingModel.GetEndPoints();
+            points.ForEach(x => AddIndicator(x));
+            ShowIndicator();
+        }
+
+        private void AddIndicator(Point point)
+        {
+            var ellipse = new Ellipse();
+            ellipse.Width = 20;
+            ellipse.Height = 20;
+            ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            ellipse.Visibility = Visibility.Visible;
+            TranslateTransform translateTarget = new TranslateTransform();
+            translateTarget.X = point.X - ellipse.Width / 2;
+            translateTarget.Y = point.Y - ellipse.Height / 2;
+            ellipse.RenderTransform = translateTarget;
+            indicators.Add(ellipse);
+            this.page.GetCanvas().Children.Add(ellipse);
+        }
+
+        private void ClearIndicator()
+        {
+            this.indicators.ForEach(x => this.page.GetCanvas().Children.Remove(x));
+            this.indicators.Clear();
+        }
+        
+        private void HideIndicator()
+        {
+            this.indicators.ForEach(x => x.Visibility = Visibility.Collapsed);
+        }
+
+        private void ShowIndicator()
+        {
+            this.indicators.ForEach(x => x.Visibility = Visibility.Visible);
         }
     }
     enum ControllerState
