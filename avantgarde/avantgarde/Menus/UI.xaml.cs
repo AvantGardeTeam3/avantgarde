@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,6 +24,11 @@ namespace avantgarde.Menus
     public sealed partial class UI : UserControl, INotifyPropertyChanged
 
     {
+        public bool isDrawing;
+
+        private String playButtonVisibility { get; set; }
+        private String playButtonPosition { get; set; }
+        private String toolBoxButtonVisibility { get; set; }
         public String colourHex { get; set; }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
@@ -49,17 +55,30 @@ namespace avantgarde.Menus
 
         public UI()
         {
+            isDrawing = false;
+            playButtonPosition = "Center";
+            toolBoxButtonVisibility = "Collapsed";
+            playButtonVisibility = "Visible";
             colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
             this.InitializeComponent();
+            
             drawState = false;
             drawStateIcon = "/Assets/icons/icon_play.png";
 
-            colourManager.updateColourSelection += new EventHandler(updateColourSelection);
+            
+            libreToolBox.openToolbox();
 
+            libreToolBox.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            libreToolBox.undoButtonClicked += new EventHandler(undo);
+            libreToolBox.redoButtonClicked += new EventHandler(redo);
             libreToolBox.goHomeButtonClicked += new EventHandler(toolboxGoHomeButtonClicked);
             libreToolBox.propertiesUpdated += new EventHandler(toolboxPropertiesUpdated);
             libreToolBox.setBackgroundButtonClicked += new EventHandler(backgroundColourUpdated);
+            libreToolBox.toolboxClosed += new EventHandler(toolboxClosed);
+            libreToolBox.clearCanvasButtonClicked += new EventHandler(clearCanvasButtonClicked);
+            libreToolBox.popupOpened += new EventHandler(hidePlayButton);
+            libreToolBox.popupClosed += new EventHandler(showPlayButton);
 
         }
 
@@ -68,20 +87,24 @@ namespace avantgarde.Menus
         }
 
         public String getBackgroundHex() {
-            return colourManager.getColour().ToString();
+            return libreToolBox.getColourManager().getColour().ToString();
         }
 
         public Color getColour() {
             return colourSelection;
         }
 
-        private void updateDrawStateIcon() {
+        private void updateDrawStateUI() {
             if (drawState)
             {
+                if (libreToolBox.isOpen()) { libreToolBox.closeToolbox(null, null); }
+                playButtonPosition = "Right";
+                toolBoxButtonVisibility = "Collapsed";
                 drawStateIcon = "/Assets/icons/icon_pause.png";
             }
             else 
             {
+                toolBoxButtonVisibility = "Visible";
                 drawStateIcon = "/Assets/icons/icon_play.png";
             }
         }
@@ -93,22 +116,40 @@ namespace avantgarde.Menus
         public event EventHandler drawStateChanged;
         public event EventHandler drawingPropertiesUpdated;
         public event EventHandler colourSelectionUpdated;
+        public event EventHandler clearCanvas;
 
 
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
+
+            if (isDrawing)
+            {
+            
+                if (String.Compare(playButtonPosition, "Right") == 0)
+                {
+                    playButtonPosition = "Left";
+                }
+                else
+                {
+                    playButtonPosition = "Right";
+                }
+                NotifyPropertyChanged();
+                return;
+            }
+
+
             drawState = !drawState;
-            updateDrawStateIcon();
+            updateDrawStateUI();
             drawStateChanged?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
 
-        private void undo(object sender, RoutedEventArgs e)
+        private void undo(object sender, EventArgs e)
         {
             undoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void redo(object sender, RoutedEventArgs e)
+        private void redo(object sender, EventArgs e)
         {
             redoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
@@ -126,17 +167,20 @@ namespace avantgarde.Menus
         private void initToolbox(object sender, RoutedEventArgs e)
         {
             libreToolBox.openToolbox();
+            toolBoxButtonVisibility = "Collapsed";
+            playButtonPosition = "Center";
+            NotifyPropertyChanged();
         }
 
-
-        private void initColourManager(object sender, RoutedEventArgs e)
+        private void clearCanvasButtonClicked(object sender, EventArgs e)
         {
-            colourManager.openMenu();
+            clearCanvas?.Invoke(this, EventArgs.Empty);
+
         }
 
         private void updateColourSelection(object sender, EventArgs e) {
-            colourHex = colourManager.getColour().ToString();
-            colourSelection = colourManager.getColour();
+            colourHex = libreToolBox.getColourManager().getColour().ToString();
+            colourSelection = libreToolBox.getColourManager().getColour();
             colourSelectionUpdated?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
@@ -144,6 +188,24 @@ namespace avantgarde.Menus
         private void backgroundColourUpdated(object sender, EventArgs e) {
 
             backgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void toolboxClosed(object sender, EventArgs e) {
+            toolBoxButtonVisibility = "Visible";
+            playButtonPosition = "Right";
+            NotifyPropertyChanged();
+        }
+
+        private void hidePlayButton(object sender, EventArgs e)
+        {
+            playButtonVisibility = "Collapsed";
+            NotifyPropertyChanged();
+        }
+
+        private void showPlayButton(object sender, EventArgs e)
+        {
+            playButtonVisibility = "Visible";
+            NotifyPropertyChanged();
         }
 
     }

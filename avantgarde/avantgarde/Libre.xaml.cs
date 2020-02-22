@@ -22,6 +22,7 @@ namespace avantgarde
     public partial class Libre : INotifyPropertyChanged
     {
         private Controller.GazeController controller;
+
         private DrawingModel drawingModel;
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
@@ -64,6 +65,7 @@ namespace avantgarde
             ui.redoButtonClicked += new EventHandler(redoButtonClicked);
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            // ui.clearCanvas += new EventHandler(clearCanvas);
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |

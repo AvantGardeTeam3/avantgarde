@@ -143,6 +143,9 @@
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\ConfirmTool.xaml.cs">
+      <DependentUpon>ConfirmTool.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menus\LibreToolBox.xaml.cs">
       <DependentUpon>LibreToolBox.xaml</DependentUpon>
     </Compile>
@@ -169,17 +172,21 @@
     <Content Include="Assets\icons\icon_background.png" />
     <Content Include="Assets\icons\icon_book.png" />
     <Content Include="Assets\icons\icon_checkmark.png" />
+    <Content Include="Assets\icons\icon_down.png" />
     <Content Include="Assets\icons\icon_exit.png" />
     <Content Include="Assets\icons\icon_file.png" />
     <Content Include="Assets\icons\icon_highlighter.png" />
     <Content Include="Assets\icons\icon_left.png" />
     <Content Include="Assets\icons\icon_menu2.png" />
     <Content Include="Assets\icons\icon_paintbrush.png" />
+    <Content Include="Assets\icons\icon_palette.png" />
     <Content Include="Assets\icons\icon_pencil.png" />
     <Content Include="Assets\icons\icon_redo.png" />
     <Content Include="Assets\icons\icon_right.png" />
     <Content Include="Assets\icons\icon_save.png" />
+    <Content Include="Assets\icons\icon_trash.png" />
     <Content Include="Assets\icons\icon_undo.png" />
+    <Content Include="Assets\icons\icon_up.png" />
     <Content Include="Assets\icons\icon_x.png" />
     <Content Include="Assets\icons\icon_play.png" />
     <Content Include="Assets\icons\icon_pause.png" />
@@ -238,6 +245,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Menus\ColourManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\ConfirmTool.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

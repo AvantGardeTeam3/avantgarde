@@ -53,7 +53,11 @@
             </Canvas>
             <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0" />
 
-            <uc2:UI x:Name="ui"  Width="{x:Bind WIDTH}" Height="{x:Bind HEIGHT}" Canvas.ZIndex="2"/>
+            <uc2:UI
+                x:Name="ui"
+                Width="{x:Bind WIDTH}"
+                Height="{x:Bind HEIGHT}"
+                Canvas.ZIndex="2" />
 
         </Grid>
 
