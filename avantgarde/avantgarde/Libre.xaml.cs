@@ -15,11 +15,10 @@ using Windows.Devices.Input.Preview;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using avantgarde.Menus;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace avantgarde
 {
-    public partial class Libre : INotifyPropertyChanged
+    public partial class Libre : INotifyPropertyChanged, IDrawMode
     {
         private Controller.GazeController controller;
 
@@ -28,8 +27,6 @@ namespace avantgarde
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         private String backgroundHex { get; set; }
-
-        private List<Line> GridLines = new List<Line>();
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
@@ -65,7 +62,7 @@ namespace avantgarde
             ui.redoButtonClicked += new EventHandler(redoButtonClicked);
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
-            // ui.clearCanvas += new EventHandler(clearCanvas);
+            ui.clearCanvas += new EventHandler(clearCanvas);
 
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
@@ -73,7 +70,7 @@ namespace avantgarde
                 Windows.UI.Core.CoreInputDeviceTypes.Touch;
             DataContext = this;
 
-            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer);
+            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, false);
             controller = new Controller.GazeController(this);         
         }
         public GazeInputSourcePreview GetGazeInputSourcePreview() { return GazeInputSourcePreview.GetForCurrentView(); }
@@ -109,6 +106,11 @@ namespace avantgarde
         private void updateColourSelection(object sender, EventArgs e) {
             colourSelection = ui.getColour();
             drawingAttributes.Color = colourSelection;
+        }
+
+        private void clearCanvas(object sender, EventArgs e)
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
         }
     }
 }

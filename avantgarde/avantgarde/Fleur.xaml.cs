@@ -13,7 +13,6 @@ using Windows.Foundation.Collections;
 
 using System.ComponentModel;
 using System.Data;
-using System.Windows.Input;
 
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -31,6 +30,8 @@ using RoutedEventArgs = Windows.UI.Xaml.RoutedEventArgs;
 using Windows.UI.Xaml.Shapes;
 using Windows.Devices.Input;
 using Windows.UI.Input.Inking.Analysis;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using avantgarde.Menus;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -39,52 +40,49 @@ namespace avantgarde
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Fleur : INotifyPropertyChanged
+    public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private String backgroundHex { get; set; }
-        private int WIDTH { get; set; }
-        private int HEIGHT { get; set; }
-        //the coordinate of the centre of the canvas
-        private Point inkCanvasCentre;
-        //the stroke drew by the user
-        List<InkStroke> userStrokes = new List<InkStroke>();
-        //used to build a stroke
-        private InkStrokeBuilder inkStrokeBuilder;
-        private int numberOfLines = 24;
-        Stack<InkStroke> redoStack = new Stack<InkStroke>();
 
-        private Point gazePoint = new Point(0, 0);
-        private Point startPoint;
-        private Point joystickPoint;
-
-        private InkStroke indicatingStroke = null;
-
-        private bool IsMoving = false;
-        private bool PenDown = false;
-        private bool JoystickInvoked = false;
-        private DispatcherTimer gazeTimer = new DispatcherTimer();
-        private bool gazeTimerStarted = false;
-        private int timer = 0;
-        private int dwellTime = 600;
+        private Controller.GazeController controller;
 
         private DrawingModel drawingModel;
 
-        private DispatcherTimer dispatchTimer = new DispatcherTimer();
-
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-        private GazeInputSourcePreview gazeInputSourcePreview;
 
-        private List<Ellipse> indicators;
-        private bool drawState { get; set; }
+        public static Color colourSelection { get; set; }
 
+        private String backgroundHex { get; set; }
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
+
+        private int numberOfLines { get; set; }
+
+        //the coordinate of the centre of the canvas
+        private Point inkCanvasCentre;
+        List<InkStroke> userStrokes = new List<InkStroke>();
+        List<InkStroke> mandalaStrokes = new List<InkStroke>();
+        private InkStrokeBuilder inkStrokeBuilder;
+        
+
+        Stack<InkStroke> redoStack = new Stack<InkStroke>();
+
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+            HEIGHT = (int)Window.Current.Bounds.Height;
+        }
         public Fleur()
         {
+            
+            numberOfLines = 10;
+            getWindowAttributes();
             this.InitializeComponent();
+            drawingAttributes = ui.getDrawingAttributes();
             inkCanvas.InkPresenter.InputDeviceTypes =
                 Windows.UI.Core.CoreInputDeviceTypes.Mouse |
                 Windows.UI.Core.CoreInputDeviceTypes.Pen |
@@ -95,13 +93,35 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             inkStrokeBuilder = new InkStrokeBuilder();
 
+            colourSelection = Menus.ColourManager.defaultColour;
 
-            HEIGHT = (int)Window.Current.Bounds.Height;
-            WIDTH = (int)Window.Current.Bounds.Width;
-            backgroundHex = Colors.Black.ToString();
-            toolbar.redoButtonClicked += this.Redo_Button_Click;
-            toolbar.undoButtonClicked += this.Undo_Button_Click;
-            toolbar.setBackgroundButtonClicked += this.toolbar_setBackgroundButtonClicked;
+            this.DataContext = this;
+
+            backgroundHex = Colors.LightGreen.ToString();
+
+            ui.goHomeButtonClicked += new EventHandler(goHomeButtonClicked);
+            ui.drawStateChanged += new EventHandler(drawStateButtonClicked);
+            ui.drawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);
+            ui.undoButtonClicked += new EventHandler(undo);
+            ui.redoButtonClicked += new EventHandler(redo);
+            ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
+            ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            ui.clearCanvas += new EventHandler(clearCanvas);
+
+            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, true);
+            controller = new Controller.GazeController(this);
+
+            drawingModel.curveDrawn += new EventHandler(curveDrawn);
+
+        }
+
+        private void curveDrawn(object sender, EventArgs e) {
+            DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
+            userStrokes.Add(arg.stroke);
+            drawingAttributes = ui.getDrawingAttributes();
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(userStrokes);
+            mandalaStrokes.AddRange(this.Transfrom(userStrokes));
         }
 
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
@@ -110,18 +130,19 @@ namespace avantgarde
             IReadOnlyList<InkStroke> strokes = e.Strokes;
             foreach (InkStroke stroke in strokes)
             {
-                stroke.DrawingAttributes = toolbar.getDrawingAttributes();
+                //stroke.DrawingAttributes = toolbar.getDrawingAttributes();
                 userStrokes.Add(stroke);
             }
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
+
         }
         private List<InkStroke> Transfrom(List<InkStroke> u)
         {
             List<InkStroke> transformedStrokes = new List<InkStroke>();
             foreach (InkStroke stroke in u)
             {
-                transformedStrokes.AddRange(TransformStroke(stroke, 24));
+                transformedStrokes.AddRange(TransformStroke(stroke, numberOfLines));
             }
             return transformedStrokes;
         }
@@ -201,7 +222,22 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
-        private async void Redo_Button_Click(object sender, EventArgs e)
+        
+        private void InkCanvas_refresh()
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
+        }
+
+
+        public GazeInputSourcePreview GetGazeInputSourcePreview() { return GazeInputSourcePreview.GetForCurrentView(); }
+        public DrawingModel GetDrawingModel() { return this.drawingModel; }
+        public UI GetUI() { return this.ui; }
+        public RadialProgressBar GetRadialProgressBar() { return this.radialProgressBar; }
+        public InkCanvas GetInkCanvas() { return inkCanvas; }
+        public Canvas GetCanvas() { return this.canvas; }
+
+        private async void redo(object sender, EventArgs e)
         {
             if (redoStack.Count() == 0)
             {
@@ -210,12 +246,8 @@ namespace avantgarde
             userStrokes.Add(redoStack.Pop());
             InkCanvas_refresh();
         }
-        private void InkCanvas_refresh()
-        {
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
-        }
-        private async void Undo_Button_Click(object sender, EventArgs e)
+
+        private async void undo(object sender, EventArgs e)
         {
             int containerSize = 0;
             var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -241,10 +273,54 @@ namespace avantgarde
             userStrokes.RemoveAt(userStrokes.Count() - 1);
             inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
         }
-        private void toolbar_setBackgroundButtonClicked(object sender, EventArgs e)
+
+        private void goHomeButtonClicked(object sender, EventArgs e)
         {
-            backgroundHex = toolbar.getColourHex();
+            Frame.Navigate(typeof(MainPage));
+        }
+        private void redoButtonClicked(object sender, EventArgs e)
+        {
+            drawingModel.redo();
+        }
+        private void undoButtonClicked(object sender, EventArgs e)
+        {
+            drawingModel.undo();
+        }
+        private void drawStateButtonClicked(object sender, EventArgs e)
+        {
+            controller.Paused = !controller.Paused;
+
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+           
+
+            if (controller.Paused)
+            {
+                inkCanvas.InkPresenter.StrokeContainer.AddStrokes(mandalaStrokes);
+            }
+            else 
+            {
+                inkCanvas.InkPresenter.StrokeContainer.AddStrokes(userStrokes);
+            }
+
+        }
+        private void drawingPropertiesUpdated(object sender, EventArgs e)
+        {
+            drawingAttributes = ui.getDrawingAttributes();
+        }
+        private void backgroundColourUpdated(object sender, EventArgs e)
+        {
+            backgroundHex = ui.getBackgroundHex();
             NotifyPropertyChanged();
+        }
+        private void updateColourSelection(object sender, EventArgs e)
+        {
+            colourSelection = ui.getColour();
+            drawingAttributes.Color = colourSelection;
+        }
+
+        private void clearCanvas(object sender, EventArgs e)
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
         }
     }
 }

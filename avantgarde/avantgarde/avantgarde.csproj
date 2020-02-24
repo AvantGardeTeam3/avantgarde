@@ -126,6 +126,7 @@
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IDrawMode.cs" />
     <Compile Include="InkPointGenerator.cs" />
     <Compile Include="Joysticks\AbstractJoystick.cs" />
     <Compile Include="Joysticks\Joystick.xaml.cs">

@@ -34,7 +34,8 @@ namespace avantgarde.Menus
         public String colourHex { get; set; }
         public LibreToolBox()
         {
-            
+            drawingAttributes.Color = ColourManager.defaultColour;
+            drawingAttributes.Size = new Size(10, 10);
             this.InitializeComponent();
             //styleFlyout();
             colourHex = ColourManager.defaultColour.ToString();

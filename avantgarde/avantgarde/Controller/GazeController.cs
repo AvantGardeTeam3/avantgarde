@@ -21,7 +21,7 @@ namespace avantgarde.Controller
 {
     class GazeController
     {
-        private Libre page;
+        private IDrawMode page;
         private UI ui;
         private GazeInputSourcePreview gazeInputSourcePreview;
         private DrawingModel drawingModel;
@@ -54,7 +54,7 @@ namespace avantgarde.Controller
 
         private List<Line> gridLines = null;
         private List<Ellipse> indicators = new List<Ellipse>();
-        public GazeController(Libre page)
+        public GazeController(IDrawMode page)
         {
             this.page = page;
             this.gazeInputSourcePreview = page.GetGazeInputSourcePreview();
@@ -68,6 +68,7 @@ namespace avantgarde.Controller
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             ui.drawStateChanged += this.DrawStateChanged;
             InitGrid();
+            HideGrid();
             DrawStateChanged(null, null);
         }
         private void DrawStateChanged(object sender, EventArgs e)
@@ -218,14 +219,12 @@ namespace avantgarde.Controller
                 Double midX = (lineStartPoint.X + sp.Value.X) / 2;
                 Double midY = (lineStartPoint.Y + sp.Value.Y) / 2;
                 drawingModel.newCurve(lineStartPoint, sp.Value, ui.getDrawingAttributes());
-                // drawingModel.newLine(startPoint, sp.Value, toolbar.getDrawingAttributes());
             }
             else
             {
                 Double midX = (lineStartPoint.X + GazePoint.X) / 2;
                 Double midY = (lineStartPoint.Y + GazePoint.Y) / 2;
                 drawingModel.newCurve(lineStartPoint, GazePoint, ui.getDrawingAttributes());
-                // drawingModel.newLine(startPoint, ToCanvasPoint(gazePoint), toolbar.getDrawingAttributes());
             }
             this.state = ControllerState.idle;
             UpdateView();
