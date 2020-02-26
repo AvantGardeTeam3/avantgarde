@@ -402,7 +402,7 @@ namespace avantgarde.Controller
             gridLines.ForEach(x => x.Visibility = Visibility.Visible);
         }
 
-        private void HideGrid()
+        public void HideGrid()
         {
             if (gridLines == null) return;
             gridLines.ForEach(x => x.Visibility = Visibility.Collapsed);

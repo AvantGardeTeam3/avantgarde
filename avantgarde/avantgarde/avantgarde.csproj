@@ -169,7 +169,7 @@
     <Content Include="Assets\headings\Avant-Garde.png" />
     <Content Include="Assets\blue radial.png" />
     <Content Include="Assets\headings\Fleur Heading.png" />
-    <Content Include="Assets\headings\coollogo_com-55241496.png" />
+    <Content Include="Assets\headings\lets create.png" />
     <Content Include="Assets\icons\icon_background.png" />
     <Content Include="Assets\icons\icon_book.png" />
     <Content Include="Assets\icons\icon_checkmark.png" />
@@ -185,6 +185,7 @@
     <Content Include="Assets\icons\icon_redo.png" />
     <Content Include="Assets\icons\icon_right.png" />
     <Content Include="Assets\icons\icon_save.png" />
+    <Content Include="Assets\icons\icon_spiral.png" />
     <Content Include="Assets\icons\icon_trash.png" />
     <Content Include="Assets\icons\icon_undo.png" />
     <Content Include="Assets\icons\icon_up.png" />

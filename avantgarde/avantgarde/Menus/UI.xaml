@@ -6,6 +6,9 @@
     xmlns:local="using:avantgarde.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="using:avantgarde.Menus"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    gaze:GazeInput.IsCursorVisible="True"
+    gaze:GazeInput.Interaction="Enabled"
     d:DesignHeight="{x:Bind HEIGHT}"
     d:DesignWidth="{x:Bind WIDTH}"
     mc:Ignorable="d">

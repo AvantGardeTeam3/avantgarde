@@ -55,6 +55,8 @@ namespace avantgarde
 
             backgroundHex = Colors.LightGreen.ToString();
 
+            ui.hideMandalaLines();
+
             ui.goHomeButtonClicked += new EventHandler(goHomeButtonClicked);
             ui.drawStateChanged += new EventHandler(drawStateButtonClicked);
             ui.drawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);

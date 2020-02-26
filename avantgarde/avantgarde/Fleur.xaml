@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    
     xmlns:local="using:avantgarde"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc1="using:avantgarde.Joysticks"
     xmlns:uc2="using:avantgarde.Menus"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     gaze:GazeInput.IsCursorVisible="True"
     gaze:GazeInput.Interaction="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -44,7 +45,9 @@
                     Minimum="0"
                     Thickness="3"
                     Visibility="Visible"
-                    Value="0" />
+                    Value="0" 
+                    Canvas.ZIndex="3" 
+                    />
                 <uc1:VerticalJoystick
                     x:Name="canvasJoystick"
                     Width="200"

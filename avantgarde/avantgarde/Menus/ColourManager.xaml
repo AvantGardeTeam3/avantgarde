@@ -17,453 +17,460 @@
         HorizontalOffset="{Binding horizontalOffset}"
         VerticalOffset="{Binding verticalOffset}">
         <Grid>
-            <Border  Width="{Binding width}"
-            Height="{Binding height}"
-            Background="Black"
-            BorderBrush="#cdff59"
-            BorderThickness="2"
-            CornerRadius="5,5,5,5"
-            Opacity="0.3"/>
-            <Border  Width="{Binding width}"
-            Height="{Binding height}"
-            Background="Transparent"
-            BorderBrush="#cdff59"
-            BorderThickness="2"
-            CornerRadius="5,5,5,5"
-            >
+            <Border
+                Width="{Binding width}"
+                Height="{Binding height}"
+                Background="Black"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                CornerRadius="5,5,5,5"
+                Opacity="0.5" />
+            <Border
+                Width="{Binding width}"
+                Height="{Binding height}"
+                Background="Transparent"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                CornerRadius="5,5,5,5">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="8*" />
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontFamily="Tahoma"
-                    FontSize="25"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Text="Colors" />
-                <Grid Grid.Row="1">
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*" />
-                        <ColumnDefinition Width="0.3*" />
-                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="7*" />
-                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="8*" />
                     </Grid.RowDefinitions>
 
-
-                    <Grid
+                    <TextBlock
                         Grid.Row="0"
-                        Grid.RowSpan="3"
-                        Grid.Column="0"
-                        Padding="30,0,0,50">
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Colors" />
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="0*" />
+                            <ColumnDefinition Width="4*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                        </Grid.RowDefinitions>
-
-                        <!--<Button Command="{Binding setColour}" CommandParameter="0"  Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FF0000"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour0"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FF8000"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour1"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FFFF00"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour2"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#80FF00"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour3"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#00FF00"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour4"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#00FF80"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour5"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#00FFFF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour6"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#0080FF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour7"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#0000FF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour8"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#7F00FF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour9"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FF00FF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour10"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FF007F"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour11"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#000000"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour12"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#808080"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour13"
-                            CornerRadius="5,5,5,5" />
-                        <Button
-                            Grid.Row="4"
-                            Grid.Column="2"
-                            Width="70"
-                            Height="70"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="#FFFFFF"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setColour14"
-                            CornerRadius="5,5,5,5" />
-                    </Grid>
-
-                    <Grid
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Padding="0,0,20,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="5*" />
+                            <RowDefinition Height="5*" />
+                            <RowDefinition Height="3*" />
                         </Grid.RowDefinitions>
 
 
-                        <Border
-                            Grid.Column="2"
-                            Margin="20"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5">
-                            <Border.Background>
-                                <SolidColorBrush Color="{x:Bind selection, Mode=OneWay}" />
-                            </Border.Background>
-                        </Border>
+                        <Grid
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            Padding="30,0,0,50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Column="0" Margin="20,20,0,0">
+                            <!--<Button Command="{Binding setColour}" CommandParameter="0"  Grid.Row="0" Grid.Column ="0" Height="70" Width="70" Background="{Binding prevColors[0]}" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FF0000"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour0"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FF8000"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour1"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FFFF00"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour2"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#80FF00"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour3"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#00FF00"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour4"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#00FF80"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour5"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#00FFFF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour6"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#0080FF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour7"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#0000FF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour8"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#7F00FF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour9"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FF00FF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour10"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FF007F"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour11"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#000000"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour12"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#808080"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour13"
+                                CornerRadius="5,5,5,5" />
+                            <Button
+                                Grid.Row="4"
+                                Grid.Column="2"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#FFFFFF"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setColour14"
+                                CornerRadius="5,5,5,5" />
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Padding="0,0,20,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Orientation="Vertical" Spacing="2" Grid.Column="2">
+                                <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="Selection"
+                                TextAlignment="Center" />
+
+                                <Border
+                                Height="150"
+                                Margin="20"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                CornerRadius="5,5,5,5">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{x:Bind selection, Mode=OneWay}" />
+                                    </Border.Background>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.ColumnSpan="2" Grid.Column="0" Margin="20,20,0,0">
+                                <TextBlock/>
+                                    <TextBlock
+                                    
+                                    FontSize="25"
+                                    Foreground="White"
+                                    Text="{x:Bind colourName, Mode=OneWay}"
+                                    VariableSizedWrapGrid.ColumnSpan="2" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="Color: " />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="R: " />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="G: " />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="B: " />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="A: " />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Margin="10,18,0,0">
+                                <TextBlock />
+                                <TextBlock/>
+                                <TextBlock />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="{x:Bind selection.ToString(), Mode=OneWay}" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="{x:Bind selection.R, Mode=OneWay}" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="{x:Bind selection.G, Mode=OneWay}" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="{x:Bind selection.B, Mode=OneWay}" />
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Text="{x:Bind selection.A, Mode=OneWay}" />
+                            </StackPanel>
+
+                        </Grid>
+
+                        <Grid
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Padding="0,0,20,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1.5*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1.5*" />
+
+                            </Grid.RowDefinitions>
+
                             <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="Brightness"
+                                TextAlignment="Center" />
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Width="80"
+                                Height="50"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                Click="increaseBrightness">
+
+                                <Image Source="/Assets/icons/icon_up.png" />
+                            </Button>
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
                                 FontSize="25"
+                                FontWeight="Bold"
                                 Foreground="White"
-                                Text="{x:Bind colourName, Mode=OneWay}"
-                                VariableSizedWrapGrid.ColumnSpan="2" />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="Color: " />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="R: " />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="G: " />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="B: " />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="A: " />
-                        </StackPanel>
-
-                        <StackPanel
-                            Grid.Column="1"
-                            Grid.ColumnSpan="2"
-                            Margin="10,18,0,0">
-                            <TextBlock />
-                            <TextBlock />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="{x:Bind selection.ToString(), Mode=OneWay}" />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="{x:Bind selection.R, Mode=OneWay}" />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="{x:Bind selection.G, Mode=OneWay}" />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="{x:Bind selection.B, Mode=OneWay}" />
-                            <TextBlock
-                                FontSize="18"
-                                Foreground="White"
-                                Text="{x:Bind selection.A, Mode=OneWay}" />
-                        </StackPanel>
-
-                    </Grid>
-
-                    <Grid
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Padding="0,0,20,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="0.5*" />
-                            <RowDefinition Height="0.2*" />
-                            <RowDefinition Height="1*" />
-
-                        </Grid.RowDefinitions>
-
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="20"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Brightness"
-                            TextAlignment="Center" />
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Width="80"
-                            Height="50"
-                            HorizontalAlignment="Left"
-                            Background="Transparent"
-                            Click="decreaseBrightness">
-
-                            <Image Source="/Assets/icons/icon_left.png" />
-                        </Button>
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="25"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="{x:Bind brightness, Mode=OneWay}"
-                            TextAlignment="Center" />
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Width="85"
-                            Height="50"
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Click="increaseBrightness">
-                            <Image Source="/Assets/icons/icon_right.png" />
-                        </Button>
+                                Text="{x:Bind brightness, Mode=OneWay}"
+                                TextAlignment="Center" />
+                            <Button
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Width="85"
+                                Height="50"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                Click="decreaseBrightness">
+                                <Image Source="/Assets/icons/icon_down.png" />
+                            </Button>
 
 
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="20"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="Opacity"
-                            TextAlignment="Center" />
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Width="80"
-                            Height="50"
-                            HorizontalAlignment="Left"
-                            Background="Transparent"
-                            Click="decreaseOpacity">
-                            <Image Source="/Assets/icons/icon_left.png" />
-                        </Button>
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="25"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="{x:Bind opacity, Mode=OneWay}"
-                            TextAlignment="Center" />
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            Grid.ColumnSpan="2"
-                            Width="85"
-                            Height="50"
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Click="increaseOpacity">
-                            <Image Source="/Assets/icons/icon_right.png" />
-                        </Button>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="Opacity"
+                                TextAlignment="Center" />
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="80"
+                                Height="50"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                Click="increaseOpacity">
+                                <Image Source="/Assets/icons/icon_up.png" />
+                            </Button>
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="25"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="{x:Bind opacity, Mode=OneWay}"
+                                TextAlignment="Center" />
+                            <Button
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Width="85"
+                                Height="50"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                Click="decreaseOpacity">
+                                <Image Source="/Assets/icons/icon_down.png" />
+                            </Button>
 
-                        <TextBlock
+                            <!--<TextBlock
                             Grid.Row="2"
                             Grid.Column="1"
                             Grid.ColumnSpan="2"
@@ -522,52 +529,50 @@
                             BorderBrush="White"
                             BorderThickness="2"
                             Click="setPrevColour3"
-                            CornerRadius="5,5,5,5" />
+                            CornerRadius="5,5,5,5" />-->
+
+                        </Grid>
+
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="0,0,30,10"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="80">
+                            <Button
+                                Grid.Column="8"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Right"
+                                Background="Transparent"
+                                BorderBrush="#ff728e"
+                                BorderThickness="2"
+                                Click="cancelColourPick"
+                                CornerRadius="5,5,5,5">
+                                <Image Source="/Assets/icons/icon_x.png" />
+                            </Button>
+                            <Button
+                                Grid.Column="8"
+                                Width="80"
+                                Height="80"
+                                HorizontalAlignment="Right"
+                                Background="Transparent"
+                                BorderBrush="#cdff59"
+                                BorderThickness="2"
+                                Click="selectColour"
+                                CornerRadius="5,5,5,5">
+                                <Image Source="/Assets/icons/icon_checkmark.png" />
+                            </Button>
+                        </StackPanel>
+
 
                     </Grid>
 
-                    <StackPanel
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Spacing="30"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal"
-                        Margin="0,0,30,10">
-                        <Button
-                            Grid.Column="8"
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Click="cancelColourPick"
-                            BorderBrush="#ff728e"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5"
-                            >
-                            <Image Source="/Assets/icons/icon_x.png" />
-                        </Button>
-                        <Button
-                            Grid.Column="8"
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Click="selectColour"
-                            BorderBrush="#cdff59"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5"
-                            >
-                            <Image Source="/Assets/icons/icon_checkmark.png" />
-                        </Button>
-                    </StackPanel>
-
 
                 </Grid>
-
-
-            </Grid>
-        </Border>
-            </Grid>
+            </Border>
+        </Grid>
     </Popup>
 </UserControl>

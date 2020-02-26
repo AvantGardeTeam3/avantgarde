@@ -23,7 +23,9 @@ namespace avantgarde.Menus
 {
     public sealed partial class ColourManager : UserControl, INotifyPropertyChanged
     {
+        public bool selectingBackground = false;
 
+        public Color backgroundSelection;
         public Color selection { get; set; }
         public int brightness { get; set; }
         public int opacity { get; set; }
@@ -31,6 +33,8 @@ namespace avantgarde.Menus
         public String colourName { get; set; }
         public String selectionHex { get; set; }
         public static Color defaultColour { get; set; }
+
+        public String backgroundHex;
 
         private int DEFAULT_BRIGHTNESS = 5;
 
@@ -41,18 +45,43 @@ namespace avantgarde.Menus
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler updateColourSelection;
         public event EventHandler colourManagerClosed;
+        public event EventHandler backgroundSelectionChanged;
 
         private void NotifyPropertyChanged(String propertyName = "")
         { 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void updateColour(int profile, int brightness) {
+            if (selectingBackground) {
+                backgroundSelection = hexToColor("FF" + colourPickerData.getColourHex(profile, brightness));
+                backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
+                if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+                colourManagerClosed?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                selection = hexToColor("FF" + colourPickerData.getColourHex(profile, brightness));
+                selectionHex = selection.ToString();
+                this.brightness = brightness;
+                this.colourProfile = profile;
+            }
+            updateColourName();
+            updateColourSelection?.Invoke(this, EventArgs.Empty);
+            NotifyPropertyChanged();
+        }
+
         public Color getColour() {
             return selection;
         }
 
+        public Color getBackgroundColour() {
+            return backgroundSelection;
+        }
+
         public ColourManager()
         {
+            backgroundSelection = Colors.Lavender;
             brightness = 5;
             opacity = 100;
             colourProfile = 6;
@@ -77,7 +106,7 @@ namespace avantgarde.Menus
             Debug.WriteLine(colourName);
         }
 
-        private Color hexToColor(string hex)
+        public Color hexToColor(string hex)
         {
             if (hex.IndexOf('#') != -1)
                 hex = hex.Replace("#", "");
@@ -102,6 +131,8 @@ namespace avantgarde.Menus
 
             return newOpacityStr;
         }
+
+        
 
 
         private void updateOpacity() {
@@ -285,16 +316,30 @@ namespace avantgarde.Menus
 
         private void selectColour(object sender, RoutedEventArgs e)
         {
-            selectionHex = selection.ToString();
-            colourPickerData.addColourToPrevColours(selection.ToString());
+            if (selectingBackground)
+            {
+                backgroundSelection = selection;
+                selection = hexToColor(selectionHex);
+                backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
+                selectingBackground = false;
+            }
+            else
+            {
+
+                selectionHex = selection.ToString();
+                colourPickerData.addColourToPrevColours(selection.ToString());
+               
+                updateColourSelection?.Invoke(this, EventArgs.Empty);
+
+            }
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
-            updateColourSelection?.Invoke(this, EventArgs.Empty);
             colourManagerClosed?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
         }
 
         private void cancelColourPick(object sender, RoutedEventArgs e)
         {
+            if (selectingBackground) { selectingBackground = false; }
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
             colourManagerClosed?.Invoke(this, EventArgs.Empty);
             selection = hexToColor(selectionHex);
@@ -303,8 +348,10 @@ namespace avantgarde.Menus
         public void close() {
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
         }
-       
 
+        public String getColourHex(int colourProfile, int brightness) {
+            return colourPickerData.getColourHex(colourProfile, brightness);
+        }
 
         public class ColourPickerData
         {

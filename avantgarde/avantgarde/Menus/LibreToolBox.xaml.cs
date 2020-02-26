@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,14 +30,30 @@ namespace avantgarde.Menus
         private int RESTRICTED_CLEAR_CANVAS = 1;
         private int RESTRICTED_GO_HOME = 2;
 
+        private int BRIGHTNESS = 0;
+        private int PROFILE = 1;
+
+        public String backgroundHex { get; set; }
+        private int[,] colourPaletteData { get; set; }
+        
+        public String[] colourPalette { get; set; }
 
         public Color colourSelection;
         public String colourHex { get; set; }
+
+        public String mandalaLinesVisibility { get; set; }
         public LibreToolBox()
         {
+            
+            colourPalette = new String[5];
             drawingAttributes.Color = ColourManager.defaultColour;
             drawingAttributes.Size = new Size(10, 10);
+            mandalaLinesVisibility = "Visible";
+            mandalaLines = 8;
+            propertyUpdate();
             this.InitializeComponent();
+            updateBackgroundButton();
+            initColourPalette();
             //styleFlyout();
             colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
@@ -48,8 +65,28 @@ namespace avantgarde.Menus
 
             colourManager.colourManagerClosed += new EventHandler(colourManagerClosed);
             colourManager.updateColourSelection += new EventHandler(updateColourSelection);
-
+            colourManager.backgroundSelectionChanged += new EventHandler(updateBackground);
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
+        }
+
+        private void updateBackgroundButton() {
+            backgroundHex = colourManager.backgroundSelection.ToString();
+            NotifyPropertyChanged();
+        }
+        private void initColourPalette() {
+            colourPaletteData = new int[,] { { 7, 3 }, { 5, 6 }, { 7, 0 }, { 2, 7 }, { 4, 11 } };
+
+            for (int x = 0; x < colourPaletteData.GetLength(0); x += 1)
+            {
+               
+               colourPalette[x] = "#FF" + colourManager.getColourHex(colourPaletteData[x, PROFILE], colourPaletteData[x,BRIGHTNESS]);
+                Debug.WriteLine(colourPalette[x]);
+                Debug.WriteLine("b: "+ colourPaletteData[x, BRIGHTNESS]);
+                Debug.WriteLine("p: " + colourPaletteData[x, PROFILE]);
+            }
+
+            NotifyPropertyChanged();
+
         }
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
@@ -62,6 +99,8 @@ namespace avantgarde.Menus
         }
 
         private double brushSize { get; set; }
+
+        public int mandalaLines { get; set; }
         private String paintbrushButtonState { get; set; }
         private String pencilButtonState { get; set; }
         private String highlighterButtonState { get; set; }
@@ -69,6 +108,10 @@ namespace avantgarde.Menus
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
+        public void hideMandalaLines() {
+            mandalaLinesVisibility = "Collapsed";
+            NotifyPropertyChanged();
+        }
         private void getWindowAttributes()
         {
             WIDTH = (int)(Window.Current.Bounds.Width);
@@ -81,13 +124,6 @@ namespace avantgarde.Menus
             return drawingAttributes;
         }
 
-        private void styleFlyout() {
-            Style s = new Style { TargetType = typeof(Flyout) };
-            s.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(Colors.Red)));
-            brushSizeFlyout.FlyoutPresenterStyle = s;
-            NotifyPropertyChanged();
-        }
-
         private void increaseBrushSize(object sender, RoutedEventArgs e)
         {
             brushSize++;
@@ -96,15 +132,49 @@ namespace avantgarde.Menus
             propertyUpdate();
         }
 
+        private void decreaseMandalaLines(object sender, RoutedEventArgs e)
+        {
+            if (mandalaLines > 1)
+            {
+                mandalaLines--;
+            }
+            else
+            {
+                return;
+            }
+            NotifyPropertyChanged();
+            propertyUpdate();
+
+        }
+
+        private void increaseMandalaLines(object sender, RoutedEventArgs e)
+        {
+            if (mandalaLines < 21)
+            {
+                mandalaLines++;
+            }
+            else {
+                return;
+            }
+            NotifyPropertyChanged();
+            propertyUpdate();
+        }
+
         private void decreaseBrushSize(object sender, RoutedEventArgs e)
         {
-            if (brushSize == 0) return;
-            brushSize--;
+            if (brushSize > 1)
+            {
+                brushSize--;
+            }
+            else {
+
+                return;
+            }
             NotifyPropertyChanged();
             drawingAttributes.Size = new Size(brushSize, brushSize);
             propertyUpdate();
-         
         }
+
 
         private void selectPaintbrush(object sender, RoutedEventArgs e)
         {
@@ -135,6 +205,55 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
             //drawingAttributes.PenTip = PenTipShape.Rectangle;
             propertyUpdate();
+        }
+
+        private void colourPalette0Clicked(object sender, RoutedEventArgs e)
+        {
+            colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS]);
+        }
+
+        private void colourPalette1Clicked(object sender, RoutedEventArgs e)
+        {
+            colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS]);
+        }
+
+        private void colourPalette2Clicked(object sender, RoutedEventArgs e)
+        {
+            colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS]);
+        }
+
+        private void colourPalette3Clicked(object sender, RoutedEventArgs e)
+        {
+            colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS]);
+        }
+
+        private void colourPalette4Clicked(object sender, RoutedEventArgs e)
+        {
+            colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS]);
+        }
+
+        private void toggleAutoSwitch(object sender, RoutedEventArgs e)
+        {
+            //TO DO
+        }
+
+        private void initThemePicker(object sender, RoutedEventArgs e)
+        {
+            //TO DO
+        }
+
+        private void saveButtonClicked(object sender, RoutedEventArgs e)
+        {
+            //TO DO
+        }
+
+        private void loadButtonClicked(object sender, RoutedEventArgs e)
+        {
+            //TO DO
+        }
+        private void exportButtonClicked(object sender, RoutedEventArgs e)
+        {
+            //TO DO
         }
 
         private void updateSize()
@@ -184,6 +303,7 @@ namespace avantgarde.Menus
         public event EventHandler clearCanvasButtonClicked;
         public event EventHandler popupOpened;
         public event EventHandler popupClosed;
+      
 
 
         private void confirmDecisionMade(object sender, EventArgs e)
@@ -219,9 +339,20 @@ namespace avantgarde.Menus
 
         }
 
+        private void updateBackground(object sender, EventArgs e) {
+            setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+            updateBackgroundButton();
+            colourManager.selectingBackground = false;
+        }
         private void setBackground(object sender, RoutedEventArgs e)
         {
-            setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+            if (confirmTool.isOpen())
+            {
+                confirmTool.closeConfirmTool();
+            }
+            colourManager.selectingBackground = true;
+            colourManager.openMenu();
+            popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
         private void undo(object sender, RoutedEventArgs e)

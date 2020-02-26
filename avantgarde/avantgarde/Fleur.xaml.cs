@@ -37,9 +37,6 @@ using avantgarde.Menus;
 
 namespace avantgarde
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -97,7 +94,7 @@ namespace avantgarde
 
             this.DataContext = this;
 
-            backgroundHex = Colors.LightGreen.ToString();
+            backgroundHex = ui.getBackgroundHex();
 
             ui.goHomeButtonClicked += new EventHandler(goHomeButtonClicked);
             ui.drawStateChanged += new EventHandler(drawStateButtonClicked);
@@ -113,14 +110,16 @@ namespace avantgarde
 
             drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
+
+            controller.HideGrid();
         }
 
         private void curveDrawn(object sender, EventArgs e) {
             DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
-            userStrokes.Add(arg.stroke);
-            drawingAttributes = ui.getDrawingAttributes();
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(userStrokes);
+            InkStroke s = arg.stroke;
+            s.DrawingAttributes = ui.getDrawingAttributes();
+            userStrokes.Add(s);
+            inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
             mandalaStrokes.AddRange(this.Transfrom(userStrokes));
         }
 
@@ -291,21 +290,26 @@ namespace avantgarde
             controller.Paused = !controller.Paused;
 
             inkCanvas.InkPresenter.StrokeContainer.Clear();
-           
+            List<InkStroke> newStrokes;
 
             if (controller.Paused)
             {
-                inkCanvas.InkPresenter.StrokeContainer.AddStrokes(mandalaStrokes);
+                newStrokes = mandalaStrokes;
             }
             else 
             {
-                inkCanvas.InkPresenter.StrokeContainer.AddStrokes(userStrokes);
+                newStrokes = userStrokes;
             }
+
+            foreach (InkStroke s in newStrokes) {
+                inkCanvas.InkPresenter.StrokeContainer.AddStroke(s.Clone());
+                    }
 
         }
         private void drawingPropertiesUpdated(object sender, EventArgs e)
         {
             drawingAttributes = ui.getDrawingAttributes();
+            numberOfLines = ui.getMandalaLines();
         }
         private void backgroundColourUpdated(object sender, EventArgs e)
         {

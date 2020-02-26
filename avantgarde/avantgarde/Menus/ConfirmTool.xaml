@@ -5,6 +5,9 @@
     xmlns:local="using:avantgarde.Menus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    gaze:GazeInput.IsCursorVisible="True"
+    gaze:GazeInput.Interaction="Enabled"
     mc:Ignorable="d">
 
     <Popup
@@ -16,7 +19,7 @@
             <Border Width="{x:Bind width}"
                 Height="{x:Bind height}"
                 Background="Black"
-                Opacity="0.3"
+                Opacity="0.5"
                 BorderBrush="#4ffff6"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5"/>

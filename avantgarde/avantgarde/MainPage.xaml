@@ -29,13 +29,11 @@
 
 		<Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="4" Source="Assets/background.png" Stretch="UniformToFill"/>
 		<Image Source="Assets/headings/Avant-Garde.png" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Height="120"/>
-		<Image Source="Assets/paint.png" Stretch="Uniform" Grid.Row="1" Grid.Column="1" Opacity=".50"/>
+		<Image Source="Assets/paint.png" Stretch="Uniform" Grid.Row="1" HorizontalAlignment="Right" Grid.Column="1" Opacity=".50"/>
 		<Image Source="Assets/flower.png" Stretch="Uniform" Grid.Row="1" Grid.Column="2" Opacity=".50"/>
-		<Button x:Name="goLibreButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goLibreButtonClick" Grid.Row="1" Grid.Column="1">
-			<Image Source="Assets/headings/Libre Heading.png"/>
-		</Button>
-		<Button x:Name="goFleurButton" HorizontalAlignment="Center" Height="100" Width="300" Click="goFleurButtonClick" Grid.Row="1" Grid.Column="2" >
-			<Image Source="Assets/headings/Fleur Heading.png" />
+		
+		<Button x:Name="goFleurButton" HorizontalAlignment="Center" Height="150" Width="400" Click="goFleurButtonClick" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" >
+			<Image Source="Assets/headings/lets create.png" />
 		</Button>
 		<Button x:Name="exitButton" Margin="20" Height="85" Width="200" Click="exitButtonClick" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
 			<Image Source="Assets/headings/exit.png" />

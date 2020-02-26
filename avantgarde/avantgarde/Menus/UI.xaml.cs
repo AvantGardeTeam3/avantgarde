@@ -47,6 +47,9 @@ namespace avantgarde.Menus
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void hideMandalaLines() {
+            libreToolBox.hideMandalaLines();
+        }
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
@@ -87,11 +90,15 @@ namespace avantgarde.Menus
         }
 
         public String getBackgroundHex() {
-            return libreToolBox.getColourManager().getColour().ToString();
+            return libreToolBox.getColourManager().getBackgroundColour().ToString();
         }
 
         public Color getColour() {
             return colourSelection;
+        }
+
+        public int getMandalaLines() {
+            return libreToolBox.mandalaLines;
         }
 
         private void updateDrawStateUI() {
