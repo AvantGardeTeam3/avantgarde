@@ -47,8 +47,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="10">
+                Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -61,7 +60,7 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent"
                 Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="10">
+                gaze:GazeInput.MaxDwellRepeatCount="20">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -74,7 +73,7 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent"
                 Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="10">
+                gaze:GazeInput.MaxDwellRepeatCount="20">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -87,7 +86,7 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent"
                 Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="10">
+                gaze:GazeInput.MaxDwellRepeatCount="20">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -100,7 +99,7 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent"
                 Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="10">
+                gaze:GazeInput.MaxDwellRepeatCount="20">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>

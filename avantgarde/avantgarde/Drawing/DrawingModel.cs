@@ -156,7 +156,7 @@ namespace avantgarde
             container.AddStroke(curve.InkStroke);
         }
 
-        public void moveEndPoints(Point point, Point position)
+        public Point moveEndPoints(Point point, Point position)
         {
             List<BezierCurve> involvedCurves = curves.FindAll(x => x.P0 == point || x.P3 == point);
             involvedCurves.ForEach(x => x.InkStroke.Selected = true);
@@ -175,6 +175,7 @@ namespace avantgarde
             }
 
             involvedCurves.ForEach(x => container.AddStroke(x.InkStroke));
+            return position;
         }
 
         public event EventHandler curveDrawn;

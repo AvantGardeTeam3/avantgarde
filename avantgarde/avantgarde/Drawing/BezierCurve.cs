@@ -139,7 +139,7 @@ namespace avantgarde.Drawing
             Double dhx = _midPoint.X - midX;
             Double dhy = _midPoint.Y - midY;
             
-            P1 = new Point(P1.X + dhx, P0.Y + dhy);
+            P1 = new Point(P0.X + dhx, P0.Y + dhy);
             P2 = new Point(P3.X + dhx, P3.Y + dhy);
         }
         private void UpdateStroke()

@@ -52,6 +52,7 @@ namespace avantgarde.Controller
 
         private InkStroke StrokeIndication = null;
         private VerticalJoystick ActiveVerticalJoystick = null;
+        private Joystick ActiveJoystick = null;
         private Point joystickPosition;
 
         private List<Line> gridLines = null;
@@ -294,7 +295,11 @@ namespace avantgarde.Controller
         }
         private Joystick InvokeJoystick(Point center, Action<object, StateChangedEventArgs> func)
         {
-            Joystick joystick = new Joystick();
+            Joystick joystick = new Joystick()
+            {
+                Height = 200,
+                Width = 200
+            };
             TranslateTransform translateTarget = new TranslateTransform
             {
                 X = center.X - joystick.Width / 2,
@@ -320,15 +325,13 @@ namespace avantgarde.Controller
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     this.StartLine(joystickPosition);
                     this.state = ControllerState.drawing;
-                    // this.StartDrawing(joystickPoint);
-                    // this.DismissJoystick();
                     break;
                 case "DownKey":
+                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    //this.StartMovingP0P3(selectedPoint.Value);
+                    //this.state = ControllerState.movingP0P3;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    this.StartMovingP0P3(selectedPoint.Value);
-                    this.state = ControllerState.movingP0P3;
-                    // this.StartMoving(joystickPoint);
-                    // this.DismissJoystick();
+                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveEndPointJoystickEventHandler);
                     break;
             }
         }
@@ -342,13 +345,15 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
+                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    //this.StartMovingMid(selectedPoint.Value);
+                    //this.state = ControllerState.movingMid;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    this.StartMovingMid(selectedPoint.Value);
-                    this.state = ControllerState.movingMid;
+                    this.state = ControllerState.idle;
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    this.state = ControllerState.idle;
+                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointJoystickEventHandler);
                     break;
             }
         }
@@ -362,13 +367,15 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
-                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    StartMovingControl(selectedPoint.Value);
-                    this.state = ControllerState.movingControl;
-                    break;
-                case "DownKey":
                     page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     state = ControllerState.idle;
+                    break;
+                case "DownKey":
+                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    //StartMovingControl(selectedPoint.Value);
+                    //this.state = ControllerState.movingControl;
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveControlPointJoystickEventHandler);
                     break;
             }
         }
@@ -380,18 +387,101 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveJoystick);
+                    this.state = ControllerState.idle;
                     break;
                 case "UpKey":
+                    joystickPosition.Y -= 5;
                     break;
                 case "DownKey":
+                    joystickPosition.Y += 5;
                     break;
                 case "LeftKey":
+                    joystickPosition.X -= 5;
                     break;
                 case "RightKey":
+                    joystickPosition.X += 5;
                     break;
             }
+            TranslateTransform translateTarget = new TranslateTransform
+            {
+                X = joystickPosition.X - ActiveJoystick.Width / 2,
+                Y = joystickPosition.Y - ActiveJoystick.Height / 2
+            };
+            ActiveJoystick.RenderTransform = translateTarget;
+            drawingModel.moveEndPoints(selectedPoint.Value, joystickPosition);
+            selectedPoint = joystickPosition;
+            UpdateIndicator();
         }
 
+        private void MoveMidPointJoystickEventHandler(object sender, StateChangedEventArgs args)
+        {
+            if (args.PointerState != PointerState.Dwell) return;
+            Button button = (Button)sender;
+            switch (button.Name)
+            {
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveJoystick);
+                    this.state = ControllerState.idle;
+                    break;
+                case "UpKey":
+                    joystickPosition.Y -= 5;
+                    break;
+                case "DownKey":
+                    joystickPosition.Y += 5;
+                    break;
+                case "LeftKey":
+                    joystickPosition.X -= 5;
+                    break;
+                case "RightKey":
+                    joystickPosition.X += 5;
+                    break;
+            }
+            TranslateTransform translateTarget = new TranslateTransform
+            {
+                X = joystickPosition.X - ActiveJoystick.Width / 2,
+                Y = joystickPosition.Y - ActiveJoystick.Height / 2
+            };
+            ActiveJoystick.RenderTransform = translateTarget;
+            drawingModel.moveMidPoint(selectedPoint.Value, joystickPosition);
+            selectedPoint = joystickPosition;
+            UpdateIndicator();
+        }
+
+
+        private void MoveControlPointJoystickEventHandler(object sender, StateChangedEventArgs args)
+        {
+            if (args.PointerState != PointerState.Dwell) return;
+            Button button = (Button)sender;
+            switch (button.Name)
+            {
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveJoystick);
+                    this.state = ControllerState.idle;
+                    break;
+                case "UpKey":
+                    joystickPosition.Y -= 5;
+                    break;
+                case "DownKey":
+                    joystickPosition.Y += 5;
+                    break;
+                case "LeftKey":
+                    joystickPosition.X -= 5;
+                    break;
+                case "RightKey":
+                    joystickPosition.X += 5;
+                    break;
+            }
+            TranslateTransform translateTarget = new TranslateTransform
+            {
+                X = joystickPosition.X - ActiveJoystick.Width / 2,
+                Y = joystickPosition.Y - ActiveJoystick.Height / 2
+            };
+            ActiveJoystick.RenderTransform = translateTarget;
+            drawingModel.moveControlPoint(selectedPoint.Value, joystickPosition);
+            selectedPoint = joystickPosition;
+            UpdateIndicator();
+        }
         private void UpdateView()
         {
             if (Paused)
