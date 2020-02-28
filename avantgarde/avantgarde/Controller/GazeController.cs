@@ -45,6 +45,8 @@ namespace avantgarde.Controller
         }
         private ControllerState state;
         private Point GazePoint = new Point(0, 0);
+        private Point? selectedPoint;
+
 
         private Point lineStartPoint;
 
@@ -177,18 +179,21 @@ namespace avantgarde.Controller
             if (controlPoint.HasValue)
             {
                 // control point selected
+                selectedPoint = controlPoint.Value;
                 ActiveVerticalJoystick = InvokeVerticalJoystick(controlPoint.Value, ControlPointJoystickEventHandler);
                 state = ControllerState.selectControl;
             }
             else if (midPoint.HasValue)
             {
                 // mid point selected
+                selectedPoint = midPoint.Value;
                 ActiveVerticalJoystick = InvokeVerticalJoystick(midPoint.Value, MidPointJoystickEventHandler);
                 state = ControllerState.selectMid;
             }
             else if (endPoint.HasValue)
             {
                 // end points selected
+                selectedPoint = endPoint.Value;
                 ActiveVerticalJoystick = InvokeVerticalJoystick(endPoint.Value, EndPointJoystickEventHandler);
                 state = ControllerState.selectP0P3;
             }
@@ -237,7 +242,9 @@ namespace avantgarde.Controller
 
         private void EndMovingP0P3(Point point)
         {
-
+            drawingModel.moveEndPoints(selectedPoint.Value, point);
+            UpdateIndicator();
+            this.state = ControllerState.idle;
         }
 
         private void StartMovingMid(Point point)
@@ -247,7 +254,9 @@ namespace avantgarde.Controller
 
         private void EndMovingMid(Point point)
         {
-
+            drawingModel.moveMidPoint(selectedPoint.Value, point);
+            UpdateIndicator();
+            this.state = ControllerState.idle;
         }
 
         private void StartMovingControl(Point point)
@@ -257,7 +266,9 @@ namespace avantgarde.Controller
 
         private void EndMovingControl(Point point)
         {
-
+            drawingModel.moveControlPoint(selectedPoint.Value, point);
+            UpdateIndicator();
+            this.state = ControllerState.idle;
         }
 
         private VerticalJoystick InvokeVerticalJoystick(Point center, Action<object, StateChangedEventArgs> func)
@@ -269,6 +280,21 @@ namespace avantgarde.Controller
                 Width = 200
             };
 
+            TranslateTransform translateTarget = new TranslateTransform
+            {
+                X = center.X - joystick.Width / 2,
+                Y = center.Y - joystick.Height / 2
+            };
+            joystick.RenderTransform = translateTarget;
+            joystick.Visibility = Visibility.Visible;
+            joystick.GazeStateChangeHandler.Add(func);
+
+            this.page.GetCanvas().Children.Add(joystick);
+            return joystick;
+        }
+        private Joystick InvokeJoystick(Point center, Action<object, StateChangedEventArgs> func)
+        {
+            Joystick joystick = new Joystick();
             TranslateTransform translateTarget = new TranslateTransform
             {
                 X = center.X - joystick.Width / 2,
@@ -299,7 +325,8 @@ namespace avantgarde.Controller
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    this.state = ControllerState.idle;
+                    this.StartMovingP0P3(selectedPoint.Value);
+                    this.state = ControllerState.movingP0P3;
                     // this.StartMoving(joystickPoint);
                     // this.DismissJoystick();
                     break;
@@ -316,7 +343,8 @@ namespace avantgarde.Controller
             {
                 case "UpKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    this.state = ControllerState.idle;
+                    this.StartMovingMid(selectedPoint.Value);
+                    this.state = ControllerState.movingMid;
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
@@ -334,8 +362,32 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    StartMovingControl(selectedPoint.Value);
+                    this.state = ControllerState.movingControl;
                     break;
                 case "DownKey":
+                    page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    state = ControllerState.idle;
+                    break;
+            }
+        }
+
+        private void MoveEndPointJoystickEventHandler(object sender, StateChangedEventArgs args)
+        {
+            if (args.PointerState != PointerState.Dwell) return;
+            Button button = (Button)sender;
+            switch (button.Name)
+            {
+                case "MidKey":
+                    break;
+                case "UpKey":
+                    break;
+                case "DownKey":
+                    break;
+                case "LeftKey":
+                    break;
+                case "RightKey":
                     break;
             }
         }
@@ -413,6 +465,10 @@ namespace avantgarde.Controller
             ClearIndicator();
             List<Point> points = drawingModel.GetEndPoints();
             points.ForEach(x => AddIndicator(x));
+            List<Point> midPoints = drawingModel.GetMidPoints();
+            midPoints.ForEach(x => AddIndicator(x));
+            List<Point> controlPoints = drawingModel.GetControlPoints();
+            controlPoints.ForEach(x => AddIndicator(x));
             ShowIndicator();
         }
 

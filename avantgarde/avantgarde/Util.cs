@@ -21,8 +21,8 @@ namespace avantgarde
         {
             foreach (Point ep in points)
             {
-                double distance = Math.Sqrt(Math.Pow(p.X - ep.X, 2) + Math.Pow(p.Y - ep.Y, 2));
-                if (distance < snapDistance) return ep;
+                double d = Util.distance(p, ep);
+                if (d < snapDistance) return ep;
             }
             return null;
         }
@@ -45,7 +45,7 @@ namespace avantgarde
         }
         public static Point MidPoint(Point p1, Point p2)
         {
-            return new Point((p1.X + p2.X) / 2, (p2.Y + p2.Y) / 2);
+            return new Point((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
         }
     }
 }

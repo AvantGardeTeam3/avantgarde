@@ -31,15 +31,40 @@ namespace avantgarde
         }
         public List<Point> GetMidPoints()
         {
-            return midPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                if (!curve.Modified) retPoints.Add(curve.MidPoint);
+                //retPoints.Add(curve.MidPoint);
+            }
+            return retPoints;
         }
         public List<Point> GetEndPoints()
         {
-            return endPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                Point p0 = curve.P0;
+                Point p3 = curve.P3;
+                if (!retPoints.Contains(p0)) retPoints.Add(p0);
+                if (!retPoints.Contains(p3)) retPoints.Add(p3);
+            }
+            return retPoints;
         }
         public List<Point> GetControlPoints()
         {
-            return controlPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                Point p1 = curve.P1;
+                Point p2 = curve.P2;
+                if (curve.Modified)
+                {
+                    retPoints.Add(p1);
+                    retPoints.Add(p2);
+                }
+            }
+            return retPoints;
         }
         public void redo()
         {
@@ -133,19 +158,23 @@ namespace avantgarde
 
         public void moveEndPoints(Point point, Point position)
         {
-            BezierCurve curve = curves.Find(x => x.P0 == point || x.P3 == point);
-            InkStroke stroke = curve.InkStroke;
-            stroke.Selected = true;
+            List<BezierCurve> involvedCurves = curves.FindAll(x => x.P0 == point || x.P3 == point);
+            involvedCurves.ForEach(x => x.InkStroke.Selected = true);
             container.DeleteSelected();
-            if (curve.P1 == point)
+
+            foreach(BezierCurve curve in involvedCurves)
             {
-                curve.P0 = position;
+                if (curve.P0 == point)
+                {
+                    curve.P0 = position;
+                }
+                else
+                {
+                    curve.P3 = position;
+                }
             }
-            else
-            {
-                curve.P3 = position;
-            }
-            container.AddStroke(curve.InkStroke);
+
+            involvedCurves.ForEach(x => container.AddStroke(x.InkStroke));
         }
 
         public event EventHandler curveDrawn;

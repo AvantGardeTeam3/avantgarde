@@ -41,13 +41,27 @@
                 Source="/Assets/joystick_ball.png" />
 
             <Button
+                x:Name="MidKey"
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Transparent"
+                Visibility="Visible"
+                gaze:GazeInput.MaxDwellRepeatCount="10">
+                <gaze:GazeInput.GazeElement>
+                    <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
+                </gaze:GazeInput.GazeElement>
+            </Button>
+            <Button
                 x:Name="UpKey"
                 Grid.Row="0"
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                gaze:GazeInput.MaxDwellRepeatCount="10">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -59,7 +73,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                gaze:GazeInput.MaxDwellRepeatCount="10">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -71,7 +86,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                gaze:GazeInput.MaxDwellRepeatCount="10">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -83,7 +99,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                gaze:GazeInput.MaxDwellRepeatCount="10">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>

@@ -64,7 +64,7 @@ namespace avantgarde
         List<InkStroke> userStrokes = new List<InkStroke>();
         List<InkStroke> mandalaStrokes = new List<InkStroke>();
         private InkStrokeBuilder inkStrokeBuilder;
-        
+
 
         Stack<InkStroke> redoStack = new Stack<InkStroke>();
 
@@ -75,7 +75,7 @@ namespace avantgarde
         }
         public Fleur()
         {
-            
+
             numberOfLines = 10;
             getWindowAttributes();
             this.InitializeComponent();
@@ -85,7 +85,7 @@ namespace avantgarde
                 Windows.UI.Core.CoreInputDeviceTypes.Pen |
                 Windows.UI.Core.CoreInputDeviceTypes.Touch;
             //register the event with UWP
-            inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
+            //inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             inkCanvasCentre.X = canvas.ActualWidth / 2;
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             inkStrokeBuilder = new InkStrokeBuilder();
@@ -114,7 +114,8 @@ namespace avantgarde
             controller.HideGrid();
         }
 
-        private void curveDrawn(object sender, EventArgs e) {
+        private void curveDrawn(object sender, EventArgs e)
+        {
             DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
             InkStroke s = arg.stroke;
             s.DrawingAttributes = ui.getDrawingAttributes();
@@ -156,7 +157,7 @@ namespace avantgarde
                 foreach (InkPoint ip in inkPoints)
                 {
                     Single pressure = ip.Pressure;
-                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i); 
+                    Point transformedPoint = TransformPoint(ip.Position, thetaDiff * i);
                     transformedInkPoints.Add(new InkPoint(transformedPoint, pressure));
                 }
                 InkStroke transformedStroke = inkStrokeBuilder.CreateStrokeFromInkPoints(transformedInkPoints, System.Numerics.Matrix3x2.Identity, stroke.StrokeStartedTime, stroke.StrokeDuration);
@@ -221,7 +222,7 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
-        
+
         private void InkCanvas_refresh()
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
@@ -268,7 +269,7 @@ namespace avantgarde
                 }
             }
             int size = userStrokes.Count();
-            redoStack.Push(userStrokes.ElementAt(size-1));
+            redoStack.Push(userStrokes.ElementAt(size - 1));
             userStrokes.RemoveAt(userStrokes.Count() - 1);
             inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
         }
@@ -296,14 +297,15 @@ namespace avantgarde
             {
                 newStrokes = mandalaStrokes;
             }
-            else 
+            else
             {
                 newStrokes = userStrokes;
             }
 
-            foreach (InkStroke s in newStrokes) {
+            foreach (InkStroke s in newStrokes)
+            {
                 inkCanvas.InkPresenter.StrokeContainer.AddStroke(s.Clone());
-                    }
+            }
 
         }
         private void drawingPropertiesUpdated(object sender, EventArgs e)

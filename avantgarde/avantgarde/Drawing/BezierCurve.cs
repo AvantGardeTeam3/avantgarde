@@ -24,6 +24,12 @@ namespace avantgarde.Drawing
             {
                 _p0.X = value.X;
                 _p0.Y = value.Y;
+                if (!_modified)
+                {
+                    _p1.X = value.X;
+                    _p1.Y = value.Y;
+                }
+                _midPoint = Util.MidPoint(_p0, _p3);
                 UpdateStroke();
             }
         }
@@ -33,6 +39,7 @@ namespace avantgarde.Drawing
             get { return _p1; }
             set
             {
+                _modified = true;
                 _p1.X = value.X;
                 _p1.Y = value.Y;
                 UpdateStroke();
@@ -44,6 +51,7 @@ namespace avantgarde.Drawing
             get { return _p2; }
             set
             {
+                _modified = true;
                 _p2.X = value.X;
                 _p2.Y = value.Y;
                 UpdateStroke();
@@ -57,6 +65,12 @@ namespace avantgarde.Drawing
             {
                 _p3.X = value.X;
                 _p3.Y = value.Y;
+                if (!_modified)
+                {
+                    _p2.X = value.X;
+                    _p2.Y = value.Y;
+                }
+                _midPoint = Util.MidPoint(_p0, _p3);
                 UpdateStroke();
             }
         }
@@ -79,7 +93,7 @@ namespace avantgarde.Drawing
             _p0 = p0;
             _p1 = p0;
             _p2 = p3;
-            _p3= p3;
+            _p3 = p3;
             _midPoint = Util.MidPoint(_p0, _p3);
             this.DrawingAttributes = drawingAttributes;
             UpdateStroke();
