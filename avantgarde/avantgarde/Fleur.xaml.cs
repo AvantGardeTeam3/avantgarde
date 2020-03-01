@@ -108,7 +108,7 @@ namespace avantgarde
             drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, true);
             controller = new Controller.GazeController(this);
 
-            drawingModel.curveDrawn += new EventHandler(curveDrawn);
+            // drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
 
             controller.HideGrid();
@@ -124,19 +124,19 @@ namespace avantgarde
             mandalaStrokes.AddRange(this.Transfrom(userStrokes));
         }
 
-        private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
-        {
-            //called everytime user finishes a stroke
-            IReadOnlyList<InkStroke> strokes = e.Strokes;
-            foreach (InkStroke stroke in strokes)
-            {
-                //stroke.DrawingAttributes = toolbar.getDrawingAttributes();
-                userStrokes.Add(stroke);
-            }
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
+        //private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
+        //{
+        //    //called everytime user finishes a stroke
+        //    IReadOnlyList<InkStroke> strokes = e.Strokes;
+        //    foreach (InkStroke stroke in strokes)
+        //    {
+        //        //stroke.DrawingAttributes = toolbar.getDrawingAttributes();
+        //        userStrokes.Add(stroke);
+        //    }
+        //    inkCanvas.InkPresenter.StrokeContainer.Clear();
+        //    inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
 
-        }
+        //}
         private List<InkStroke> Transfrom(List<InkStroke> u)
         {
             List<InkStroke> transformedStrokes = new List<InkStroke>();
@@ -151,7 +151,7 @@ namespace avantgarde
             IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
             List<InkStroke> ret = new List<InkStroke>();
             double thetaDiff = Math.PI * 2 / num;
-            for (int i = 0; i < num; i++)
+            for (int i = 1; i < num; i++)
             {
                 List<InkPoint> transformedInkPoints = new List<InkPoint>();
                 foreach (InkPoint ip in inkPoints)
@@ -290,23 +290,41 @@ namespace avantgarde
         {
             controller.Paused = !controller.Paused;
 
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            List<InkStroke> newStrokes;
+            //inkCanvas.InkPresenter.StrokeContainer.Clear();
+            //List<InkStroke> newStrokes;
 
+            //if (controller.Paused)
+            //{
+            //    newStrokes = mandalaStrokes;
+            //}
+            //else
+            //{
+            //    newStrokes = userStrokes;
+            //}
+
+            //foreach (InkStroke s in newStrokes)
+            //{
+            //    inkCanvas.InkPresenter.StrokeContainer.AddStroke(s.Clone());
+            //}
+            List<InkStroke> strokes = drawingModel.GetStrokes();
             if (controller.Paused)
             {
-                newStrokes = mandalaStrokes;
-            }
-            else
+                strokes = Transfrom(strokes);
+                strokes.ForEach(x => inkCanvas.InkPresenter.StrokeContainer.AddStroke(x));
+            } else
             {
-                newStrokes = userStrokes;
+                IReadOnlyList<InkStroke> all = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+                foreach(InkStroke stroke in all)
+                {
+                    if (!strokes.Contains(stroke))
+                    {
+                        stroke.Selected = true;
+                    }
+                }
+                inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
             }
-
-            foreach (InkStroke s in newStrokes)
-            {
-                inkCanvas.InkPresenter.StrokeContainer.AddStroke(s.Clone());
-            }
-
+            
+            //inkCanvas.InkPresenter.StrokeContainer.AddStrokes(strokes);
         }
         private void drawingPropertiesUpdated(object sender, EventArgs e)
         {

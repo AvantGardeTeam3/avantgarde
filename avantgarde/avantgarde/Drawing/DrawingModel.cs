@@ -178,7 +178,7 @@ namespace avantgarde
             return position;
         }
 
-        public event EventHandler curveDrawn;
+        // public event EventHandler curveDrawn;
         public void newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
         {
             BezierCurve curve = new BezierCurve(p0, p3, attributes);
@@ -194,15 +194,23 @@ namespace avantgarde
             // controlPoints.Add(p2);
 
             curves.Add(curve);
-            if (fleur) {
-                LineDrawnEventArgs args = new LineDrawnEventArgs();
-                args.stroke = curve.InkStroke;
-                curveDrawn?.Invoke(this, args);
-            }
-            else
-            {
-                container.AddStroke(curve.InkStroke);
-            }
+            //if (fleur) {
+            //    LineDrawnEventArgs args = new LineDrawnEventArgs();
+            //    args.stroke = curve.InkStroke;
+            //    curveDrawn?.Invoke(this, args);
+            //}
+            //else
+            //{
+            //    container.AddStroke(curve.InkStroke);
+            //}
+            container.AddStroke(curve.InkStroke);
+        }
+
+        public List<InkStroke> GetStrokes()
+        {
+            List<InkStroke> ret = new List<InkStroke>();
+            curves.ForEach(x => ret.Add(x.InkStroke));
+            return ret;
         }
 
         public class LineDrawnEventArgs : EventArgs
