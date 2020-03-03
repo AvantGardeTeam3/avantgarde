@@ -19,6 +19,11 @@ namespace avantgarde
         private List<BezierCurve> curves = new List<BezierCurve>();
         private Stack<BezierCurve> undoStack = new Stack<BezierCurve>();
 
+        public BezierCurve FindCurveByHalfPoint(Point point)
+        {
+            return curves.Find(x => x.HalfPoint == point);
+        }
+
         private bool fleur;
 
         public InkDrawingAttributes attributes { get; set; }
@@ -63,6 +68,15 @@ namespace avantgarde
                     retPoints.Add(p1);
                     retPoints.Add(p2);
                 }
+            }
+            return retPoints;
+        }
+        public List<Point> GetHalfPoints()
+        {
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                if (curve.Modified) retPoints.Add(curve.HalfPoint);
             }
             return retPoints;
         }

@@ -8,7 +8,7 @@ using Windows.UI.Input.Inking;
 
 namespace avantgarde.Drawing
 {
-    class BezierCurve
+    public class BezierCurve
     {
         private bool _modified = false;
         public bool Modified
@@ -30,6 +30,7 @@ namespace avantgarde.Drawing
                     _p1.Y = value.Y;
                 }
                 _midPoint = Util.MidPoint(_p0, _p3);
+                _halfPoint = CurveFunction(0.5);
                 UpdateStroke();
             }
         }
@@ -42,6 +43,7 @@ namespace avantgarde.Drawing
                 _modified = true;
                 _p1.X = value.X;
                 _p1.Y = value.Y;
+                _halfPoint = CurveFunction(0.5);
                 UpdateStroke();
             }
         }
@@ -54,6 +56,7 @@ namespace avantgarde.Drawing
                 _modified = true;
                 _p2.X = value.X;
                 _p2.Y = value.Y;
+                _halfPoint = CurveFunction(0.5);
                 UpdateStroke();
             }
         }
@@ -71,6 +74,7 @@ namespace avantgarde.Drawing
                     _p2.Y = value.Y;
                 }
                 _midPoint = Util.MidPoint(_p0, _p3);
+                _halfPoint = CurveFunction(0.5);
                 UpdateStroke();
             }
         }
@@ -86,6 +90,18 @@ namespace avantgarde.Drawing
                 UpdateStroke();
             }
         }
+        private Point _halfPoint;
+        public Point HalfPoint
+        {
+            get
+            {
+                return this._halfPoint;
+            }
+            private set
+            {
+                this._halfPoint = value;
+            }
+        }
         public InkDrawingAttributes DrawingAttributes { get; private set; }
         public InkStroke InkStroke { get; private set; }
         public BezierCurve(Point p0, Point p3, InkDrawingAttributes drawingAttributes)
@@ -95,6 +111,7 @@ namespace avantgarde.Drawing
             _p2 = p3;
             _p3 = p3;
             _midPoint = Util.MidPoint(_p0, _p3);
+            _halfPoint = CurveFunction(0.5);
             this.DrawingAttributes = drawingAttributes;
             UpdateStroke();
         }
@@ -141,6 +158,7 @@ namespace avantgarde.Drawing
             
             P1 = new Point(P0.X + dhx, P0.Y + dhy);
             P2 = new Point(P3.X + dhx, P3.Y + dhy);
+            _halfPoint = CurveFunction(0.5);
         }
         private void UpdateStroke()
         {

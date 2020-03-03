@@ -16,6 +16,7 @@ using Microsoft.Toolkit.Uwp.Input.GazeInteraction;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI;
+using avantgarde.Drawing;
 
 namespace avantgarde.Controller
 {
@@ -56,7 +57,21 @@ namespace avantgarde.Controller
         private Point joystickPosition;
 
         private List<Line> gridLines = null;
-        private List<Ellipse> indicators = new List<Ellipse>();
+        private List<Shape> indicators = new List<Shape>();
+
+        private BezierCurve _selectedCurve = null;
+        private BezierCurve SelectedCurve
+        {
+            get
+            {
+                return _selectedCurve;
+            }
+            set
+            {
+                _selectedCurve = value;
+            }
+        }
+
         public GazeController(IDrawMode page)
         {
             this.page = page;
@@ -174,9 +189,16 @@ namespace avantgarde.Controller
         }
         private void IdleGazeDwell(Point point)
         {
+            List<Point> controlPoints = new List<Point>();
+            if(_selectedCurve != null)
+            {
+                controlPoints.Add(_selectedCurve.P1);
+                controlPoints.Add(_selectedCurve.P2);
+            }
             Point? controlPoint = Util.snapping(drawingModel.GetControlPoints(), point, Configuration.GazeSnapDistance);
             Point? midPoint = Util.snapping(drawingModel.GetMidPoints(), point, Configuration.GazeSnapDistance);
             Point? endPoint = Util.snapping(drawingModel.GetEndPoints(), point, Configuration.GazeSnapDistance);
+            Point? halfPoint = Util.snapping(drawingModel.GetHalfPoints(), point, Configuration.GazeSnapDistance);
             if (controlPoint.HasValue)
             {
                 // control point selected
@@ -197,6 +219,12 @@ namespace avantgarde.Controller
                 selectedPoint = endPoint.Value;
                 ActiveVerticalJoystick = InvokeVerticalJoystick(endPoint.Value, EndPointJoystickEventHandler);
                 state = ControllerState.selectP0P3;
+            }
+            else if (halfPoint.HasValue)
+            {
+                selectedPoint = halfPoint.Value;
+                _selectedCurve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
+                UpdateView();
             }
             else
             {
@@ -268,8 +296,9 @@ namespace avantgarde.Controller
         private void EndMovingControl(Point point)
         {
             drawingModel.moveControlPoint(selectedPoint.Value, point);
+            _selectedCurve = null;
             UpdateIndicator();
-            this.state = ControllerState.idle;
+            this.state = ControllerState.idle;   
         }
 
         private VerticalJoystick InvokeVerticalJoystick(Point center, Action<object, StateChangedEventArgs> func)
@@ -391,16 +420,16 @@ namespace avantgarde.Controller
                     this.state = ControllerState.idle;
                     break;
                 case "UpKey":
-                    joystickPosition.Y -= 5;
+                    joystickPosition.Y -= Configuration.JoystickMoveDistance;
                     break;
                 case "DownKey":
-                    joystickPosition.Y += 5;
+                    joystickPosition.Y += Configuration.JoystickMoveDistance;
                     break;
                 case "LeftKey":
-                    joystickPosition.X -= 5;
+                    joystickPosition.X -= Configuration.JoystickMoveDistance;
                     break;
                 case "RightKey":
-                    joystickPosition.X += 5;
+                    joystickPosition.X += Configuration.JoystickMoveDistance;
                     break;
             }
             TranslateTransform translateTarget = new TranslateTransform
@@ -425,16 +454,16 @@ namespace avantgarde.Controller
                     this.state = ControllerState.idle;
                     break;
                 case "UpKey":
-                    joystickPosition.Y -= 5;
+                    joystickPosition.Y -= Configuration.JoystickMoveDistance;
                     break;
                 case "DownKey":
-                    joystickPosition.Y += 5;
+                    joystickPosition.Y += Configuration.JoystickMoveDistance;
                     break;
                 case "LeftKey":
-                    joystickPosition.X -= 5;
+                    joystickPosition.X -= Configuration.JoystickMoveDistance;
                     break;
                 case "RightKey":
-                    joystickPosition.X += 5;
+                    joystickPosition.X += Configuration.JoystickMoveDistance;
                     break;
             }
             TranslateTransform translateTarget = new TranslateTransform
@@ -460,16 +489,16 @@ namespace avantgarde.Controller
                     this.state = ControllerState.idle;
                     break;
                 case "UpKey":
-                    joystickPosition.Y -= 5;
+                    joystickPosition.Y -= Configuration.JoystickMoveDistance;
                     break;
                 case "DownKey":
-                    joystickPosition.Y += 5;
+                    joystickPosition.Y += Configuration.JoystickMoveDistance;
                     break;
                 case "LeftKey":
-                    joystickPosition.X -= 5;
+                    joystickPosition.X -= Configuration.JoystickMoveDistance;
                     break;
                 case "RightKey":
-                    joystickPosition.X += 5;
+                    joystickPosition.X += Configuration.JoystickMoveDistance;
                     break;
             }
             TranslateTransform translateTarget = new TranslateTransform
@@ -553,12 +582,20 @@ namespace avantgarde.Controller
         private void UpdateIndicator()
         {
             ClearIndicator();
+            if (_selectedCurve != null)
+            {
+                AddCurve(_selectedCurve);
+            }
+
+            
             List<Point> points = drawingModel.GetEndPoints();
             points.ForEach(x => AddIndicator(x));
             List<Point> midPoints = drawingModel.GetMidPoints();
             midPoints.ForEach(x => AddIndicator(x));
-            List<Point> controlPoints = drawingModel.GetControlPoints();
-            controlPoints.ForEach(x => AddIndicator(x));
+            //List<Point> controlPoints = drawingModel.GetControlPoints();
+            //controlPoints.ForEach(x => AddIndicator(x));
+            List<Point> halfPoints = drawingModel.GetHalfPoints();
+            halfPoints.ForEach(x => AddIndicator(x));
             ShowIndicator();
         }
 
@@ -575,6 +612,46 @@ namespace avantgarde.Controller
             ellipse.RenderTransform = translateTarget;
             indicators.Add(ellipse);
             this.page.GetCanvas().Children.Add(ellipse);
+        }
+
+        private void AddCurve(BezierCurve curve)
+        {
+            AddLine(curve.P0, curve.P1);
+            AddLine(curve.P3, curve.P2);
+            AddControlIndicator(curve.P1);
+            AddControlIndicator(curve.P2);
+        }
+
+        private void AddControlIndicator(Point point)
+        {
+            var rectangle = new Rectangle();
+            rectangle.Width = 15;
+            rectangle.Height = 15;
+            rectangle.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            rectangle.Visibility = Visibility.Visible;
+            TranslateTransform translateTarget = new TranslateTransform();
+            translateTarget.X = point.X - rectangle.Width / 2;
+            translateTarget.Y = point.Y - rectangle.Height / 2;
+            rectangle.RenderTransform = translateTarget;
+            indicators.Add(rectangle);
+            this.page.GetCanvas().Children.Add(rectangle);
+        }
+
+        private void AddLine(Point p1, Point p2)
+        {
+            var line = new Line()
+            {
+                X1 = p1.X,
+                Y1 = p1.Y,
+                X2 = p2.X,
+                Y2 = p2.Y
+            };
+            line.Stroke = new SolidColorBrush(Windows.UI.Colors.Black);
+            line.StrokeThickness = 2;
+            line.Fill = new SolidColorBrush(Windows.UI.Colors.Black);
+            line.Visibility = Visibility.Visible;
+            indicators.Add(line);
+            this.page.GetCanvas().Children.Add(line);
         }
 
         private void ClearIndicator()
