@@ -82,6 +82,7 @@ namespace avantgarde.Menus
             libreToolBox.clearCanvasButtonClicked += new EventHandler(clearCanvasButtonClicked);
             libreToolBox.popupOpened += new EventHandler(hidePlayButton);
             libreToolBox.popupClosed += new EventHandler(showPlayButton);
+            libreToolBox.saveImageClicked += new EventHandler(saveIamge);
 
         }
 
@@ -124,7 +125,7 @@ namespace avantgarde.Menus
         public event EventHandler drawingPropertiesUpdated;
         public event EventHandler colourSelectionUpdated;
         public event EventHandler clearCanvas;
-
+        public event EventHandler saveIamgeClicked;
 
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
@@ -192,9 +193,15 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
+
         private void backgroundColourUpdated(object sender, EventArgs e) {
 
             backgroundButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void saveIamge(object sender, EventArgs e)
+        {
+            saveIamgeClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void toolboxClosed(object sender, EventArgs e) {
@@ -214,6 +221,9 @@ namespace avantgarde.Menus
             playButtonVisibility = "Visible";
             NotifyPropertyChanged();
         }
+
+
+        public ColourManager UIGetColourManager() { return libreToolBox.getColourManager(); }
 
     }
 }

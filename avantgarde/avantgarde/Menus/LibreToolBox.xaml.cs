@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
@@ -16,13 +19,15 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using avantgarde.Controller;
+using static avantgarde.Menus.ColourManager;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
     public sealed partial class LibreToolBox : UserControl, INotifyPropertyChanged
-    {
+    {   
 
 
         private int restrictedID = 0;
@@ -35,6 +40,8 @@ namespace avantgarde.Menus
 
         public String backgroundHex { get; set; }
         private int[,] colourPaletteData { get; set; }
+
+        public string[] colourPaletteDataHex { get; set; }
         
         public String[] colourPalette { get; set; }
 
@@ -67,8 +74,20 @@ namespace avantgarde.Menus
             colourManager.updateColourSelection += new EventHandler(updateColourSelection);
             colourManager.backgroundSelectionChanged += new EventHandler(updateBackground);
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
+            colorCombination.ThemeUpdate += new EventHandler<ThemeColorArg>(ThemeUpdate);
+            
         }
 
+        
+        private void ThemeUpdate(object sender,ThemeColorArg arg)
+        {
+            colourManager.updateColorTheme(arg.recycleColor);
+            colourPallette0.Background = new SolidColorBrush(arg.recycleColor[0]);
+            colourPallette1.Background = new SolidColorBrush(arg.recycleColor[1]);
+            colourPallette2.Background = new SolidColorBrush(arg.recycleColor[2]);
+            colourPallette3.Background = new SolidColorBrush(arg.recycleColor[3]);
+            colourPallette4.Background = new SolidColorBrush(arg.recycleColor[4]);
+        }
         private void updateBackgroundButton() {
             backgroundHex = colourManager.backgroundSelection.ToString();
             NotifyPropertyChanged();
@@ -234,26 +253,39 @@ namespace avantgarde.Menus
 
         private void toggleAutoSwitch(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            if (autoSwitchText.Text.CompareTo("AutoSwitch") == 0) {
+                autoSwitchText.Text = "Switch on";
+                autoSwitchText.Foreground = new SolidColorBrush(Colors.LightGreen);
+                colourManager.autoSwitchTurnOn = true;
+                //colourManager.colorRecycleListHex = 
+            }
+            else {
+                autoSwitchText.Text = "AutoSwitch";
+                autoSwitchText.Foreground = new SolidColorBrush(Colors.White);
+                colourManager.autoSwitchTurnOn = false;
+            }
+            
         }
 
         private void initThemePicker(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            colorCombination.colorList = colourManager.getPresetColorTheme();
+            colorCombination.openColorCombination();
+            
         }
 
-        private void saveButtonClicked(object sender, RoutedEventArgs e)
+        private async void saveButtonClicked(object sender, RoutedEventArgs e)
         {
             //TO DO
         }
 
-        private void loadButtonClicked(object sender, RoutedEventArgs e)
+        private async void loadButtonClicked(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            //To do
         }
         private void exportButtonClicked(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            saveImageClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void updateSize()
@@ -292,6 +324,7 @@ namespace avantgarde.Menus
             }
             
         }
+       
 
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
@@ -303,6 +336,7 @@ namespace avantgarde.Menus
         public event EventHandler clearCanvasButtonClicked;
         public event EventHandler popupOpened;
         public event EventHandler popupClosed;
+        public event EventHandler saveImageClicked;
       
 
 

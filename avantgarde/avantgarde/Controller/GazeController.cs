@@ -21,6 +21,7 @@ namespace avantgarde.Controller
 {
     class GazeController
     {
+
         private IDrawMode page;
         private UI ui;
         private GazeInputSourcePreview gazeInputSourcePreview;
@@ -54,6 +55,8 @@ namespace avantgarde.Controller
 
         private List<Line> gridLines = null;
         private List<Ellipse> indicators = new List<Ellipse>();
+        public ColourManager colourManager;
+        public InkCanvas inkCanvas { get; set; }
         public GazeController(IDrawMode page)
         {
             this.page = page;
@@ -62,14 +65,17 @@ namespace avantgarde.Controller
             this.state = ControllerState.idle;
             this.progressBar = page.GetRadialProgressBar();
             this.container = page.GetInkCanvas().InkPresenter.StrokeContainer;
+            this.inkCanvas = page.GetInkCanvas();
             this.ui = page.GetUI();
             this.gazeInputSourcePreview.GazeMoved += GazeMoved;
+            this.colourManager = page.GetColourManager();
             Timer.Tick += GazeTimer_Tick;
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             ui.drawStateChanged += this.DrawStateChanged;
             InitGrid();
             HideGrid();
             DrawStateChanged(null, null);
+            thisController = this;
         }
         private void DrawStateChanged(object sender, EventArgs e)
         {
@@ -445,6 +451,12 @@ namespace avantgarde.Controller
         private void ShowIndicator()
         {
             this.indicators.ForEach(x => x.Visibility = Visibility.Visible);
+        }
+
+        private static GazeController thisController;
+        public static GazeController GetGazeController()
+        {
+            return thisController;
         }
     }
     enum ControllerState

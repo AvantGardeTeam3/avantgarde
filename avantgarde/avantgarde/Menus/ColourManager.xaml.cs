@@ -24,6 +24,9 @@ namespace avantgarde.Menus
     public sealed partial class ColourManager : UserControl, INotifyPropertyChanged
     {
         public bool selectingBackground = false;
+        public bool themeChoosing {get;set;}
+
+        public bool autoSwitchTurnOn = false;
 
         public Color backgroundSelection;
         public Color selection { get; set; }
@@ -42,11 +45,33 @@ namespace avantgarde.Menus
 
         public String[] prevColours { get; set;}
 
+        private int[,,] newcolorList = new int[6, 5, 2] {                   // int [lines of button,one button, color on the button]
+            {{2,7 },{1,8},{ 1,1},{1,6 },{11,4 } },
+            {{ 5,9},{ 1,8},{ 10,7},{ 11,4},{12,2 } },
+            {{1,8 },{11,6 },{10,4 },{9,2 },{ 7,2} },
+            {{6,9 },{5,8 },{ 1,8},{ 1,6},{ 11,8} },
+            {{11,5},{ 10,3},{11,4 },{10,3 },{10,0 } },
+            {{11,3 },{9,2 },{6,3 },{ 4,8},{3,9 } }
+
+            };
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler updateColourSelection;
         public event EventHandler colourManagerClosed;
         public event EventHandler backgroundSelectionChanged;
 
+        public string[,] getPresetColorTheme()
+        {
+            string[,] result = new string[6, 5];
+            for(int i = 0; i < 6; i++)
+            {
+                for(int j = 0; j < 5; j++)
+                {
+                    result[i, j] = "FF" + colourPickerData.getColourHex(newcolorList[i,j,0],newcolorList[i,j,1]);
+                }
+            }
+            return result;
+        }
         private void NotifyPropertyChanged(String propertyName = "")
         { 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -99,6 +124,7 @@ namespace avantgarde.Menus
             prevColours = colourPickerData.getDefaultPrevColours();
             NotifyPropertyChanged();
             if (!ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = true; }
+            themeChoosing = false;
         }
 
         private void updateColourName() {
@@ -313,7 +339,7 @@ namespace avantgarde.Menus
             brightness = 10;
             updateSelection();
         }
-
+        public event EventHandler<ThemeColorArg> themeColorSelected;
         private void selectColour(object sender, RoutedEventArgs e)
         {
             if (selectingBackground)
@@ -322,6 +348,15 @@ namespace avantgarde.Menus
                 selection = hexToColor(selectionHex);
                 backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
                 selectingBackground = false;
+            }
+            else if (themeChoosing)
+            {
+                ThemeColorArg themeColorArg = new ThemeColorArg();
+                themeColorArg.colorSelected = selection;
+                themeColorArg.colorHex = selection.ToString();
+                selection = hexToColor(selectionHex);
+                themeColorSelected?.Invoke(this, themeColorArg);
+                themeChoosing = false;
             }
             else
             {
@@ -353,6 +388,35 @@ namespace avantgarde.Menus
             return colourPickerData.getColourHex(colourProfile, brightness);
         }
 
+        private int cycleCount = 0;
+        public String[] colorRecycleListHex = new String[5] {"#DAD870",
+        "#FFCD58","#FF9636","#FF5C4D","CD5C5C"};
+        public void AutoChangeColor(Color[] colors)
+        {
+            /*Random random = new Random();
+            Byte[] bufferBytes = new Byte[4];
+            random.NextBytes(bufferBytes);
+            selection = Color.FromArgb(bufferBytes[0], bufferBytes[1], bufferBytes[2], bufferBytes[3]);*/
+
+            if (cycleCount == 5)
+            {
+                cycleCount = 0;
+            }
+            //selection = hexToColor(colorRecycleListHex[cycleCount++]);
+            selection = colors[cycleCount++];
+        }
+
+        public void updateColorTheme(Color[] recycleColor)
+        {
+            //this.colorRecycleListHex = recycleColor;
+
+        }
+        public class ThemeColorArg : EventArgs
+        {
+            public Color colorSelected { get; set; }
+            public string colorHex { get; set; }
+            public Color[] recycleColor { get; set; }
+        }
         public class ColourPickerData
         {
             public int width { get; set; }
@@ -370,6 +434,7 @@ namespace avantgarde.Menus
 
                 return colourData[colourProfile, brightness];
             }
+
 
             public void setColourDataTemp() {
                 colourData = new string[13, 11] {

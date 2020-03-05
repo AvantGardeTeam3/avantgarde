@@ -61,6 +61,7 @@
                 Width="{x:Bind WIDTH}"
                 Height="{x:Bind HEIGHT}"
                 Canvas.ZIndex="2" />
+            
 
         </Grid>
 

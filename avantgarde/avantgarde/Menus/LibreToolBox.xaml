@@ -25,6 +25,7 @@
             </Grid.ColumnDefinitions>
             <uc:ColourManager x:Name="colourManager" />
             <uc:ConfirmTool x:Name="confirmTool" />
+            <uc:ColorCombination x:Name="colorCombination"/>
 
             <Border
                 Width="120"
@@ -327,6 +328,7 @@
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
+                                                x:Name="colourPallette0"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[0], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -338,6 +340,7 @@
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
+                                                x:Name="colourPallette1"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[1], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -349,6 +352,7 @@
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
+                                                x:Name="colourPallette2"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[2], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -360,6 +364,7 @@
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
+                                                x:Name="colourPallette3"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[3], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -371,6 +376,7 @@
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
+                                                x:Name="colourPallette4"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[4], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -391,6 +397,7 @@
                                                 Opacity="1">
 
                                                 <TextBlock
+                                                    x:Name="autoSwitchText"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     FontFamily="Tahoma"

@@ -554,6 +554,7 @@
                                 <Image Source="/Assets/icons/icon_x.png" />
                             </Button>
                             <Button
+                                x:Name="colorSelectButton"
                                 Grid.Column="8"
                                 Width="80"
                                 Height="80"

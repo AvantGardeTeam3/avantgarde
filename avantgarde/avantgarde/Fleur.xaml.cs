@@ -32,6 +32,9 @@ using Windows.Devices.Input;
 using Windows.UI.Input.Inking.Analysis;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using avantgarde.Menus;
+using Windows.Storage;
+using Microsoft.Graphics.Canvas;
+using Windows.Storage.Pickers;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -104,14 +107,44 @@ namespace avantgarde
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
             ui.clearCanvas += new EventHandler(clearCanvas);
+            ui.saveIamgeClicked += saveIamge;
 
             drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, true);
-            controller = new Controller.GazeController(this);
+            // controller = new Controller.GazeController(this);       
+            Controller.ControllerFactory.MakeAController(this);
+            controller = Controller.ControllerFactory.gazeController;
 
             drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
 
             controller.HideGrid();
+        }
+
+        private async void saveIamge(object sender, EventArgs e)
+        {
+            //InkCanvas inkCanvas = ControllerFactory.gazeController.inkCanvas;
+            StorageFolder storageFolder = KnownFolders.SavedPictures;
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
+            var savePicker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary
+            };
+            savePicker.FileTypeChoices.Add("Jpg Image", new[] { ".jpg" });
+            savePicker.SuggestedFileName = "enter file name";
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            using (var ds = renderTarget.CreateDrawingSession())
+            {
+                ds.Clear(Colors.White);
+                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+            }
+            if (file != null)
+            {
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Jpeg, 1f);
+                }
+            }
         }
 
         private void curveDrawn(object sender, EventArgs e) {
@@ -122,7 +155,7 @@ namespace avantgarde
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
             mandalaStrokes.AddRange(this.Transfrom(userStrokes));
         }
-
+        private Boolean autoChangeStorkeColor = false;
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
         {
             //called everytime user finishes a stroke
@@ -134,7 +167,10 @@ namespace avantgarde
             }
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
-
+            if (autoChangeStorkeColor)
+            {
+                //autochange
+            }
         }
         private List<InkStroke> Transfrom(List<InkStroke> u)
         {
@@ -235,6 +271,8 @@ namespace avantgarde
         public RadialProgressBar GetRadialProgressBar() { return this.radialProgressBar; }
         public InkCanvas GetInkCanvas() { return inkCanvas; }
         public Canvas GetCanvas() { return this.canvas; }
+
+        public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
 
         private async void redo(object sender, EventArgs e)
         {

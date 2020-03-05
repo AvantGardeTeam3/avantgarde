@@ -110,6 +110,8 @@ namespace avantgarde
             drawingAttributes.Color = colourSelection;
         }
 
+        public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
+
         private void clearCanvas(object sender, EventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
