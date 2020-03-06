@@ -210,6 +210,8 @@ namespace avantgarde.Controller
             {
                 // mid point selected
                 selectedPoint = midPoint.Value;
+                _selectedCurve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
+                UpdateView();
                 ActiveVerticalJoystick = InvokeVerticalJoystick(midPoint.Value, MidPointJoystickEventHandler);
                 state = ControllerState.selectMid;
             }
@@ -378,6 +380,12 @@ namespace avantgarde.Controller
                     //this.StartMovingMid(selectedPoint.Value);
                     //this.state = ControllerState.movingMid;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
+                    drawingModel.delteCruve(curve);
+                    curve.InkStroke.Selected = true;
+                    container.DeleteSelected();
+                    _selectedCurve = null;
+                    UpdateView();
                     this.state = ControllerState.idle;
                     break;
                 case "DownKey":

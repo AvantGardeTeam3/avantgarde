@@ -220,6 +220,11 @@ namespace avantgarde
             container.AddStroke(curve.InkStroke);
         }
 
+        public void delteCruve(BezierCurve curve)
+        {
+            this.curves.Remove(curve);
+        }
+
         public List<InkStroke> GetStrokes()
         {
             List<InkStroke> ret = new List<InkStroke>();
