@@ -66,8 +66,6 @@ namespace avantgarde.Menus
             
         }
 
-
-
         public string[,] colorList = new string[6, 5];/*
         {
            /{"DAD870","FFCD58","FF9636","FF5C4D","CD5C5C" },
@@ -104,6 +102,10 @@ namespace avantgarde.Menus
         private string[] colorHexStore = new string[5] {"#FFFFFFFF", "#FFFFFFFF", "#FFFFFFFF", "#FFFFFFFF", "#FFFFFFFF" };
         private void changeDIYColour()
         {
+            if(colorCombinationPopup.IsOpen == true)
+            {
+                colorCombinationPopup.IsOpen = false;
+            }
             newColorManager = Controller.ControllerFactory.gazeController.colourManager;
             newColorManager.openMenu();
             newColorManager.themeChoosing = true;
@@ -115,7 +117,7 @@ namespace avantgarde.Menus
             ColorSelectIndex = 0;
             changeDIYColour();
         }
-        
+        public event EventHandler themePickerOpen;
         private void ColorChosen(object sender, ThemeColorArg e)
         {
             DIYColorButtons[ColorSelectIndex].Background = new SolidColorBrush( e.colorSelected);
@@ -123,6 +125,11 @@ namespace avantgarde.Menus
             {
                 colorHexStore[ColorSelectIndex] = e.colorHex;
             }
+            if (colorCombinationPopup.IsOpen == false)
+            {
+                colorCombinationPopup.IsOpen = true;
+            }
+            themePickerOpen?.Invoke(this, EventArgs.Empty);
         }
         private void colorCombination22_Click(object sender, RoutedEventArgs e)
         {
@@ -150,10 +157,8 @@ namespace avantgarde.Menus
 
         private async void SaveColorTheme()
         {
-
-            await Windows.Storage.FileIO.WriteLinesAsync(sampleFile,colorHexStore);
-            
-        }
+            await Windows.Storage.FileIO.WriteLinesAsync(sampleFile, colorHexStore);
+         }
         private Windows.Storage.StorageFile colorThemeFile;
         private IList<string> colorThemeFileContent;
         private void prePage_Click(object sender, RoutedEventArgs e)
@@ -199,25 +204,29 @@ namespace avantgarde.Menus
         private async void LoadDIYColorTheme()
         {
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            
-            var fileInfo = new FileInfo(storageFolder.Path+"\\colorTheme.txt");
+
+            var fileInfo = new FileInfo(storageFolder.Path + "\\colorTheme.txt");
             if (!fileInfo.Exists)
             {
                 sampleFile =
               await storageFolder.CreateFileAsync("colorTheme.txt");
-                await Windows.Storage.FileIO.WriteTextAsync(sampleFile,"non\nnon\nnon\nnon\nnon");
+                await Windows.Storage.FileIO.WriteTextAsync(sampleFile, "non\nnon\nnon\nnon\nnon");
             }
             Debug.WriteLine(storageFolder.Path);
             sampleFile =
               await storageFolder.GetFileAsync("colorTheme.txt");
             colorThemeFile = sampleFile;
             colorThemeFileContent = await Windows.Storage.FileIO.ReadLinesAsync(sampleFile);
-            
-            for(int i = 0; i < 5; i++)
+            if(colorThemeFileContent.Count == 0)
             {
-                if (string.Compare(colorThemeFileContent[i],NON)==0)
+                await Windows.Storage.FileIO.WriteTextAsync(sampleFile, "non\nnon\nnon\nnon\nnon");
+                colorThemeFileContent = await Windows.Storage.FileIO.ReadLinesAsync(sampleFile);
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                if (string.Compare(colorThemeFileContent[i], NON) == 0)
                 {
-                    
+
                 }
                 else
                 {
@@ -354,8 +363,10 @@ namespace avantgarde.Menus
                 args.opacity = opacitySent;
             }
             ThemeUpdate?.Invoke(this, args);
+            themePickerClose?.Invoke(this, EventArgs.Empty);
         }
-
+        
+        public event EventHandler themePickerClose;
         public event EventHandler<ThemeColorArg> ThemeUpdate; 
         private void colorCombination0_Click(object sender, RoutedEventArgs e)
         {
@@ -435,7 +446,6 @@ namespace avantgarde.Menus
         {
             checkLine1.IsChecked = false;
             checkLine2.IsChecked = false;
-            //recycleColor = colorHexStore;
         }
     }
 }

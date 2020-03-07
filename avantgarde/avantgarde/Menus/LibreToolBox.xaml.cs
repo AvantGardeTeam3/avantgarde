@@ -75,9 +75,20 @@ namespace avantgarde.Menus
             colourManager.backgroundSelectionChanged += new EventHandler(updateBackground);
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
             colorCombination.ThemeUpdate += new EventHandler<ThemeColorArg>(ThemeUpdate);
-            
+            colorCombination.themePickerClose += themeClose;
+            colorCombination.themePickerOpen += themeOpened;
         }
-
+        
+        private void themeClose(object sender, EventArgs e)
+        {
+            popupClosed?.Invoke(this, EventArgs.Empty);
+            playButtonShow = true;
+        }
+        private bool playButtonShow = true;
+        private void themeOpened(object sender, EventArgs e)
+        {
+            playButtonShow = false;
+        }
         private string[] opacity = new string[5];
         private void ThemeUpdate(object sender,ThemeColorArg arg)
         {
@@ -103,7 +114,7 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
         private void initColourPalette() {
-            colourPaletteData = new int[,] { { 7, 3 }, { 5, 6 }, { 7, 0 }, { 2, 7 }, { 4, 10 } };
+            colourPaletteData = new int[,] { { 2, 7 }, { 1, 8 }, { 1, 1 }, { 1, 6 }, { 11, 4 } };
 
             for (int x = 0; x < colourPaletteData.GetLength(0); x += 1)
             {
@@ -114,7 +125,7 @@ namespace avantgarde.Menus
                 Debug.WriteLine("p: " + colourPaletteData[x, PROFILE]);
             }
             NotifyPropertyChanged();
-
+            
         }
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
@@ -280,7 +291,7 @@ namespace avantgarde.Menus
         {
             colorCombination.colorList = colourManager.getPresetColorTheme();
             colorCombination.openColorCombination();
-            
+            popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
         private void saveButtonClicked(object sender, RoutedEventArgs e)
@@ -428,7 +439,11 @@ namespace avantgarde.Menus
 
         private void colourManagerClosed(object sender, EventArgs e)
         {
-            popupClosed?.Invoke(this, EventArgs.Empty);
+            if (playButtonShow)
+            {
+                popupClosed?.Invoke(this, EventArgs.Empty);
+            }
+            
         }
 
 

@@ -10,7 +10,7 @@
     d:DesignWidth="800">
 
     <Popup x:Name="colorCombinationPopup" Margin="400,100,150,150" IsOpen="False">
-        <Border BorderBrush="Cyan" BorderThickness="3" Height="auto" Width="auto" Background="LightSlateGray" CornerRadius="5,5,5,5">
+        <Border BorderBrush="Cyan" BorderThickness="3" Height="auto" Width="auto" Background="Gray" CornerRadius="5,5,5,5">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -44,12 +44,12 @@
                         <TextBlock Foreground="White" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center">Color combinations</TextBlock>
                     </Grid>
                     <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
-                        <Button CornerRadius="1,1,1,1" x:Name="prePage" Width="20" Height="100" Click="prePage_Click" HorizontalAlignment="Center">
+                        <Button CornerRadius="1,1,1,1" x:Name="prePage" Width="40" Height="100" Click="prePage_Click" HorizontalAlignment="Center">
                             <Image Source="/Assets/icons/icon_ColorThemePreviousPage.jpg" Stretch="UniformToFill" Width="20" Height="20" HorizontalAlignment="Center"/>
                         </Button>
                     </Grid>
                     <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="7">
-                        <Button CornerRadius="1,1,1,1" x:Name="nextPage" Width="20" Height="100" Click="nextPage_Click"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Button CornerRadius="1,1,1,1" x:Name="nextPage" Width="40" Height="100" Click="nextPage_Click"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Image Source="/Assets/icons/icon_ColorThemePreviousPage.jpg"  Width="20" Height="20" Stretch="UniformToFill"/>
                         </Button>
                     </Grid>
@@ -105,13 +105,13 @@
                         </Border>
                     </Grid>
                     <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="6">
-                        <CheckBox  x:Name="checkLine1" Click="checkLine1_Click" Foreground="White"   IsChecked="True"/>
+                        <CheckBox  x:Name="checkLine1" Click="checkLine1_Click" Foreground="White"  />
                     </Grid>
                     <Grid Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="6">
                         <CheckBox  x:Name="checkLine2" Click="checkLine2_Click" Foreground="White"/>
                     </Grid>
                     <Grid Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="6">
-                        <CheckBox  x:Name="checkLine3" Click="checkLine3_Click" Foreground="White"/>
+                        <CheckBox  x:Name="checkLine3" Click="checkLine3_Click" Foreground="White"  IsChecked="True"/>
                     </Grid>
                     <Grid Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3" >
                         <Button x:Name="Exit" Click="Exit_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5">
