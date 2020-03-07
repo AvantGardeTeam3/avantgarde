@@ -35,8 +35,8 @@ namespace avantgarde.Menus
         private int RESTRICTED_CLEAR_CANVAS = 1;
         private int RESTRICTED_GO_HOME = 2;
 
-        private int BRIGHTNESS = 0;
-        private int PROFILE = 1;
+        private int BRIGHTNESS = 1;
+        private int PROFILE = 0;
 
         public String backgroundHex { get; set; }
         private int[,] colourPaletteData { get; set; }
@@ -78,32 +78,41 @@ namespace avantgarde.Menus
             
         }
 
-        
+        private string[] opacity = new string[5];
         private void ThemeUpdate(object sender,ThemeColorArg arg)
         {
-            colourManager.updateColorTheme(arg.recycleColor);
-            colourPallette0.Background = new SolidColorBrush(arg.recycleColor[0]);
-            colourPallette1.Background = new SolidColorBrush(arg.recycleColor[1]);
-            colourPallette2.Background = new SolidColorBrush(arg.recycleColor[2]);
-            colourPallette3.Background = new SolidColorBrush(arg.recycleColor[3]);
-            colourPallette4.Background = new SolidColorBrush(arg.recycleColor[4]);
+            colourPaletteData = new int[5, 2];
+            if (arg.LineChosen < 3)
+            {
+                colourManager.updatePresetThemes(arg.ColorFromProfile, arg.opacity, arg.order);
+            }
+            for(int i = 0; i < 5; i++)
+            {
+                colourPaletteData[i, 0] = arg.ColorFromProfile[i, 0];
+                colourPaletteData[i, 1] = arg.ColorFromProfile[i, 1];
+            }
+            this.opacity = arg.opacity;
+            for(int i=0; i < 5; i++)
+            {
+                colourPalette[i] = "#" + this.opacity[i] + colourManager.getColourHex(colourPaletteData[i, 0], colourPaletteData[i, 1]);
+            }
+            NotifyPropertyChanged();
         }
         private void updateBackgroundButton() {
             backgroundHex = colourManager.backgroundSelection.ToString();
             NotifyPropertyChanged();
         }
         private void initColourPalette() {
-            colourPaletteData = new int[,] { { 7, 3 }, { 5, 6 }, { 7, 0 }, { 2, 7 }, { 4, 11 } };
+            colourPaletteData = new int[,] { { 7, 3 }, { 5, 6 }, { 7, 0 }, { 2, 7 }, { 4, 10 } };
 
             for (int x = 0; x < colourPaletteData.GetLength(0); x += 1)
             {
                
-               colourPalette[x] = "#FF" + colourManager.getColourHex(colourPaletteData[x, PROFILE], colourPaletteData[x,BRIGHTNESS]);
+                colourPalette[x] = "#FF" + colourManager.getColourHex(colourPaletteData[x, PROFILE], colourPaletteData[x,BRIGHTNESS]);
                 Debug.WriteLine(colourPalette[x]);
                 Debug.WriteLine("b: "+ colourPaletteData[x, BRIGHTNESS]);
                 Debug.WriteLine("p: " + colourPaletteData[x, PROFILE]);
             }
-
             NotifyPropertyChanged();
 
         }
@@ -228,27 +237,27 @@ namespace avantgarde.Menus
 
         private void colourPalette0Clicked(object sender, RoutedEventArgs e)
         {
-            colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS]);
+            colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS],opacity[0]);
         }
 
         private void colourPalette1Clicked(object sender, RoutedEventArgs e)
         {
-            colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS]);
+            colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS],opacity[1]);
         }
 
         private void colourPalette2Clicked(object sender, RoutedEventArgs e)
         {
-            colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS]);
+            colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS],opacity[2]);
         }
 
         private void colourPalette3Clicked(object sender, RoutedEventArgs e)
         {
-            colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS]);
+            colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS],opacity[3]);
         }
 
         private void colourPalette4Clicked(object sender, RoutedEventArgs e)
         {
-            colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS]);
+            colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS],opacity[4]);
         }
 
         private void toggleAutoSwitch(object sender, RoutedEventArgs e)
@@ -274,12 +283,12 @@ namespace avantgarde.Menus
             
         }
 
-        private async void saveButtonClicked(object sender, RoutedEventArgs e)
+        private void saveButtonClicked(object sender, RoutedEventArgs e)
         {
             //TO DO
         }
 
-        private async void loadButtonClicked(object sender, RoutedEventArgs e)
+        private void loadButtonClicked(object sender, RoutedEventArgs e)
         {
             //To do
         }

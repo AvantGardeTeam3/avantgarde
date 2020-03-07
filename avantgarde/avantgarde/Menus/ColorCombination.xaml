@@ -10,7 +10,7 @@
     d:DesignWidth="800">
 
     <Popup x:Name="colorCombinationPopup" Margin="400,100,150,150" IsOpen="False">
-        <Border BorderBrush="Gray" BorderThickness="3" Height="auto" Width="auto" Background="LightSlateGray" CornerRadius="5,5,5,5">
+        <Border BorderBrush="Cyan" BorderThickness="3" Height="auto" Width="auto" Background="LightSlateGray" CornerRadius="5,5,5,5">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -41,7 +41,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Row="0" Grid.ColumnSpan="7">
 
-                        <TextBlock FontWeight="Bold" FontSize="20" HorizontalAlignment="Center">Color combinations</TextBlock>
+                        <TextBlock Foreground="White" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center">Color combinations</TextBlock>
                     </Grid>
                     <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
                         <Button CornerRadius="1,1,1,1" x:Name="prePage" Width="20" Height="100" Click="prePage_Click" HorizontalAlignment="Center">
@@ -54,53 +54,53 @@
                         </Button>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1">
-                        <Button x:Name="colorCombination0" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination0_Click"/>
+                        <Button x:Name="colorCombination0" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination0_Click"/>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="2">
-                        <Button x:Name="colorCombination1" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination1_Click"/>
+                        <Button x:Name="colorCombination1" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination1_Click"/>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="3">
-                        <Button x:Name="colorCombination2" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination2_Click"/>
+                        <Button x:Name="colorCombination2" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination2_Click"/>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="4">
-                        <Button x:Name="colorCombination3" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination3_Click"/>
+                        <Button x:Name="colorCombination3" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination3_Click"/>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="5">
-                        <Button x:Name="colorCombination4" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination4_Click"/>
+                        <Button x:Name="colorCombination4" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination4_Click"/>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="1">
-                        <Button x:Name="colorCombination10" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination10_Click"/>
+                        <Button x:Name="colorCombination10" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination10_Click"/>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="2">
-                        <Button x:Name="colorCombination11" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination11_Click"/>
+                        <Button x:Name="colorCombination11" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination11_Click"/>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="3">
-                        <Button x:Name="colorCombination12" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination12_Click"/>
+                        <Button x:Name="colorCombination12" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination12_Click"/>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="4">
-                        <Button x:Name="colorCombination13" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination13_Click"/>
+                        <Button x:Name="colorCombination13" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination13_Click"/>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="5">
-                        <Button x:Name="colorCombination14" Width="60" Height="60" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination14_Click"/>
+                        <Button x:Name="colorCombination14" Width="80" Height="80" CornerRadius="5,5,5,5" BorderThickness="2" BorderBrush="White" Click="colorCombination14_Click"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="1">
-                        <Button x:Name="colorCombination21"  Click="colorCombination21_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
+                        <Button x:Name="colorCombination21"  Click="colorCombination21_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="2">
-                        <Button x:Name="colorCombination22"  Click="colorCombination22_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
+                        <Button x:Name="colorCombination22"  Click="colorCombination22_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="3">
-                        <Button x:Name="colorCombination23"  Click="colorCombination23_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
+                        <Button x:Name="colorCombination23"  Click="colorCombination23_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="4">
-                        <Button x:Name="colorCombination24"  Click="colorCombination24_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
+                        <Button x:Name="colorCombination24"  Click="colorCombination24_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="5">
-                        <Button x:Name="colorCombination25"  Click="colorCombination25_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
+                        <Button x:Name="colorCombination25"  Click="colorCombination25_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5"/>
                     </Grid>
 
                     <Grid Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" CornerRadius="3,3,3,3">
-                        <Border Background="DarkGray" Width="50" Height="50">
+                        <Border Background="DarkGray" Width="80" Height="80">
                             <TextBlock Foreground="white" VerticalAlignment="Center" HorizontalAlignment="Center">DIY:</TextBlock>
                         </Border>
                     </Grid>
@@ -114,8 +114,8 @@
                         <CheckBox  x:Name="checkLine3" Click="checkLine3_Click" Foreground="White"/>
                     </Grid>
                     <Grid Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3" >
-                        <Button x:Name="Exit" Click="Exit_Click" Width="60" Height="60" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5">
-                            <TextBlock FontSize="8" Text="Finish" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button x:Name="Exit" Click="Exit_Click" Width="80" Height="80" BorderBrush="Gray" BorderThickness="2" CornerRadius="5,5,5,5">
+                            <TextBlock  Text="Finish" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Button>
                     </Grid>
                 </Grid>

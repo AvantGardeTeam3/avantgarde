@@ -169,7 +169,7 @@ namespace avantgarde
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
             if (autoChangeStorkeColor)
             {
-                //autochange
+                controller.colourManager.AutoChangeColor();
             }
         }
         private List<InkStroke> Transfrom(List<InkStroke> u)

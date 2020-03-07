@@ -42,7 +42,7 @@ namespace avantgarde.Menus
         private int DEFAULT_BRIGHTNESS = 5;
 
         ColourPickerData colourPickerData = new ColourPickerData();
-
+        
         public String[] prevColours { get; set;}
 
         private int[,,] newcolorList = new int[6, 5, 2] {                   // int [lines of button,one button, color on the button]
@@ -54,6 +54,13 @@ namespace avantgarde.Menus
             {{11,3 },{9,2 },{6,3 },{ 4,8},{3,9 } }
 
             };
+
+        private string[,] presetThemeOpacity = new string[6, 5] { { "FF", "FF", "FF", "FF", "FF"},
+            { "FF", "FF", "FF", "FF", "FF"},
+            { "FF", "FF", "FF", "FF", "FF"},
+            { "FF", "FF", "FF", "FF", "FF"},
+            { "FF", "FF", "FF", "FF", "FF"},
+            { "FF", "FF", "FF", "FF", "FF"}};
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler updateColourSelection;
@@ -67,7 +74,7 @@ namespace avantgarde.Menus
             {
                 for(int j = 0; j < 5; j++)
                 {
-                    result[i, j] = "FF" + colourPickerData.getColourHex(newcolorList[i,j,0],newcolorList[i,j,1]);
+                    result[i, j] =  colourPickerData.getColourHex(newcolorList[i,j,0],newcolorList[i,j,1]);
                 }
             }
             return result;
@@ -87,6 +94,31 @@ namespace avantgarde.Menus
             else
             {
                 selection = hexToColor("FF" + colourPickerData.getColourHex(profile, brightness));
+                selectionHex = selection.ToString();
+                this.brightness = brightness;
+                this.colourProfile = profile;
+            }
+            updateColourName();
+            updateColourSelection?.Invoke(this, EventArgs.Empty);
+            NotifyPropertyChanged();
+        }
+
+        public void updateColour(int profile, int brightness,string opacity)
+        {
+            if (selectingBackground)
+            {
+                backgroundSelection = hexToColor(opacity + colourPickerData.getColourHex(profile, brightness));
+                backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
+                if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
+                colourManagerClosed?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                if(opacity == null)
+                {
+                    opacity = "FF";
+                }
+                selection = hexToColor(opacity + colourPickerData.getColourHex(profile, brightness));
                 selectionHex = selection.ToString();
                 this.brightness = brightness;
                 this.colourProfile = profile;
@@ -391,7 +423,7 @@ namespace avantgarde.Menus
         private int cycleCount = 0;
         public String[] colorRecycleListHex = new String[5] {"#DAD870",
         "#FFCD58","#FF9636","#FF5C4D","CD5C5C"};
-        public void AutoChangeColor(Color[] colors)
+        public void AutoChangeColor()
         {
             /*Random random = new Random();
             Byte[] bufferBytes = new Byte[4];
@@ -402,20 +434,30 @@ namespace avantgarde.Menus
             {
                 cycleCount = 0;
             }
-            //selection = hexToColor(colorRecycleListHex[cycleCount++]);
-            selection = colors[cycleCount++];
+            selection = hexToColor(autoChangeOpacityList + colorRecycleListHex[cycleCount++]);
         }
-
-        public void updateColorTheme(Color[] recycleColor)
+        public void updatePresetThemes(int[,] newPresetColor, string[] opacity,int order)
         {
-            //this.colorRecycleListHex = recycleColor;
-
+            for(int i = 0; i < 5; i++)
+            {
+                presetThemeOpacity[order, i] = opacity[i];
+                newcolorList[order, i, 0] = newPresetColor[i, 0];
+                newcolorList[order, i, 1] = newPresetColor[i, 1];
+                colorRecycleListHex[i] = getColourHex(newcolorList[order, i, 0], newcolorList[order, i, 1]);
+            }
+            autoChangeOpacityList = opacity;
         }
+        private string[] autoChangeOpacityList = new string[5];
+        
         public class ThemeColorArg : EventArgs
         {
             public Color colorSelected { get; set; }
             public string colorHex { get; set; }
             public Color[] recycleColor { get; set; }
+            public int LineChosen { get; set; }
+            public string[] opacity { get; set; }
+            public int[,] ColorFromProfile { get; set; }
+            public int order { get; set; }
         }
         public class ColourPickerData
         {
