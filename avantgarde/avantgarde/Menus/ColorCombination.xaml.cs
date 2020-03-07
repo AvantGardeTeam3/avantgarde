@@ -199,14 +199,15 @@ namespace avantgarde.Menus
         private async void LoadDIYColorTheme()
         {
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            FileInfo fileInfo = new FileInfo("colorTheme.txt");
-            /*if (!fileInfo.Exists)
+            
+            var fileInfo = new FileInfo(storageFolder.Path+"\\colorTheme.txt");
+            if (!fileInfo.Exists)
             {
                 sampleFile =
-              await storageFolder.GetFileAsync("colorTheme.txt");
+              await storageFolder.CreateFileAsync("colorTheme.txt");
                 await Windows.Storage.FileIO.WriteTextAsync(sampleFile,"non\nnon\nnon\nnon\nnon");
-            }*/
-            //Debug.WriteLine(storageFolder.Path);
+            }
+            Debug.WriteLine(storageFolder.Path);
             sampleFile =
               await storageFolder.GetFileAsync("colorTheme.txt");
             colorThemeFile = sampleFile;
