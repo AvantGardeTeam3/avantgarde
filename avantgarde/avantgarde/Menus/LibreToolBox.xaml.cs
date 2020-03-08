@@ -38,6 +38,8 @@ namespace avantgarde.Menus
         private int BRIGHTNESS = 1;
         private int PROFILE = 0;
 
+        public String brushSelection;
+
         public String backgroundHex { get; set; }
         private int[,] colourPaletteData { get; set; }
 
@@ -51,7 +53,7 @@ namespace avantgarde.Menus
         public String mandalaLinesVisibility { get; set; }
         public LibreToolBox()
         {
-            
+            brushSelection = "paint";
             colourPalette = new String[5];
             drawingAttributes.Color = ColourManager.defaultColour;
             drawingAttributes.Size = new Size(10, 10);
@@ -109,9 +111,6 @@ namespace avantgarde.Menus
             {
                
                 colourPalette[x] = "#FF" + colourManager.getColourHex(colourPaletteData[x, PROFILE], colourPaletteData[x,BRIGHTNESS]);
-                Debug.WriteLine(colourPalette[x]);
-                Debug.WriteLine("b: "+ colourPaletteData[x, BRIGHTNESS]);
-                Debug.WriteLine("p: " + colourPaletteData[x, PROFILE]);
             }
             NotifyPropertyChanged();
 
@@ -206,6 +205,7 @@ namespace avantgarde.Menus
 
         private void selectPaintbrush(object sender, RoutedEventArgs e)
         {
+            brushSelection = "paint";
             paintbrushButtonState = "Visible";
             pencilButtonState = "Collapsed";
             highlighterButtonState = "Collapsed";
@@ -216,6 +216,7 @@ namespace avantgarde.Menus
 
         private void selectPencil(object sender, RoutedEventArgs e)
         {
+            brushSelection = "pencil";
             paintbrushButtonState = "Collapsed";
             pencilButtonState = "Visible";
             highlighterButtonState = "Collapsed";

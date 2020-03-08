@@ -90,6 +90,9 @@ namespace avantgarde.Menus
             return libreToolBox.getDrawingAttributes();
         }
 
+        public String getBrush() {
+            return libreToolBox.brushSelection;
+        }
         public String getBackgroundHex() {
             return libreToolBox.getColourManager().getBackgroundColour().ToString();
         }
@@ -102,6 +105,19 @@ namespace avantgarde.Menus
             return libreToolBox.mandalaLines;
         }
 
+        public int getColourAttributes(int att) {
+            if (att == 0)
+            {
+                return libreToolBox.getColourManager().colourProfile;
+            }
+            else if (att == 1)
+            {
+                return libreToolBox.getColourManager().brightness;
+            }
+            else {
+                return libreToolBox.getColourManager().opacity;
+            }
+        }
         private void updateDrawStateUI() {
             if (drawState)
             {

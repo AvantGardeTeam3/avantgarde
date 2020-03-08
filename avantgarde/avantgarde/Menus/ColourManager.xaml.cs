@@ -26,7 +26,7 @@ namespace avantgarde.Menus
         public bool selectingBackground = false;
         public bool themeChoosing {get;set;}
 
-        public bool autoSwitchTurnOn = false;
+        public bool autoSwitchTurnOn = true;
 
         public Color backgroundSelection;
         public Color selection { get; set; }
@@ -236,34 +236,6 @@ namespace avantgarde.Menus
             }
             opacity = opacity - 5;
             updateOpacity();
-            updateColourName();
-            NotifyPropertyChanged();
-        }
-
-        private void setPrevColour0(object sender, RoutedEventArgs e)
-        {
-            selection = hexToColor(colourPickerData.getDefaultPrevColour(0));
-            updateColourName();
-            NotifyPropertyChanged();
-        }
-
-        private void setPrevColour1(object sender, RoutedEventArgs e)
-        {
-            selection = hexToColor(colourPickerData.getDefaultPrevColour(1));
-            updateColourName();
-            NotifyPropertyChanged();
-        }
-
-        private void setPrevColour2(object sender, RoutedEventArgs e)
-        {
-            selection = hexToColor(colourPickerData.getDefaultPrevColour(2));
-            updateColourName();
-            NotifyPropertyChanged();
-        }
-
-        private void setPrevColour3(object sender, RoutedEventArgs e)
-        {
-            selection = hexToColor(colourPickerData.getDefaultPrevColour(3));
             updateColourName();
             NotifyPropertyChanged();
         }

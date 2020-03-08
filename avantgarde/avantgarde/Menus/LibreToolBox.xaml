@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
             <uc:ColourManager x:Name="colourManager" />
             <uc:ConfirmTool x:Name="confirmTool" />
-            <uc:ColorCombination x:Name="colorCombination"/>
+            <uc:ColorCombination x:Name="colorCombination" />
 
             <Border
                 Width="120"
@@ -325,10 +325,10 @@
                                         CornerRadius="5,5,5,5">
                                         <StackPanel Orientation="Vertical" Spacing="10">
                                             <Button
+                                                x:Name="colourPallette0"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette0"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[0], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -337,10 +337,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette1"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette1"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[1], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -349,10 +349,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette2"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette2"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[2], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -361,10 +361,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette3"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette3"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[3], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -373,10 +373,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette4"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette4"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[4], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -470,14 +470,11 @@
                             Height="80"
                             HorizontalAlignment="Center"
                             Background="{x:Bind backgroundHex, Mode=OneWay}"
-                            Click="setBackground"
-                            CornerRadius="5,5,5,5"
-                            Visibility="Visible"
                             BorderBrush="White"
                             BorderThickness="2"
-                            >
-                           
-                        </Button>
+                            Click="setBackground"
+                            CornerRadius="5,5,5,5"
+                            Visibility="Visible" />
                     </StackPanel>
 
 

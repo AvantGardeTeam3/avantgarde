@@ -124,6 +124,7 @@
     <Compile Include="Controller\GazeController.cs" />
     <Compile Include="Drawing\BezierCurve.cs" />
     <Compile Include="Drawing\DrawingModel.cs" />
+    <Compile Include="Drawing\StrokeData.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
@@ -150,6 +151,9 @@
     </Compile>
     <Compile Include="Menus\ConfirmTool.xaml.cs">
       <DependentUpon>ConfirmTool.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Menus\FileManager.xaml.cs">
+      <DependentUpon>FileManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menus\LibreToolBox.xaml.cs">
       <DependentUpon>LibreToolBox.xaml</DependentUpon>
@@ -259,6 +263,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Menus\ConfirmTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\FileManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

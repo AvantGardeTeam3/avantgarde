@@ -20,6 +20,10 @@ namespace avantgarde
 {
     public partial class Libre : INotifyPropertyChanged, IDrawMode
     {
+        public List<StrokeData> getStrokeData() {
+            return null;
+        }
+        
         private Controller.GazeController controller;
 
         private DrawingModel drawingModel;

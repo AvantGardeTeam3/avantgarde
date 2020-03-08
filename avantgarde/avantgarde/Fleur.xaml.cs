@@ -42,6 +42,10 @@ namespace avantgarde
 {
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
+        public List<StrokeData> getStrokeData() {
+            return null;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName = "")
         {
@@ -64,8 +68,9 @@ namespace avantgarde
 
         //the coordinate of the centre of the canvas
         private Point inkCanvasCentre;
-        List<InkStroke> userStrokes = new List<InkStroke>();
-        List<InkStroke> mandalaStrokes = new List<InkStroke>();
+        public List<StrokeData> strokeData = new List<StrokeData>();
+        public List<InkStroke> userStrokes = new List<InkStroke>();
+        public List<InkStroke> mandalaStrokes = new List<InkStroke>();
         private InkStrokeBuilder inkStrokeBuilder;
         
 
@@ -147,10 +152,41 @@ namespace avantgarde
             }
         }
 
+        private void storeStrokeData(DrawingModel.LineDrawnEventArgs attributes) {
+            int COLOUR_PROFILE = 0;
+            int BRIGHTNESS = 1;
+            int OPACITY = 2;
+            
+            StrokeData newStrokeData = new StrokeData();
+            newStrokeData.p0 = attributes.p0;
+            newStrokeData.p1 = attributes.p1;
+            newStrokeData.p2 = attributes.p2;
+            newStrokeData.p3 = attributes.p3;
+            newStrokeData.midpoint = attributes.midpoint;
+            newStrokeData.halfpoint = attributes.halfpoint;
+            newStrokeData.modified = attributes.modified;
+            newStrokeData.reflections = numberOfLines;
+            newStrokeData.colourProfile = ui.getColourAttributes(COLOUR_PROFILE);
+            newStrokeData.brightness = ui.getColourAttributes(BRIGHTNESS);
+            newStrokeData.opacity = ui.getColourAttributes(OPACITY);
+            newStrokeData.size = drawingAttributes.Size;
+
+            if (String.Compare(ui.getBrush(), "pencil") == 0)
+            {
+                newStrokeData.brush = "pencil";
+            }
+            else {
+                newStrokeData.brush = "paint";
+            }
+
+            strokeData.Add(newStrokeData);
+        }
+
         private void curveDrawn(object sender, EventArgs e) {
             DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
             InkStroke s = arg.stroke;
             s.DrawingAttributes = ui.getDrawingAttributes();
+            storeStrokeData(arg);
             userStrokes.Add(s);
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
             mandalaStrokes.AddRange(this.Transfrom(userStrokes));
@@ -363,6 +399,7 @@ namespace avantgarde
         private void clearCanvas(object sender, EventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
+            // clear all lists
         }
     }
 }
