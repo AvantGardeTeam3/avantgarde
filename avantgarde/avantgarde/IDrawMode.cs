@@ -20,7 +20,6 @@ namespace avantgarde
         Canvas GetCanvas();
         ColourManager GetColourManager();
 
-        List<StrokeData> getStrokeData();
             
     }
 }

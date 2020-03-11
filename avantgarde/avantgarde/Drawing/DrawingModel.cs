@@ -13,10 +13,11 @@ namespace avantgarde
 {
     public class DrawingModel
     {
+        public List<BezierCurve> curves = new List<BezierCurve>();
         private List<Point> midPoints = new List<Point>(); 
         private List<Point> endPoints = new List<Point>();
         private List<Point> controlPoints = new List<Point>();
-        private List<BezierCurve> curves = new List<BezierCurve>();
+        
         private Stack<BezierCurve> undoStack = new Stack<BezierCurve>();
 
         private bool fleur;
@@ -24,6 +25,10 @@ namespace avantgarde
         public InkDrawingAttributes attributes { get; set; }
 
         private InkStrokeContainer container;
+
+        public List<BezierCurve> getCurves() {
+            return curves;
+        }
         public DrawingModel(InkStrokeContainer inkStrokeContainer, bool f)
         {
             this.container = inkStrokeContainer;
@@ -167,13 +172,6 @@ namespace avantgarde
 
             if (fleur) {
                 LineDrawnEventArgs args = new LineDrawnEventArgs();
-                args.p0 = curve.P0;
-                args.p1 = curve.P1;
-                args.p2 = curve.P2;
-                args.p3 = curve.P3;
-                args.midpoint = curve.MidPoint;
-                args.halfpoint = new Point(10,10); // CHANGE TO PROPER HALFPOINT
-                args.modified = curve.Modified;
                 args.stroke = curve.InkStroke;
                 curveDrawn?.Invoke(this, args);
             }
@@ -186,19 +184,7 @@ namespace avantgarde
         public class LineDrawnEventArgs : EventArgs
         {
             public InkStroke stroke { get; set; }
-            public Point p0 { get; set; }
 
-            public Point p1 { get; set; }
-
-            public Point p2 { get; set; }
-
-            public Point p3 { get; set; }
-
-            public Point midpoint { get; set; }
-
-            public Point halfpoint { get; set; }
-
-            public bool modified { get; set; }
         }
     }
 }

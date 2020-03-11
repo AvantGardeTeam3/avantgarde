@@ -401,11 +401,20 @@
                             <Button
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Width="80"
-                                Height="50"
+                                Width="85"
+                                Height="60"
                                 HorizontalAlignment="Center"
+                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                Click="increaseBrightness">
+                                BorderBrush="DarkGray"
+                                BorderThickness="2"
+                                Click="increaseBrightness"
+                                CornerRadius="5,5,5,5">
 
                                 <Image Source="/Assets/icons/icon_up.png" />
                             </Button>
@@ -424,10 +433,19 @@
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Width="85"
-                                Height="50"
+                                Height="60"
                                 HorizontalAlignment="Center"
+                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                Click="decreaseBrightness">
+                                BorderBrush="DarkGray"
+                                BorderThickness="2"
+                                Click="decreaseBrightness"
+                                CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_down.png" />
                             </Button>
 
@@ -446,11 +464,20 @@
                             <Button
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Width="80"
-                                Height="50"
+                                Width="85"
+                                Height="60"
                                 HorizontalAlignment="Center"
+                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                Click="increaseOpacity">
+                                BorderBrush="DarkGray"
+                                BorderThickness="2"
+                                Click="increaseOpacity"
+                                CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_up.png" />
                             </Button>
                             <TextBlock
@@ -468,10 +495,19 @@
                                 Grid.Row="4"
                                 Grid.Column="1"
                                 Width="85"
-                                Height="50"
+                                Height="60"
                                 HorizontalAlignment="Center"
+                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                Click="decreaseOpacity">
+                                BorderBrush="DarkGray"
+                                BorderThickness="2"
+                                Click="decreaseOpacity"
+                                CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_down.png" />
                             </Button>
 

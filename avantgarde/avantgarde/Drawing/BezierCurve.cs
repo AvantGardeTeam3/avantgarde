@@ -8,7 +8,7 @@ using Windows.UI.Input.Inking;
 
 namespace avantgarde.Drawing
 {
-    class BezierCurve
+    public class BezierCurve
     {
         private bool _modified = false;
         public bool Modified

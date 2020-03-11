@@ -23,18 +23,40 @@ namespace avantgarde.Menus
 {
     public sealed partial class ColourManager : UserControl, INotifyPropertyChanged
     {
-        public bool selectingBackground = false;
-        public bool themeChoosing {get;set;}
 
-        public bool autoSwitchTurnOn = true;
+        private int BRIGHTNESS = 1;
+        private int PROFILE = 0;
+        private int OPACITY = 2;
+
+        public int switchID = 0;
+
+        public Color[] colourPalette = new Color[5];
+        public String[] colourPaletteHex = new String[5];
+        public int[,] colourPaletteData = new int[5,3];
+
+        private int profileHolder;
+        private int brightnessHolder;
+        private int opacityHolder;
+
+
+        public bool selectingBackground = false;
+        public bool editingPalette = false;
+        public int editID = 0;
 
         public Color backgroundSelection;
+
+        private int bgProfile;
+        private int bgBrightness;
+        private int bgOpacity;
+
         public Color selection { get; set; }
+        
         public int brightness { get; set; }
         public int opacity { get; set; }
         public int colourProfile { get; set; }
         public String colourName { get; set; }
         public String selectionHex { get; set; }
+
         public static Color defaultColour { get; set; }
 
         public String backgroundHex;
@@ -45,80 +67,31 @@ namespace avantgarde.Menus
         
         public String[] prevColours { get; set;}
 
-        private int[,,] newcolorList = new int[6, 5, 2] {                   // int [lines of button,one button, color on the button]
-            {{2,7 },{1,8},{ 1,1},{1,6 },{11,4 } },
-            {{ 5,9},{ 1,8},{ 10,7},{ 11,4},{12,2 } },
-            {{1,8 },{11,6 },{10,4 },{9,2 },{ 7,2} },
-            {{6,9 },{5,8 },{ 1,8},{ 1,6},{ 11,8} },
-            {{11,5},{ 10,3},{11,4 },{10,3 },{10,0 } },
-            {{11,3 },{9,2 },{6,3 },{ 4,8},{3,9 } }
-
-            };
-
-        private string[,] presetThemeOpacity = new string[6, 5] { { "FF", "FF", "FF", "FF", "FF"},
-            { "FF", "FF", "FF", "FF", "FF"},
-            { "FF", "FF", "FF", "FF", "FF"},
-            { "FF", "FF", "FF", "FF", "FF"},
-            { "FF", "FF", "FF", "FF", "FF"},
-            { "FF", "FF", "FF", "FF", "FF"}};
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler updateColourSelection;
         public event EventHandler colourManagerClosed;
         public event EventHandler backgroundSelectionChanged;
+        public event EventHandler paletteEdited;
 
-        public string[,] getPresetColorTheme()
-        {
-            string[,] result = new string[6, 5];
-            for(int i = 0; i < 6; i++)
-            {
-                for(int j = 0; j < 5; j++)
-                {
-                    result[i, j] =  colourPickerData.getColourHex(newcolorList[i,j,0],newcolorList[i,j,1]);
-                }
-            }
-            return result;
-        }
+
         private void NotifyPropertyChanged(String propertyName = "")
         { 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void updateColour(int profile, int brightness) {
-            if (selectingBackground) {
-                backgroundSelection = hexToColor("FF" + colourPickerData.getColourHex(profile, brightness));
-                backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
-                if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
-                colourManagerClosed?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                selection = hexToColor("FF" + colourPickerData.getColourHex(profile, brightness));
-                selectionHex = selection.ToString();
-                this.brightness = brightness;
-                this.colourProfile = profile;
-            }
-            updateColourName();
-            updateColourSelection?.Invoke(this, EventArgs.Empty);
-            NotifyPropertyChanged();
-        }
-
-        public void updateColour(int profile, int brightness,string opacity)
+        public void updateColour(int profile, int brightness,int opacity)
         {
             if (selectingBackground)
             {
-                backgroundSelection = hexToColor(opacity + colourPickerData.getColourHex(profile, brightness));
+                backgroundSelection = hexToColor(getOpacityHex(opacity) + colourPickerData.getColourHex(profile, brightness));
                 backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
                 if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
                 colourManagerClosed?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                if(opacity == null)
-                {
-                    opacity = "FF";
-                }
-                selection = hexToColor(opacity + colourPickerData.getColourHex(profile, brightness));
+                selection = hexToColor(getOpacityHex(opacity) + colourPickerData.getColourHex(profile, brightness));
                 selectionHex = selection.ToString();
                 this.brightness = brightness;
                 this.colourProfile = profile;
@@ -138,25 +111,29 @@ namespace avantgarde.Menus
 
         public ColourManager()
         {
-            backgroundSelection = Colors.Lavender;
+            colourPickerData.setColourDataTemp();
+            bgBrightness = 1;
+            bgProfile = 12;
+            bgOpacity = 100;
+
+            backgroundSelection = hexToColor(getOpacityHex(bgOpacity) + colourPickerData.getColourHex(bgProfile, bgBrightness));
             brightness = 5;
             opacity = 100;
-            colourProfile = 6;
+            colourProfile = 5;
             this.InitializeComponent();
             DataContext = colourPickerData.getColourPickerData();
             prevColours = colourPickerData.getDefaultPrevColours();
-            colourPickerData.setColourDataTemp();
-            defaultColour = hexToColor(getOpacityHex() + colourPickerData.getColourHex(colourProfile, brightness));
+
+            defaultColour = hexToColor(getOpacityHex(opacity) + colourPickerData.getColourHex(colourProfile, brightness));
             selection = defaultColour;
             selectionHex = selection.ToString();
+            updateColourSelection?.Invoke(this, EventArgs.Empty);
             updateColourName();
         }
 
         public void openMenu() {
-            prevColours = colourPickerData.getDefaultPrevColours();
             NotifyPropertyChanged();
             if (!ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = true; }
-            themeChoosing = false;
         }
 
         private void updateColourName() {
@@ -164,7 +141,7 @@ namespace avantgarde.Menus
             Debug.WriteLine(colourName);
         }
 
-        public Color hexToColor(string hex)
+        public static Color hexToColor(string hex)
         {
             if (hex.IndexOf('#') != -1)
                 hex = hex.Replace("#", "");
@@ -178,7 +155,7 @@ namespace avantgarde.Menus
         }
 
 
-        private String getOpacityHex() {
+        public String getOpacityHex(int opacity) {
             int newOpacity = (int)(opacity * 0.01 * 255);
             String newOpacityStr = Convert.ToString(newOpacity, 16);
 
@@ -194,7 +171,7 @@ namespace avantgarde.Menus
 
 
         private void updateOpacity() {
-            selection = hexToColor(getOpacityHex() + selection.ToString().Substring(3));
+            selection = hexToColor(getOpacityHex(opacity) + selection.ToString().Substring(3));
         }
 
         private void increaseBrightness(object sender, RoutedEventArgs e)
@@ -219,7 +196,7 @@ namespace avantgarde.Menus
 
         private void increaseOpacity(object sender, RoutedEventArgs e)
         {
-            if (opacity == 100)
+            if (opacity >= 100)
             {
                 return;
             }
@@ -241,9 +218,22 @@ namespace avantgarde.Menus
         }
 
         private void updateSelection() {
-            selection = hexToColor(getOpacityHex() + colourPickerData.getColourHex(colourProfile, brightness));
+            selection = hexToColor(getOpacityHex(opacity) + colourPickerData.getColourHex(colourProfile, brightness));
             updateColourName();
             NotifyPropertyChanged();
+        }
+
+        public void nextColour() {
+            selection = colourPalette[switchID];
+            colourProfile = colourPaletteData[switchID, PROFILE];
+            brightness = colourPaletteData[switchID, BRIGHTNESS];
+            opacity = colourPaletteData[switchID, OPACITY];
+            switchID++;
+            if (switchID == 5) {
+                switchID = 0;
+            }
+
+            updateColourSelection?.Invoke(this, EventArgs.Empty);
         }
 
         private void setColour0(object sender, RoutedEventArgs e)
@@ -343,33 +333,37 @@ namespace avantgarde.Menus
             brightness = 10;
             updateSelection();
         }
-        public event EventHandler<ThemeColorArg> themeColorSelected;
+
+        public event EventHandler toggleAutoswitch;
         private void selectColour(object sender, RoutedEventArgs e)
         {
             if (selectingBackground)
             {
                 backgroundSelection = selection;
-                selection = hexToColor(selectionHex);
+                bgProfile = colourProfile;
+                bgBrightness = brightness;
+                bgOpacity = opacity;
+                resetSelection();
                 backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
                 selectingBackground = false;
             }
-            else if (themeChoosing)
+            else if (editingPalette)
             {
-                ThemeColorArg themeColorArg = new ThemeColorArg();
-                themeColorArg.colorSelected = selection;
-                themeColorArg.colorHex = selection.ToString();
-                selection = hexToColor(selectionHex);
-                themeColorSelected?.Invoke(this, themeColorArg);
-                themeChoosing = false;
+                colourPaletteData[editID, PROFILE] = colourProfile;
+                colourPaletteData[editID, BRIGHTNESS] = brightness;
+                colourPaletteData[editID, OPACITY] = opacity;
+                colourPaletteHex[editID] = selection.ToString();
+                colourPalette[editID] = selection;
+                resetSelection();
+                paletteEdited?.Invoke(this, EventArgs.Empty);
+                editingPalette = false;
             }
             else
             {
-
                 selectionHex = selection.ToString();
                 colourPickerData.addColourToPrevColours(selection.ToString());
-               
                 updateColourSelection?.Invoke(this, EventArgs.Empty);
-
+                toggleAutoswitch?.Invoke(this,EventArgs.Empty);
             }
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
             colourManagerClosed?.Invoke(this, EventArgs.Empty);
@@ -384,6 +378,32 @@ namespace avantgarde.Menus
             selection = hexToColor(selectionHex);
         }
 
+        public void saveSelectionData() {
+            profileHolder = colourProfile;
+            brightnessHolder = brightness;
+            opacityHolder = opacity;
+        }
+
+        private void resetSelection() {
+            colourProfile = profileHolder;
+            brightness = brightnessHolder;
+            opacity = opacityHolder;
+            selection = hexToColor(selectionHex);
+        }
+
+        public void loadColourData() {
+            if (editingPalette) {
+                selection = colourPalette[editID];
+                colourProfile = colourPaletteData[editID, PROFILE];
+                brightness = colourPaletteData[editID, BRIGHTNESS];
+                opacity = colourPaletteData[editID, OPACITY];
+            } else if (selectingBackground) {
+                selection = backgroundSelection;
+                colourProfile = bgProfile;
+                brightness = bgBrightness;
+                opacity = bgOpacity;
+            }
+        }
         public void close() {
             if (ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = false; }
         }
@@ -392,45 +412,11 @@ namespace avantgarde.Menus
             return colourPickerData.getColourHex(colourProfile, brightness);
         }
 
-        private int cycleCount = 0;
-        public String[] colorRecycleListHex = new String[5] {"#DAD870",
-        "#FFCD58","#FF9636","#FF5C4D","CD5C5C"};
-        public void AutoChangeColor()
-        {
-            /*Random random = new Random();
-            Byte[] bufferBytes = new Byte[4];
-            random.NextBytes(bufferBytes);
-            selection = Color.FromArgb(bufferBytes[0], bufferBytes[1], bufferBytes[2], bufferBytes[3]);*/
-
-            if (cycleCount == 5)
-            {
-                cycleCount = 0;
-            }
-            selection = hexToColor(autoChangeOpacityList + colorRecycleListHex[cycleCount++]);
-        }
-        public void updatePresetThemes(int[,] newPresetColor, string[] opacity,int order)
-        {
-            for(int i = 0; i < 5; i++)
-            {
-                presetThemeOpacity[order, i] = opacity[i];
-                newcolorList[order, i, 0] = newPresetColor[i, 0];
-                newcolorList[order, i, 1] = newPresetColor[i, 1];
-                colorRecycleListHex[i] = getColourHex(newcolorList[order, i, 0], newcolorList[order, i, 1]);
-            }
-            autoChangeOpacityList = opacity;
-        }
-        private string[] autoChangeOpacityList = new string[5];
+       
         
-        public class ThemeColorArg : EventArgs
-        {
-            public Color colorSelected { get; set; }
-            public string colorHex { get; set; }
-            public Color[] recycleColor { get; set; }
-            public int LineChosen { get; set; }
-            public string[] opacity { get; set; }
-            public int[,] ColorFromProfile { get; set; }
-            public int order { get; set; }
-        }
+        
+        
+       
         public class ColourPickerData
         {
             public int width { get; set; }

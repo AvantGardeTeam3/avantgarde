@@ -60,7 +60,6 @@
                 Height="{x:Bind HEIGHT}"
                 Canvas.ZIndex="2" />
 
-
         </Grid>
 
     </Grid>

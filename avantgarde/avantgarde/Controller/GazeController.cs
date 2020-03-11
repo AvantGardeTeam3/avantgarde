@@ -25,7 +25,7 @@ namespace avantgarde.Controller
         public IDrawMode page;
         private UI ui;
         private GazeInputSourcePreview gazeInputSourcePreview;
-        private DrawingModel drawingModel;
+        public DrawingModel drawingModel;
         private DispatcherTimer Timer = new DispatcherTimer();
         private RadialProgressBar progressBar;
         private InkStrokeContainer container;
