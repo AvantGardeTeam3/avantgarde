@@ -183,9 +183,6 @@ namespace avantgarde
 
         private void curveDrawn(object sender, EventArgs e) {
 
-           
-            
-
             DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
             InkStroke s = arg.stroke;
             s.DrawingAttributes = ui.getDrawingAttributes();

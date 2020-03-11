@@ -40,7 +40,11 @@ namespace avantgarde.Menus
         public static int LOADING = 1;
 
         public int mode = 0;
-        private bool presetsLoaded;
+        private bool presetsLoaded = true;
+
+        public int bgProfile;
+        public int bgBrightness;
+        public int bgOpacity;
 
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
 
@@ -54,25 +58,19 @@ namespace avantgarde.Menus
         public int horizontalOffset { get; set; }
         public int verticalOffset { get; set; }
 
-        private string newBackground;
-
-        private string imgSrc1 { get; set; }
-        private string imgSrc2 { get; set; }
-        private string imgSrc3 { get; set; }
 
 
         public FileManager()
         {
-            //loadPresets();
-            imgSrc1 = "";
-            imgSrc2 = "";
-            imgSrc3 = "";
+            
             title = "";
             selectedSlot = 1;
             slot1State = "Visible";
             slot2State = "Collapsed";
             slot3State = "Collapsed";
             getWindowAttributes();
+            Debug.WriteLine("hello1");
+            loadPresets();
             this.InitializeComponent();
 
         }
@@ -97,8 +95,7 @@ namespace avantgarde.Menus
         {
             StringBuilder content = new StringBuilder();
 
-            var bg = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
-            content.Append(bg.ToString() + "\n");
+            content.Append(bgProfile + "," + bgBrightness + "," + bgOpacity + "\n");
 
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 3; j++) {
@@ -110,13 +107,13 @@ namespace avantgarde.Menus
 
 
             foreach (StrokeData s in strokeData) {
-                content.Append(s.p0.X.ToString() + "," + s.p0.Y.ToString()+",");
-                content.Append(s.p1.X.ToString() + "," + s.p1.Y.ToString() + ",");
-                content.Append(s.p2.X.ToString() + "," + s.p2.Y.ToString() + ",");
-                content.Append(s.p3.X.ToString() + "," + s.p3.Y.ToString() + ",");
-                content.Append(s.midpoint.X.ToString() + "," + s.midpoint.Y.ToString() + ",");
-                content.Append(s.halfpoint.X.ToString() + "," + s.halfpoint.Y.ToString() + ",");
-                content.Append(s.size.Width.ToString() + "," + s.size.Height.ToString() + ",");
+                content.Append(Convert.ToInt32(s.p0.X).ToString() + "," + Convert.ToInt32(s.p0.Y).ToString()+",");
+                content.Append(Convert.ToInt32(s.p1.X).ToString() + "," + Convert.ToInt32(s.p1.Y).ToString() + ",");
+                content.Append(Convert.ToInt32(s.p2.X).ToString() + "," + Convert.ToInt32(s.p2.Y).ToString() + ",");
+                content.Append(Convert.ToInt32(s.p3.X).ToString() + "," + Convert.ToInt32(s.p3.Y).ToString() + ",");
+                content.Append(Convert.ToInt32(s.midpoint.X).ToString() + "," + Convert.ToInt32(s.midpoint.Y).ToString() + ",");
+                content.Append(Convert.ToInt32(s.halfpoint.X).ToString() + "," + Convert.ToInt32(s.halfpoint.Y).ToString() + ",");
+                content.Append(Convert.ToInt32(s.size.Width).ToString() + "," + Convert.ToInt32(s.size.Height).ToString() + ",");
                 content.Append(s.modified.ToString() + ",");
                 content.Append(s.colourProfile.ToString() + ",");
                 content.Append(s.brightness.ToString() + ",");
@@ -129,31 +126,44 @@ namespace avantgarde.Menus
             return content.ToString();
         }
 
-        private List<StrokeData> deserialize(String content) {
+        public event EventHandler fileLoaded;
+        private void deserialize(String content) {
             List<StrokeData> newData = new List<StrokeData>();
 
             string[] lines = content.Split("\n");
             StrokeData data;
 
             bool first = true;
+            bool second = false;
 
             foreach (var line in lines)
             {
+                if (line.Length <= 1) {
+                    continue;
+                }
                 if (first) {
-                    newBackground = line.Remove(line.Length - 1);
+                    loadBackground(line);
                     first = false;
+                    second = true;
+                    continue;
+                }
+                if (second) {
+                    loadColourPalette(line);
+                    second = false;
                     continue;
                 }
                 string[] vals = line.Split(",");
+                Debug.WriteLine("line"+line);
+                Debug.WriteLine(vals.Length);
                 data = new StrokeData();
-                data.p0 = new Point(Double.Parse(vals[0]), Double.Parse(vals[1]));
-                data.p1 = new Point(Double.Parse(vals[2]), Double.Parse(vals[3]));
-                data.p2 = new Point(Double.Parse(vals[4]), Double.Parse(vals[5]));
-                data.p3 = new Point(Double.Parse(vals[6]), Double.Parse(vals[7]));
-                data.midpoint = new Point(Double.Parse(vals[8]), Double.Parse(vals[9]));
-                data.halfpoint = new Point(Double.Parse(vals[10]), Double.Parse(vals[11]));
-                data.size = new Size(Double.Parse(vals[12]), Double.Parse(vals[13]));
-                data.modified = Boolean.Parse(vals[14]);
+                data.p0 = new Point(Double.Parse(vals[0]+".0"), Double.Parse(vals[1] + ".0"));
+                data.p1 = new Point(Double.Parse(vals[2] + ".0"), Double.Parse(vals[3] + ".0"));
+                data.p2 = new Point(Double.Parse(vals[4] + ".0"), Double.Parse(vals[5] + ".0"));
+                data.p3 = new Point(Double.Parse(vals[6] + ".0"), Double.Parse(vals[7] + ".0"));
+                data.midpoint = new Point(Double.Parse(vals[8] + ".0"), Double.Parse(vals[9] + ".0"));
+                data.halfpoint = new Point(Double.Parse(vals[10] + ".0"), Double.Parse(vals[11] + ".0"));
+                data.size = new Size(Double.Parse(vals[12] + ".0"), Double.Parse(vals[13] + ".0"));
+                data.modified = "True" == vals[14];
                 data.colourProfile = Int32.Parse(vals[15]);
                 data.brightness = Int32.Parse(vals[16]);
                 data.opacity = Int32.Parse(vals[17]);
@@ -164,9 +174,37 @@ namespace avantgarde.Menus
             }
 
 
-            return newData;
+            strokeData = newData;
+
+            if (presetsLoaded)
+            {
+                fileLoaded?.Invoke(this, EventArgs.Empty);
+            }
         }
 
+        private void loadBackground(String data) {
+            string[] vals = data.Split(",");
+            bgProfile = Int32.Parse(vals[0]);
+            bgBrightness = Int32.Parse(vals[1]);
+            bgOpacity = Int32.Parse(vals[2]);
+        }
+
+
+        private void loadColourPalette(String data) {
+            string[] vals = data.Split(",");
+
+            colourPalette = new int[5, 3];
+
+            int k = 0;
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 3; j++) {
+                    colourPalette[i, j] = Int32.Parse(vals[k]);
+                    k++;
+
+                }
+            }
+
+        }
         private async Task saveFileAsync() {
             StorageFile file = await localFolder.CreateFileAsync("slot" + selectedSlot.ToString() + ".txt",
                 CreationCollisionOption.ReplaceExisting);
@@ -203,7 +241,7 @@ namespace avantgarde.Menus
         public async void save() {
             getCanvasData();
             await saveFileAsync();
-            await saveImageAsync();
+            //await saveImageAsync(); will add back for thumbnails if time permits
         }
 
         private async Task saveImageAsync() {
@@ -229,20 +267,6 @@ namespace avantgarde.Menus
 
             }
 
-            if (selectedSlot == 1)
-            {
-                imgSrc1 = file.Path;
-            }
-            else if (selectedSlot == 2) {
-
-                imgSrc2 = file.Path;
-            }
-            else if (selectedSlot == 3)
-            {
-
-                imgSrc3 = file.Path;
-            }
-
             NotifyPropertyChanged();
 
         }
@@ -250,29 +274,37 @@ namespace avantgarde.Menus
 
         private async void loadPresets()
         {
-            checkSlotsEmpty();
+            await checkSlotsEmpty();
+            Debug.WriteLine("hello2");
+            Debug.WriteLine(presetsLoaded);
             if (!presetsLoaded) {
                 for (int i = 1; i < 4; i++)
                 {
+                    Debug.WriteLine("yeet"+i);
                     selectedSlot = i;
                     await loadFileAsync(true);
-                    // generate canvas from file 
                     save();
                 }
+                presetsLoaded = true;
             }
+
+
            
         }
 
-        private async void checkSlotsEmpty() {
+        private async Task checkSlotsEmpty() {
             var slot1 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot1.txt");
             var slot2 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot2.txt");
             var slot3 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot3.txt");
-            var img1 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img1.jpg");
-            var img2 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img2.jpg");
-            var img3 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img3.jpg");
+            //var img1 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img1.jpg");
+            //var img2 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img2.jpg");
+            //var img3 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img3.jpg");
 
-            presetsLoaded = (slot1 != null) && (slot2 != null) && (slot3 != null) 
-                && (img1 != null) && (img2 != null) && (img3 != null);
+            Debug.WriteLine("hello3");
+
+            presetsLoaded = (slot1 != null) && (slot2 != null) && (slot3 != null);
+
+            Debug.WriteLine(presetsLoaded);
 
         }
 
@@ -280,18 +312,21 @@ namespace avantgarde.Menus
             
             StorageFile file;
 
+            Debug.WriteLine("hello5");
+
             if (fromPresets)
             {
-                file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(@"Assets\slot" + selectedSlot.ToString() + ".txt");
+                file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(@"Assets\data\slot" + selectedSlot.ToString() + ".txt");
+                Debug.WriteLine("file is not null:" + file != null);
+                
             }
             else 
             {
                 file = await localFolder.GetFileAsync("slot" + selectedSlot.ToString() + ".txt");
             }
 
-           
             var content = await FileIO.ReadTextAsync(file);
-            strokeData = deserialize(content);
+            deserialize(content);
         }
 
         public async void load() {

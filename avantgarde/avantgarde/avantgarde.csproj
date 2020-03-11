@@ -200,6 +200,9 @@
     <Content Include="Assets\icons\icon_x.png" />
     <Content Include="Assets\icons\icon_play.png" />
     <Content Include="Assets\icons\icon_pause.png" />
+    <Content Include="Assets\mandala1.png" />
+    <Content Include="Assets\mandala2.png" />
+    <Content Include="Assets\mandala3.png" />
     <Content Include="Assets\microsoft footer.png" />
     <Content Include="Assets\ucl footer.png" />
     <Content Include="Assets\icons\icon_undo.jpg" />

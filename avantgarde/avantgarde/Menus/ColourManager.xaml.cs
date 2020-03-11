@@ -132,13 +132,13 @@ namespace avantgarde.Menus
         }
 
         public void openMenu() {
+            updateColourName();
             NotifyPropertyChanged();
             if (!ColourPickerMenu.IsOpen) { ColourPickerMenu.IsOpen = true; }
         }
 
         private void updateColourName() {
             colourName = ColorHelper.ToDisplayName(selection);
-            Debug.WriteLine(colourName);
         }
 
         public static Color hexToColor(string hex)
@@ -224,11 +224,14 @@ namespace avantgarde.Menus
         }
 
         public void nextColour() {
+            
+            switchID++;
+
             selection = colourPalette[switchID];
             colourProfile = colourPaletteData[switchID, PROFILE];
             brightness = colourPaletteData[switchID, BRIGHTNESS];
             opacity = colourPaletteData[switchID, OPACITY];
-            switchID++;
+            
             if (switchID == 5) {
                 switchID = 0;
             }
@@ -332,6 +335,19 @@ namespace avantgarde.Menus
             colourProfile = 12;
             brightness = 10;
             updateSelection();
+        }
+
+        public void setBGColour(int p, int b, int o) {
+            bgProfile = p;
+            bgBrightness = b;
+            bgOpacity = o;
+            backgroundSelection = hexToColor(getOpacityHex(o) + colourPickerData.getColourHex(p, b));
+            backgroundSelectionChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public int[] getBGColour()
+        {
+            return new int[] { bgProfile, bgBrightness, bgOpacity };
         }
 
         public event EventHandler toggleAutoswitch;

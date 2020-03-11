@@ -48,7 +48,8 @@ namespace avantgarde.Menus
         private bool autoswitch;
 
         public String backgroundHex { get; set; }
-        private int[,] colourPaletteData { get; set; }
+        private int[,] colourPaletteData = 
+            new int[,] { { 5, 6, 100 }, { 0, 7, 100 }, { 6, 7, 100 }, { 2, 7, 100 }, { 9, 7, 100 } };
         public String[] colourPalette { get; set; }
 
         public Color colourSelection;
@@ -70,7 +71,7 @@ namespace avantgarde.Menus
             drawingAttributes.Size = new Size(10, 10);
             autoswitchButton.Background = new SolidColorBrush(hexToColor("#a0cdff59"));
             updateBackgroundButton();
-            initColourPalette();
+            initColourPalette(this.colourPaletteData);
             
             colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
@@ -86,9 +87,9 @@ namespace avantgarde.Menus
             colourManager.paletteEdited += new EventHandler(updatePalette);
             colourManager.toggleAutoswitch += new EventHandler(cmToggleAutoSwitch);
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
-            //colorCombination.ThemeUpdate += new EventHandler<ThemeColorArg>(ThemeUpdate);
             fileManager.loadRequested += new EventHandler(load);
             fileManager.saveRequested += new EventHandler(save);
+            fileManager.fileLoaded += new EventHandler(fileLoaded);
 
         }
 
@@ -98,19 +99,21 @@ namespace avantgarde.Menus
             backgroundHex = colourManager.backgroundSelection.ToString();
             NotifyPropertyChanged();
         }
-        private void initColourPalette() {
-            colourPaletteData = new int[,] { { 5, 6, 100 }, { 0, 7, 100 }, { 6, 7, 100 }, { 2, 7, 100 }, { 9, 7, 100 } };
+        private void initColourPalette(int[,] data) {
 
-            for (int x = 0; x < colourPaletteData.GetLength(0); x += 1)
+            for (int x = 0; x < data.GetLength(0); x += 1)
             {
-                colourPalette[x] = "#" + colourManager.getOpacityHex(colourPaletteData[x,OPACITY])
-                    + colourManager.getColourHex(colourPaletteData[x, PROFILE], colourPaletteData[x,BRIGHTNESS]);
+                colourPalette[x] = "#" + colourManager.getOpacityHex(data[x,OPACITY])
+                    + colourManager.getColourHex(data[x, PROFILE], data[x,BRIGHTNESS]);
                 colourManager.colourPalette[x] = hexToColor(colourPalette[x]);
             }
 
             colourManager.colourPaletteHex = colourPalette;
-            colourManager.colourPaletteData = colourPaletteData;
-            fileManager.colourPalette = colourManager.colourPaletteData;
+            colourManager.colourPaletteData = data;
+            colourPaletteData = data;
+            fileManager.colourPalette = data;
+
+            
 
             NotifyPropertyChanged();
 
@@ -236,6 +239,7 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
+                colourManager.switchID = 0;
 
             }
 
@@ -254,10 +258,12 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
+                
             }
 
             else
             {
+                colourManager.switchID = 1;
                 colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS], colourPaletteData[1, OPACITY]);
             }
         }
@@ -271,10 +277,12 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
+                
             }
 
             else
             {
+                colourManager.switchID = 2;
                 colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS], colourPaletteData[2, OPACITY]);
             }
         }
@@ -288,10 +296,12 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
+                
             }
 
             else
             {
+                colourManager.switchID = 3;
                 colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS], colourPaletteData[3, OPACITY]);
             }
         }
@@ -305,10 +315,12 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
+                
             }
 
             else
             {
+                colourManager.switchID = 4;
                 colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS], colourPaletteData[4, OPACITY]);
             }
         }
@@ -348,6 +360,10 @@ namespace avantgarde.Menus
         private void saveButtonClicked(object sender, RoutedEventArgs e)
         {
             restrictedID = RESTRICTED_SAVE;
+            int[] bgProps = colourManager.getBGColour();
+            fileManager.bgProfile = bgProps[PROFILE];
+            fileManager.bgBrightness = bgProps[BRIGHTNESS];
+            fileManager.bgOpacity = bgProps[OPACITY];
             clearPopups();
             fileManager.open(FileManager.SAVING);
             popupOpened?.Invoke(this, EventArgs.Empty);
@@ -546,6 +562,16 @@ namespace avantgarde.Menus
         private void colourManagerClosed(object sender, EventArgs e)
         {
             popupClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void fileLoaded(object sender, EventArgs e)
+        {   
+            initColourPalette(fileManager.colourPalette);
+            colourManager.setBGColour(fileManager.bgProfile, fileManager.bgBrightness, fileManager.bgOpacity);
+
+            NotifyPropertyChanged();
+
+            // generate canvas from Stroke data
         }
 
 

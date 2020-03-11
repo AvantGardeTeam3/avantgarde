@@ -79,7 +79,7 @@
                             Click="selectSlot1">
 
                             <StackPanel Orientation="Vertical" Spacing="10">
-                                <Image Source="/Assets/icons/icon_paintbrush.png" />
+                                <Image Source="/Assets/mandala1.png" />
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -111,7 +111,7 @@
                             Click="selectSlot2">
 
                             <StackPanel Orientation="Vertical" Spacing="10">
-                                <Image Source="/Assets/icons/icon_paintbrush.png" />
+                                <Image Source="/Assets/mandala2.png" />
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -143,7 +143,7 @@
                             Click="selectSlot3">
 
                             <StackPanel Orientation="Vertical" Spacing="10">
-                                <Image Source="/Assets/icons/icon_paintbrush.png" />
+                                <Image Source="/Assets/mandala3.png" />
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
