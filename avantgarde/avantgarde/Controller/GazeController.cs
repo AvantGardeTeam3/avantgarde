@@ -22,10 +22,10 @@ namespace avantgarde.Controller
     class GazeController
     {
 
-        private IDrawMode page;
+        public IDrawMode page;
         private UI ui;
         private GazeInputSourcePreview gazeInputSourcePreview;
-        private DrawingModel drawingModel;
+        public DrawingModel drawingModel;
         private DispatcherTimer Timer = new DispatcherTimer();
         private RadialProgressBar progressBar;
         private InkStrokeContainer container;
@@ -57,6 +57,8 @@ namespace avantgarde.Controller
         private List<Ellipse> indicators = new List<Ellipse>();
         public ColourManager colourManager;
         public InkCanvas inkCanvas { get; set; }
+
+        
         public GazeController(IDrawMode page)
         {
             this.page = page;

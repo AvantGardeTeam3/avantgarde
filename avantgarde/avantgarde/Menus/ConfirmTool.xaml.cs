@@ -35,10 +35,7 @@ namespace avantgarde.Menus
 
         public ConfirmTool()
         {
-            width = 400;
-            height = 250;
-            horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
-            verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
+            
             message = "Are you sure?";
             getWindowAttributes();
             this.InitializeComponent();
@@ -53,8 +50,10 @@ namespace avantgarde.Menus
         }
 
         private void getWindowAttributes() {
-           
-        
+            width = 400;
+            height = 250;
+            horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
+            verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
         }
 
         public void setMessage(String s) {

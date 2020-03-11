@@ -124,6 +124,7 @@
     <Compile Include="Controller\GazeController.cs" />
     <Compile Include="Drawing\BezierCurve.cs" />
     <Compile Include="Drawing\DrawingModel.cs" />
+    <Compile Include="Drawing\StrokeData.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
@@ -142,14 +143,14 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Menus\ColorCombination.xaml.cs">
-      <DependentUpon>ColorCombination.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menus\ConfirmTool.xaml.cs">
       <DependentUpon>ConfirmTool.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Menus\FileManager.xaml.cs">
+      <DependentUpon>FileManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menus\LibreToolBox.xaml.cs">
       <DependentUpon>LibreToolBox.xaml</DependentUpon>
@@ -170,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\background.png" />
+    <Content Include="Assets\data\slot1.txt" />
+    <Content Include="Assets\data\slot3.txt" />
+    <Content Include="Assets\data\slot2.txt" />
     <Content Include="Assets\headings\Avant-Garde.png" />
     <Content Include="Assets\blue radial.png" />
     <Content Include="Assets\headings\Fleur Heading.png" />
@@ -196,6 +200,9 @@
     <Content Include="Assets\icons\icon_x.png" />
     <Content Include="Assets\icons\icon_play.png" />
     <Content Include="Assets\icons\icon_pause.png" />
+    <Content Include="Assets\mandala1.png" />
+    <Content Include="Assets\mandala2.png" />
+    <Content Include="Assets\mandala3.png" />
     <Content Include="Assets\microsoft footer.png" />
     <Content Include="Assets\ucl footer.png" />
     <Content Include="Assets\icons\icon_undo.jpg" />
@@ -250,15 +257,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Menus\ColorCombination.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Menus\ColourManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Menus\ConfirmTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\FileManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

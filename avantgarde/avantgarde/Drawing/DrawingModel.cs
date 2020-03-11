@@ -13,10 +13,11 @@ namespace avantgarde
 {
     public class DrawingModel
     {
+        public List<BezierCurve> curves = new List<BezierCurve>();
         private List<Point> midPoints = new List<Point>(); 
         private List<Point> endPoints = new List<Point>();
         private List<Point> controlPoints = new List<Point>();
-        private List<BezierCurve> curves = new List<BezierCurve>();
+        
         private Stack<BezierCurve> undoStack = new Stack<BezierCurve>();
 
         private bool fleur;
@@ -24,6 +25,10 @@ namespace avantgarde
         public InkDrawingAttributes attributes { get; set; }
 
         private InkStrokeContainer container;
+
+        public List<BezierCurve> getCurves() {
+            return curves;
+        }
         public DrawingModel(InkStrokeContainer inkStrokeContainer, bool f)
         {
             this.container = inkStrokeContainer;
@@ -164,6 +169,7 @@ namespace avantgarde
             // controlPoints.Add(p2);
 
             curves.Add(curve);
+
             if (fleur) {
                 LineDrawnEventArgs args = new LineDrawnEventArgs();
                 args.stroke = curve.InkStroke;
@@ -178,6 +184,7 @@ namespace avantgarde
         public class LineDrawnEventArgs : EventArgs
         {
             public InkStroke stroke { get; set; }
+
         }
     }
 }

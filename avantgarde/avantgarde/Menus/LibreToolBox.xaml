@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
             <uc:ColourManager x:Name="colourManager" />
             <uc:ConfirmTool x:Name="confirmTool" />
-            <uc:ColorCombination x:Name="colorCombination"/>
+            <uc:FileManager x:Name="fileManager" />
 
             <Border
                 Width="120"
@@ -173,6 +173,12 @@
                                                 Width="80"
                                                 Height="50"
                                                 HorizontalAlignment="Center"
+                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                                 Background="Transparent"
                                                 Click="increaseMandalaLines">
                                                 <Image Source="/Assets/icons/icon_up.png" />
@@ -182,6 +188,12 @@
                                                 Width="80"
                                                 Height="50"
                                                 HorizontalAlignment="Center"
+                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                                 Background="Transparent"
                                                 Click="decreaseMandalaLines">
                                                 <Image Source="/Assets/icons/icon_down.png" />
@@ -263,6 +275,12 @@
                                                 Width="80"
                                                 Height="50"
                                                 HorizontalAlignment="Center"
+                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                                 Background="Transparent"
                                                 Click="increaseBrushSize">
                                                 <Image Source="/Assets/icons/icon_up.png" />
@@ -272,6 +290,12 @@
                                                 Width="80"
                                                 Height="50"
                                                 HorizontalAlignment="Center"
+                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                                                gaze:GazeInput.MaxDwellRepeatCount="5"
+                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                                 Background="Transparent"
                                                 Click="decreaseBrushSize">
                                                 <Image Source="/Assets/icons/icon_down.png" />
@@ -325,10 +349,10 @@
                                         CornerRadius="5,5,5,5">
                                         <StackPanel Orientation="Vertical" Spacing="10">
                                             <Button
+                                                x:Name="colourPallette0"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette0"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[0], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -337,10 +361,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette1"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette1"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[1], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -349,10 +373,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette2"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette2"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[2], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -361,10 +385,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette3"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette3"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[3], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -373,10 +397,10 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="colourPallette4"
                                                 Width="80"
                                                 Height="80"
                                                 Margin="5"
-                                                x:Name="colourPallette4"
                                                 HorizontalAlignment="Center"
                                                 Background="{x:Bind colourPalette[4], Mode=OneWay}"
                                                 BorderBrush="White"
@@ -385,6 +409,7 @@
                                                 CornerRadius="5,5,5,5" />
 
                                             <Button
+                                                x:Name="autoswitchButton"
                                                 Width="90"
                                                 Height="50"
                                                 Margin="5"
@@ -397,7 +422,6 @@
                                                 Opacity="1">
 
                                                 <TextBlock
-                                                    x:Name="autoSwitchText"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     FontFamily="Tahoma"
@@ -409,6 +433,7 @@
                                             </Button>
 
                                             <Button
+                                                x:Name="editPaletteButton"
                                                 Width="90"
                                                 Height="50"
                                                 Margin="5"
@@ -416,7 +441,7 @@
                                                 Background="Transparent"
                                                 BorderBrush="White"
                                                 BorderThickness="2"
-                                                Click="initThemePicker"
+                                                Click="editPalette"
                                                 CornerRadius="5,5,5,5"
                                                 Opacity="1">
 
@@ -426,7 +451,7 @@
                                                     FontFamily="Tahoma"
                                                     FontSize="13"
                                                     Foreground="White"
-                                                    Text="Themes" />
+                                                    Text="Edit Palette" />
 
 
                                             </Button>
@@ -470,14 +495,11 @@
                             Height="80"
                             HorizontalAlignment="Center"
                             Background="{x:Bind backgroundHex, Mode=OneWay}"
-                            Click="setBackground"
-                            CornerRadius="5,5,5,5"
-                            Visibility="Visible"
                             BorderBrush="White"
                             BorderThickness="2"
-                            >
-                           
-                        </Button>
+                            Click="setBackground"
+                            CornerRadius="5,5,5,5"
+                            Visibility="Visible" />
                     </StackPanel>
 
 

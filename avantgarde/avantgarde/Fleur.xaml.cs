@@ -42,20 +42,27 @@ namespace avantgarde
 {
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
+        public static List<StrokeData> getStrokeData() {
+            return strokeData;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public static bool autoswitch = true;
+
         private Controller.GazeController controller;
 
-        private DrawingModel drawingModel;
+        public DrawingModel drawingModel;
 
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         public static Color colourSelection { get; set; }
 
+        public static String[] colourPalette;
         private String backgroundHex { get; set; }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
@@ -64,13 +71,15 @@ namespace avantgarde
 
         //the coordinate of the centre of the canvas
         private Point inkCanvasCentre;
-        List<InkStroke> userStrokes = new List<InkStroke>();
-        List<InkStroke> mandalaStrokes = new List<InkStroke>();
+        public static List<StrokeData> strokeData = new List<StrokeData>();
+        public List<InkStroke> userStrokes = new List<InkStroke>();
+        public List<InkStroke> mandalaStrokes = new List<InkStroke>();
         private InkStrokeBuilder inkStrokeBuilder;
         
 
         Stack<InkStroke> redoStack = new Stack<InkStroke>();
 
+       
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
@@ -94,6 +103,7 @@ namespace avantgarde
             inkStrokeBuilder = new InkStrokeBuilder();
 
             colourSelection = Menus.ColourManager.defaultColour;
+            radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
 
             this.DataContext = this;
 
@@ -123,19 +133,20 @@ namespace avantgarde
         private async void saveIamge(object sender, EventArgs e)
         {
             //InkCanvas inkCanvas = ControllerFactory.gazeController.inkCanvas;
-            StorageFolder storageFolder = KnownFolders.SavedPictures;
+            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
             var savePicker = new FileSavePicker
             {
                 SuggestedStartLocation = PickerLocationId.PicturesLibrary
             };
-            savePicker.FileTypeChoices.Add("Jpg Image", new[] { ".jpg" });
-            savePicker.SuggestedFileName = "enter file name";
+            savePicker.FileTypeChoices.Add(".jpg", new[] { ".jpg" });
+            savePicker.SuggestedFileName = "Avant Garde Project";
             StorageFile file = await savePicker.PickSaveFileAsync();
             using (var ds = renderTarget.CreateDrawingSession())
             {
-                ds.Clear(Colors.White);
+                ds.Clear(background);
                 ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
             }
             if (file != null)
@@ -147,15 +158,48 @@ namespace avantgarde
             }
         }
 
+        private void storeStrokeData() {
+            int COLOUR_PROFILE = 0;
+            int BRIGHTNESS = 1;
+            int OPACITY = 2;
+            
+            StrokeData newStrokeData = new StrokeData();
+            newStrokeData.reflections = numberOfLines;
+            newStrokeData.colourProfile = ui.getColourAttributes(COLOUR_PROFILE);
+            newStrokeData.brightness = ui.getColourAttributes(BRIGHTNESS);
+            newStrokeData.opacity = ui.getColourAttributes(OPACITY);
+            newStrokeData.size = drawingAttributes.Size;
+
+            if (String.Compare(ui.getBrush(), "pencil") == 0)
+            {
+                newStrokeData.brush = "pencil";
+            }
+            else {
+                newStrokeData.brush = "paint";
+            }
+
+            strokeData.Add(newStrokeData);
+        }
+
         private void curveDrawn(object sender, EventArgs e) {
+
             DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
             InkStroke s = arg.stroke;
             s.DrawingAttributes = ui.getDrawingAttributes();
+            
+            storeStrokeData();
             userStrokes.Add(s);
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
             mandalaStrokes.AddRange(this.Transfrom(userStrokes));
+
+            if (autoswitch)
+            {
+                ui.UIGetColourManager().nextColour();
+            }
+
+
         }
-        private Boolean autoChangeStorkeColor = false;
+        
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
         {
             //called everytime user finishes a stroke
@@ -167,10 +211,6 @@ namespace avantgarde
             }
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
-            if (autoChangeStorkeColor)
-            {
-                controller.colourManager.AutoChangeColor();
-            }
         }
         private List<InkStroke> Transfrom(List<InkStroke> u)
         {
@@ -274,6 +314,7 @@ namespace avantgarde
 
         public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
 
+
         private async void redo(object sender, EventArgs e)
         {
             if (redoStack.Count() == 0)
@@ -358,11 +399,13 @@ namespace avantgarde
         {
             colourSelection = ui.getColour();
             drawingAttributes.Color = colourSelection;
+            radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
         }
 
         private void clearCanvas(object sender, EventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
+            // clear all lists
         }
     }
 }
