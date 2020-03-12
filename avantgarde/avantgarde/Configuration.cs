@@ -10,5 +10,6 @@ namespace avantgarde
     {
         public static int DrawingDwellTimeMs = 600;
         public static double GazeSnapDistance = 30.0;
+        public static int JoystickMoveDistance = 10;
     }
 }

@@ -20,6 +20,11 @@ namespace avantgarde
         
         private Stack<BezierCurve> undoStack = new Stack<BezierCurve>();
 
+        public BezierCurve FindCurveByHalfPoint(Point point)
+        {
+            return curves.Find(x => x.HalfPoint == point);
+        }
+
         private bool fleur;
 
         public InkDrawingAttributes attributes { get; set; }
@@ -36,15 +41,49 @@ namespace avantgarde
         }
         public List<Point> GetMidPoints()
         {
-            return midPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                if (!curve.Modified) retPoints.Add(curve.MidPoint);
+                //retPoints.Add(curve.MidPoint);
+            }
+            return retPoints;
         }
         public List<Point> GetEndPoints()
         {
-            return endPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                Point p0 = curve.P0;
+                Point p3 = curve.P3;
+                if (!retPoints.Contains(p0)) retPoints.Add(p0);
+                if (!retPoints.Contains(p3)) retPoints.Add(p3);
+            }
+            return retPoints;
         }
         public List<Point> GetControlPoints()
         {
-            return controlPoints;
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                Point p1 = curve.P1;
+                Point p2 = curve.P2;
+                if (curve.Modified)
+                {
+                    retPoints.Add(p1);
+                    retPoints.Add(p2);
+                }
+            }
+            return retPoints;
+        }
+        public List<Point> GetHalfPoints()
+        {
+            List<Point> retPoints = new List<Point>();
+            foreach(BezierCurve curve in curves)
+            {
+                if (curve.Modified) retPoints.Add(curve.HalfPoint);
+            }
+            return retPoints;
         }
         public void redo()
         {
@@ -136,24 +175,29 @@ namespace avantgarde
             container.AddStroke(curve.InkStroke);
         }
 
-        public void moveEndPoints(Point point, Point position)
+        public Point moveEndPoints(Point point, Point position)
         {
-            BezierCurve curve = curves.Find(x => x.P0 == point || x.P3 == point);
-            InkStroke stroke = curve.InkStroke;
-            stroke.Selected = true;
+            List<BezierCurve> involvedCurves = curves.FindAll(x => x.P0 == point || x.P3 == point);
+            involvedCurves.ForEach(x => x.InkStroke.Selected = true);
             container.DeleteSelected();
-            if (curve.P1 == point)
+
+            foreach(BezierCurve curve in involvedCurves)
             {
-                curve.P0 = position;
+                if (curve.P0 == point)
+                {
+                    curve.P0 = position;
+                }
+                else
+                {
+                    curve.P3 = position;
+                }
             }
-            else
-            {
-                curve.P3 = position;
-            }
-            container.AddStroke(curve.InkStroke);
+
+            involvedCurves.ForEach(x => container.AddStroke(x.InkStroke));
+            return position;
         }
 
-        public event EventHandler curveDrawn;
+        // public event EventHandler curveDrawn;
         public void newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
         {
             BezierCurve curve = new BezierCurve(p0, p3, attributes);
@@ -169,16 +213,28 @@ namespace avantgarde
             // controlPoints.Add(p2);
 
             curves.Add(curve);
+            //if (fleur) {
+            //    LineDrawnEventArgs args = new LineDrawnEventArgs();
+            //    args.stroke = curve.InkStroke;
+            //    curveDrawn?.Invoke(this, args);
+            //}
+            //else
+            //{
+            //    container.AddStroke(curve.InkStroke);
+            //}
+            container.AddStroke(curve.InkStroke);
+        }
 
-            if (fleur) {
-                LineDrawnEventArgs args = new LineDrawnEventArgs();
-                args.stroke = curve.InkStroke;
-                curveDrawn?.Invoke(this, args);
-            }
-            else
-            {
-                container.AddStroke(curve.InkStroke);
-            }
+        public void delteCruve(BezierCurve curve)
+        {
+            this.curves.Remove(curve);
+        }
+
+        public List<InkStroke> GetStrokes()
+        {
+            List<InkStroke> ret = new List<InkStroke>();
+            curves.ForEach(x => ret.Add(x.InkStroke));
+            return ret;
         }
 
         public class LineDrawnEventArgs : EventArgs
