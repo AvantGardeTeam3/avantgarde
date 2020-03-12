@@ -25,7 +25,7 @@
             BorderThickness="2"
             Click="initToolbox"
             CornerRadius="5,5,5,5"
-            Opacity=".40"
+            Opacity=".60"
             Visibility="{x:Bind toolBoxButtonVisibility, Mode=OneWay}">
 
             <Image
@@ -44,12 +44,18 @@
             <Button
                 Width="150"
                 Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                 Background="LightGray"
                 BorderBrush="#cdff59"
                 BorderThickness="2"
                 Click="undo"
                 CornerRadius="5,5,5,5"
-                Opacity=".40">
+                Opacity=".60">
 
                 <Image
                     Width="80"
@@ -60,12 +66,18 @@
             <Button
                 Width="150"
                 Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                 Background="LightGray"
                 BorderBrush="#cdff59"
                 BorderThickness="2"
                 Click="redo"
                 CornerRadius="5,5,5,5"
-                Opacity=".40">
+                Opacity=".60">
                 <Image
                     Width="80"
                     Height="80"
@@ -87,7 +99,7 @@
             BorderThickness="2"
             Click="changeDrawState"
             CornerRadius="5,5,5,5"
-            Opacity="0.40"
+            Opacity="0.60"
             Visibility="{x:Bind playButtonVisibility, Mode=OneWay}">
             <Image
                 Width="80"
@@ -107,9 +119,7 @@
             BorderThickness="2"
             Click="changeDrawState"
             CornerRadius="5,5,5,5"
-            Opacity="0.40"
-
-            >
+            Opacity="0.60">
             <Image
                 Width="80"
                 Height="80"

@@ -169,27 +169,27 @@
 
 
 
-                   
-                        
 
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="15"
-                            Foreground="White"
-                            Text="Background" />
-                        <Button
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Background="{x:Bind backgroundHex, Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setBackground"
-                            CornerRadius="5,5,5,5"
-                            Visibility="Visible" />
-                    
+
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Background" />
+                    <Button
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        Background="{x:Bind backgroundHex, Mode=OneWay}"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="setBackground"
+                        CornerRadius="5,5,5,5"
+                        Visibility="Visible" />
+
 
 
                 </StackPanel>
@@ -225,173 +225,172 @@
 
 
                     <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="15"
-                            Foreground="White"
-                            Text="Brush Tools" />
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Brush Tools" />
                     <Button
-                            Width="80"
-                            Height="80"
-                            Padding="0,0,0,10"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="openBrushTool"
-                            CornerRadius="5,5,5,5"
-                        >
-                            <Image Source="/Assets/icons/icon_draw.png" />
-                        </Button>
+                        Width="80"
+                        Height="80"
+                        Padding="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        Click="openBrushTool"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_draw.png" />
+                    </Button>
 
 
 
                     <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="15"
-                            Foreground="White"
-                            Text="Tutorial" />
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Tutorial" />
                     <Button
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_book.png" />
-                        </Button>
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_book.png" />
+                    </Button>
 
 
                     <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Clear" />
+                    <Button
+                        Width="80"
+                        Height="80"
+                        Padding="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        Click="clearCanvas"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_trash.png" />
+                    </Button>
+
+
+                    <Button
+                        Width="90"
+                        Height="50"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="saveButtonClicked"
+                        CornerRadius="5,5,5,5"
+                        Opacity="1">
+
+                        <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
-                            FontSize="15"
+                            FontSize="16"
                             Foreground="White"
-                            Text="Clear" />
+                            Text="Save" />
+
+
+                    </Button>
+
                     <Button
-                            Width="80"
-                            Height="80"
-                            Padding="0,0,0,10"
+                        Width="90"
+                        Height="50"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="loadButtonClicked"
+                        CornerRadius="5,5,5,5"
+                        Opacity="1">
+
+                        <TextBlock
                             HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="clearCanvas"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_trash.png" />
-                        </Button>
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="16"
+                            Foreground="White"
+                            Text="Load" />
 
 
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
+                    </Button>
+
+                    <Button
+                        Width="90"
+                        Height="50"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="exportButtonClicked"
+                        CornerRadius="5,5,5,5"
+                        Opacity="1">
+
+                        <TextBlock
                             HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="saveButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Save" />
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="16"
+                            Foreground="White"
+                            Text="Export" />
 
 
-                        </Button>
-
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="loadButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Load" />
-
-
-                        </Button>
-
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="exportButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Export" />
-
-
-                        </Button>
+                    </Button>
 
 
 
                     <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="15"
-                            Foreground="White"
-                            Text="Exit" />
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Exit" />
                     <Button
-                            Width="80"
-                            Height="80"
-                            Padding="0,0,0,10"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="goHome"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_exit.png" />
-                        </Button>
+                        Width="80"
+                        Height="80"
+                        Padding="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        Click="goHome"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_exit.png" />
+                    </Button>
 
 
                     <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontFamily="Tahoma"
-                            FontSize="15"
-                            Foreground="White"
-                            Text="Close" />
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="15"
+                        Foreground="White"
+                        Text="Close" />
                     <Button
-                            Width="60"
-                            Height="60"
-                            Padding="0,0,0,10"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="closeToolbox"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_x.png" />
-                        </Button>
+                        Width="60"
+                        Height="60"
+                        Padding="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        Click="closeToolbox"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_x.png" />
+                    </Button>
 
 
 
-                    
+
 
 
                 </StackPanel>

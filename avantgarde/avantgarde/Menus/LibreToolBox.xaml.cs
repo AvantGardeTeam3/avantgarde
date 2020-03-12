@@ -358,6 +358,7 @@ namespace avantgarde.Menus
 
         private void save(object sender, EventArgs e) {
             clearPopups();
+            popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
             confirmTool.openConfirmTool();
         }
@@ -373,6 +374,7 @@ namespace avantgarde.Menus
         private void load(object sender, EventArgs e)
         {
             clearPopups();
+            popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to load from Slot " + fileManager.selectedSlot.ToString() + "? \n The current canvas will be lost.");
             confirmTool.openConfirmTool();
         }
@@ -519,13 +521,7 @@ namespace avantgarde.Menus
             clearPopups();
             confirmTool.setMessage("Are you sure you want to clear the canvas?");
             confirmTool.openConfirmTool();
-            popupOpened?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void initColourManager(object sender, RoutedEventArgs e)
-        {
-            clearPopups();
-            colourManager.openMenu();
+            // clear strokeData and user/mandala strokes
             popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
@@ -564,6 +560,7 @@ namespace avantgarde.Menus
 
         private void drawingAttributesUpdated(object sender, EventArgs e) {
             drawingAttributes = brushTool.getDrawingAttributes();
+            drawingAttributes.Color = colourManager.getColour();
             mandalaLines = brushTool.mandalaLines;
             propertyUpdate();
         }
