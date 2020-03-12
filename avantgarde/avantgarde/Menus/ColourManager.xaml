@@ -494,8 +494,7 @@
                             <Button
                                 Grid.Row="4"
                                 Grid.Column="1"
-                                Width="85"
-                                Height="60"
+                                
                                 HorizontalAlignment="Center"
                                 gaze:GazeInput.DwellDuration="00:00:00.4000000"
                                 gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
@@ -504,6 +503,8 @@
                                 gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
                                 gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
+                                Width="85"
+                                Height="60"
                                 BorderBrush="DimGray"
                                 BorderThickness="2"
                                 Click="decreaseOpacity"

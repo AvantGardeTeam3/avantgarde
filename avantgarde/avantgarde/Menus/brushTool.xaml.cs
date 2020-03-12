@@ -66,8 +66,8 @@ namespace avantgarde.Menus
 
         private void getWindowAttributes()
         {
-            width = 500;
-            height = 400;
+            width = 400;
+            height = 550;
             horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
             verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
         }
