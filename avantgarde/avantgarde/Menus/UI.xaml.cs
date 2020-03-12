@@ -47,9 +47,6 @@ namespace avantgarde.Menus
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void hideMandalaLines() {
-            libreToolBox.hideMandalaLines();
-        }
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
@@ -62,10 +59,12 @@ namespace avantgarde.Menus
             playButtonPosition = "Center";
             toolBoxButtonVisibility = "Collapsed";
             playButtonVisibility = "Visible";
+            
             colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
             this.InitializeComponent();
-            
+            actionPanel.Visibility = Visibility.Collapsed;
+            animationButton.Visibility = Visibility.Collapsed;
             drawState = false;
             drawStateIcon = "/Assets/icons/icon_play.png";
 
@@ -73,8 +72,6 @@ namespace avantgarde.Menus
             libreToolBox.openToolbox();
 
             libreToolBox.colourSelectionUpdated += new EventHandler(updateColourSelection);
-            libreToolBox.undoButtonClicked += new EventHandler(undo);
-            libreToolBox.redoButtonClicked += new EventHandler(redo);
             libreToolBox.goHomeButtonClicked += new EventHandler(toolboxGoHomeButtonClicked);
             libreToolBox.propertiesUpdated += new EventHandler(toolboxPropertiesUpdated);
             libreToolBox.setBackgroundButtonClicked += new EventHandler(backgroundColourUpdated);
@@ -118,17 +115,24 @@ namespace avantgarde.Menus
                 return libreToolBox.getColourManager().opacity;
             }
         }
+        public LibreToolBox getToolbox() {
+            return libreToolBox;
+        }
         private void updateDrawStateUI() {
             if (drawState)
             {
                 if (libreToolBox.isOpen()) { libreToolBox.closeToolbox(null, null); }
                 playButtonPosition = "Right";
                 toolBoxButtonVisibility = "Collapsed";
+                animationButton.Visibility = Visibility.Collapsed;
+                actionPanel.Visibility = Visibility.Collapsed;
                 drawStateIcon = "/Assets/icons/icon_pause.png";
             }
             else 
             {
                 toolBoxButtonVisibility = "Visible";
+                actionPanel.Visibility = Visibility.Visible;
+                animationButton.Visibility = Visibility.Visible;
                 drawStateIcon = "/Assets/icons/icon_play.png";
             }
         }
@@ -168,12 +172,12 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
-        private void undo(object sender, EventArgs e)
+        private void undo(object sender, RoutedEventArgs e)
         {
             undoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void redo(object sender, EventArgs e)
+        private void redo(object sender, RoutedEventArgs e)
         {
             redoButtonClicked?.Invoke(this, EventArgs.Empty);
         }
@@ -193,6 +197,8 @@ namespace avantgarde.Menus
             libreToolBox.openToolbox();
             toolBoxButtonVisibility = "Collapsed";
             playButtonPosition = "Center";
+            actionPanel.Visibility = Visibility.Collapsed;
+            animationButton.Visibility = Visibility.Collapsed;
             NotifyPropertyChanged();
         }
 
@@ -223,6 +229,8 @@ namespace avantgarde.Menus
         private void toolboxClosed(object sender, EventArgs e) {
             toolBoxButtonVisibility = "Visible";
             playButtonPosition = "Right";
+            actionPanel.Visibility = Visibility.Visible;
+            animationButton.Visibility = Visibility.Visible;
             NotifyPropertyChanged();
         }
 

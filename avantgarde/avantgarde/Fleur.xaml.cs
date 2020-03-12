@@ -194,6 +194,7 @@ namespace avantgarde
             if (autoswitch)
             {
                 ui.UIGetColourManager().nextColour();
+                ui.getToolbox().next();
             }
 
 

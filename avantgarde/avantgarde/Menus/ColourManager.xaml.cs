@@ -226,15 +226,17 @@ namespace avantgarde.Menus
         public void nextColour() {
             
             switchID++;
+            if(switchID == 5)
+            {
+                switchID = 0;
+
+            }
 
             selection = colourPalette[switchID];
             colourProfile = colourPaletteData[switchID, PROFILE];
             brightness = colourPaletteData[switchID, BRIGHTNESS];
             opacity = colourPaletteData[switchID, OPACITY];
-            
-            if (switchID == 5) {
-                switchID = 0;
-            }
+           
 
             updateColourSelection?.Invoke(this, EventArgs.Empty);
         }
@@ -372,7 +374,7 @@ namespace avantgarde.Menus
                 colourPalette[editID] = selection;
                 resetSelection();
                 paletteEdited?.Invoke(this, EventArgs.Empty);
-                editingPalette = false;
+                
             }
             else
             {

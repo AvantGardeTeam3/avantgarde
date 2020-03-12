@@ -36,7 +36,8 @@ namespace avantgarde.Menus
         private int RESTRICTED_GO_HOME = 2;
         private int RESTRICTED_SAVE = 3;
         private int RESTRICTED_LOAD = 4;
-        
+
+        public int selectedPalette = 0;
 
         private int BRIGHTNESS = 1;
         private int PROFILE = 0;
@@ -55,7 +56,6 @@ namespace avantgarde.Menus
         public Color colourSelection;
         public String colourHex { get; set; }
 
-        public String mandalaLinesVisibility { get; set; }
         public LibreToolBox()
         {
             autoswitch = true;
@@ -63,21 +63,26 @@ namespace avantgarde.Menus
             brushSelection = "paint";
             colourPalette = new String[5];
             
-            mandalaLinesVisibility = "Visible";
+           
             mandalaLines = 8;
             propertyUpdate();
             this.InitializeComponent();
+            colourPalette0.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+            colourPalette0.BorderThickness = new Thickness(5);
             drawingAttributes.Color = ColourManager.defaultColour;
             drawingAttributes.Size = new Size(10, 10);
+            brushTool.drawingAttributes = this.drawingAttributes;
+
             autoswitchButton.Background = new SolidColorBrush(hexToColor("#a0cdff59"));
             updateBackgroundButton();
             initColourPalette(this.colourPaletteData);
             
             colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
-            paintbrushButtonState = "Visible";
-            pencilButtonState = "Collapsed";
-            highlighterButtonState = "Collapsed";
+            brushTool.brushSize = this.brushSize;
+            brushTool.mandalaLines = this.mandalaLines;
+          
+   
             getWindowAttributes();
             
 
@@ -90,12 +95,51 @@ namespace avantgarde.Menus
             fileManager.loadRequested += new EventHandler(load);
             fileManager.saveRequested += new EventHandler(save);
             fileManager.fileLoaded += new EventHandler(fileLoaded);
-
+            brushTool.propertiesUpdated += new EventHandler(drawingAttributesUpdated);
+            brushTool.menuClosed += new EventHandler(brushToolClosed);
         }
-        
-     
-            
 
+
+
+        private void updatePaletteSelection() {
+            colourPalette0.BorderBrush = new SolidColorBrush(Colors.White);
+            colourPalette1.BorderBrush = new SolidColorBrush(Colors.White);
+            colourPalette2.BorderBrush = new SolidColorBrush(Colors.White);
+            colourPalette3.BorderBrush = new SolidColorBrush(Colors.White);
+            colourPalette4.BorderBrush = new SolidColorBrush(Colors.White);
+            colourPalette0.BorderThickness = new Thickness(2);
+            colourPalette1.BorderThickness = new Thickness(2);
+            colourPalette2.BorderThickness = new Thickness(2);
+            colourPalette3.BorderThickness = new Thickness(2);
+            colourPalette4.BorderThickness = new Thickness(2);
+
+            if (selectedPalette == 0)
+            {
+                colourPalette0.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+                colourPalette0.BorderThickness = new Thickness(5);
+            }
+            else if (selectedPalette == 1)
+            {
+                colourPalette1.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+                colourPalette1.BorderThickness = new Thickness(5);
+            }
+            else if (selectedPalette == 2)
+            {
+                colourPalette2.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+                colourPalette2.BorderThickness = new Thickness(5);
+            }
+            else if (selectedPalette == 3)
+            {
+                colourPalette3.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+                colourPalette3.BorderThickness = new Thickness(5);
+            }
+            else if (selectedPalette == 4)
+            {
+                colourPalette4.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
+                colourPalette4.BorderThickness = new Thickness(5);
+            }
+            NotifyPropertyChanged();
+        }
        
         
         private void updateBackgroundButton() {
@@ -136,17 +180,10 @@ namespace avantgarde.Menus
         private double brushSize { get; set; }
 
         public int mandalaLines { get; set; }
-        private String paintbrushButtonState { get; set; }
-        private String pencilButtonState { get; set; }
-        private String highlighterButtonState { get; set; }
 
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
-        public void hideMandalaLines() {
-            mandalaLinesVisibility = "Collapsed";
-            NotifyPropertyChanged();
-        }
         private void getWindowAttributes()
         {
             WIDTH = (int)(Window.Current.Bounds.Width);
@@ -155,84 +192,10 @@ namespace avantgarde.Menus
 
         public InkDrawingAttributes getDrawingAttributes()
         {
-            updateSize();
+            brushTool.getDrawingAttributes();
             return drawingAttributes;
         }
 
-        private void increaseBrushSize(object sender, RoutedEventArgs e)
-        {
-            brushSize++;
-            NotifyPropertyChanged();
-            drawingAttributes.Size = new Size(brushSize, brushSize);
-            propertyUpdate();
-        }
-
-        private void decreaseMandalaLines(object sender, RoutedEventArgs e)
-        {
-            if (mandalaLines > 1)
-            {
-                mandalaLines--;
-            }
-            else
-            {
-                return;
-            }
-            NotifyPropertyChanged();
-            propertyUpdate();
-
-        }
-
-        private void increaseMandalaLines(object sender, RoutedEventArgs e)
-        {
-            if (mandalaLines < 21)
-            {
-                mandalaLines++;
-            }
-            else {
-                return;
-            }
-            NotifyPropertyChanged();
-            propertyUpdate();
-        }
-
-        private void decreaseBrushSize(object sender, RoutedEventArgs e)
-        {
-            if (brushSize > 1)
-            {
-                brushSize--;
-            }
-            else {
-
-                return;
-            }
-            NotifyPropertyChanged();
-            drawingAttributes.Size = new Size(brushSize, brushSize);
-            propertyUpdate();
-        }
-
-
-        private void selectPaintbrush(object sender, RoutedEventArgs e)
-        {
-            brushSelection = "paint";
-            paintbrushButtonState = "Visible";
-            pencilButtonState = "Collapsed";
-            highlighterButtonState = "Collapsed";
-            NotifyPropertyChanged();
-            drawingAttributes = new InkDrawingAttributes();
-            propertyUpdate();
-        }
-
-        private void selectPencil(object sender, RoutedEventArgs e)
-        {
-            brushSelection = "pencil";
-            paintbrushButtonState = "Collapsed";
-            pencilButtonState = "Visible";
-            highlighterButtonState = "Collapsed";
-            NotifyPropertyChanged();
-            drawingAttributes = InkDrawingAttributes.CreateForPencil();
-            propertyUpdate();
-
-        }
 
 
         private void colourPalette0Clicked(object sender, RoutedEventArgs e)
@@ -250,6 +213,9 @@ namespace avantgarde.Menus
 
             else
             {
+
+                selectedPalette = 0;
+                updatePaletteSelection();
                 colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS], colourPaletteData[0, OPACITY]);
             }
         }
@@ -268,6 +234,8 @@ namespace avantgarde.Menus
 
             else
             {
+                selectedPalette = 1;
+                updatePaletteSelection();
                 colourManager.switchID = 1;
                 colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS], colourPaletteData[1, OPACITY]);
             }
@@ -287,6 +255,8 @@ namespace avantgarde.Menus
 
             else
             {
+                selectedPalette = 2;
+                updatePaletteSelection();
                 colourManager.switchID = 2;
                 colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS], colourPaletteData[2, OPACITY]);
             }
@@ -306,6 +276,8 @@ namespace avantgarde.Menus
 
             else
             {
+                selectedPalette = 3;
+                updatePaletteSelection();
                 colourManager.switchID = 3;
                 colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS], colourPaletteData[3, OPACITY]);
             }
@@ -325,6 +297,8 @@ namespace avantgarde.Menus
 
             else
             {
+                selectedPalette = 4;
+                updatePaletteSelection();
                 colourManager.switchID = 4;
                 colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS], colourPaletteData[4, OPACITY]);
             }
@@ -332,10 +306,17 @@ namespace avantgarde.Menus
 
         private void updatePalette(object sender, EventArgs e) {
             colourPalette = colourManager.colourPaletteHex;
-            editingPalette = false;
-            editPaletteButton.Background = new SolidColorBrush(Colors.Transparent);
+            
             fileManager.colourPalette = colourManager.colourPaletteData;
             NotifyPropertyChanged();
+        }
+
+        public void next() {
+            selectedPalette++;
+            if (selectedPalette == 5) {
+                selectedPalette = 0;
+            }
+            updatePaletteSelection();
         }
 
         private void toggleAS() {
@@ -377,6 +358,7 @@ namespace avantgarde.Menus
 
         private void save(object sender, EventArgs e) {
             clearPopups();
+            popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
             confirmTool.openConfirmTool();
         }
@@ -392,6 +374,7 @@ namespace avantgarde.Menus
         private void load(object sender, EventArgs e)
         {
             clearPopups();
+            popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to load from Slot " + fileManager.selectedSlot.ToString() + "? \n The current canvas will be lost.");
             confirmTool.openConfirmTool();
         }
@@ -400,10 +383,7 @@ namespace avantgarde.Menus
             saveImageClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void updateSize()
-        {
-            drawingAttributes.Size = new Size(brushSize, brushSize);
-        }
+        
 
         public bool isOpen() {
             return libreToolBox.IsOpen;
@@ -416,6 +396,13 @@ namespace avantgarde.Menus
         {
             if (libreToolBox.IsOpen) { libreToolBox.IsOpen = false; }
             toolboxClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void openBrushTool(object sender, RoutedEventArgs e)
+        {
+            clearPopups();
+            brushTool.open();
+            popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
         public ColourManager getColourManager() {
@@ -460,6 +447,10 @@ namespace avantgarde.Menus
             {
                 confirmTool.closeConfirmTool();
             }
+            if (brushTool != null)
+            {
+                brushTool.close();
+            }
 
             popupClosed?.Invoke(this, EventArgs.Empty);
 
@@ -468,8 +459,6 @@ namespace avantgarde.Menus
         public event EventHandler goHomeButtonClicked;
         public event EventHandler setBackgroundButtonClicked;
         public event EventHandler propertiesUpdated;
-        public event EventHandler undoButtonClicked;
-        public event EventHandler redoButtonClicked;
         public event EventHandler toolboxClosed;
         public event EventHandler colourSelectionUpdated;
         public event EventHandler clearCanvasButtonClicked;
@@ -525,15 +514,6 @@ namespace avantgarde.Menus
             popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
-        private void undo(object sender, RoutedEventArgs e)
-        {
-            undoButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void redo(object sender, RoutedEventArgs e)
-        {
-            redoButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
 
         private void clearCanvas(object sender, RoutedEventArgs e) {
             restrictedID = RESTRICTED_CLEAR_CANVAS;
@@ -541,13 +521,7 @@ namespace avantgarde.Menus
             clearPopups();
             confirmTool.setMessage("Are you sure you want to clear the canvas?");
             confirmTool.openConfirmTool();
-            popupOpened?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void initColourManager(object sender, RoutedEventArgs e)
-        {
-            clearPopups();
-            colourManager.openMenu();
+            // clear strokeData and user/mandala strokes
             popupOpened?.Invoke(this, EventArgs.Empty);
         }
 
@@ -584,5 +558,16 @@ namespace avantgarde.Menus
         }
 
 
+        private void drawingAttributesUpdated(object sender, EventArgs e) {
+            drawingAttributes = brushTool.getDrawingAttributes();
+            drawingAttributes.Color = colourManager.getColour();
+            mandalaLines = brushTool.mandalaLines;
+            propertyUpdate();
+        }
+
+        private void brushToolClosed(object sender, EventArgs e)
+        {
+            popupClosed?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

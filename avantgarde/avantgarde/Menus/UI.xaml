@@ -21,11 +21,11 @@
             Margin="30"
             VerticalAlignment="Top"
             Background="LightGray"
-            BorderBrush="Coral"
+            BorderBrush="#cdff59"
             BorderThickness="2"
             Click="initToolbox"
             CornerRadius="5,5,5,5"
-            Opacity=".40"
+            Opacity=".60"
             Visibility="{x:Bind toolBoxButtonVisibility, Mode=OneWay}">
 
             <Image
@@ -34,23 +34,97 @@
                 Source="/Assets/icons/icon_menu2.png" />
         </Button>
 
+        <StackPanel
+            x:Name="actionPanel"
+            Margin="30"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Horizontal"
+            Spacing="30">
+            <Button
+                Width="150"
+                Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="undo"
+                CornerRadius="5,5,5,5"
+                Opacity=".60">
+
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_undo.png" />
+            </Button>
+
+            <Button
+                Width="150"
+                Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="redo"
+                CornerRadius="5,5,5,5"
+                Opacity=".60">
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_redo.png" />
+            </Button>
+
+
+        </StackPanel>
+
         <Button
+            x:Name="playButton"
             Width="150"
             Height="150"
             Margin="30"
             HorizontalAlignment="{x:Bind playButtonPosition, Mode=OneWay}"
             VerticalAlignment="Bottom"
             Background="LightGray"
-            BorderBrush="Coral"
+            BorderBrush="#cdff59"
             BorderThickness="2"
             Click="changeDrawState"
             CornerRadius="5,5,5,5"
-            Opacity="0.40"
+            Opacity="0.60"
             Visibility="{x:Bind playButtonVisibility, Mode=OneWay}">
             <Image
                 Width="80"
                 Height="80"
                 Source="{x:Bind drawStateIcon, Mode=OneWay}" />
         </Button>
+
+        <Button
+            x:Name="animationButton"
+            Width="150"
+            Height="150"
+            Margin="30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Background="LightGray"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            Click="changeDrawState"
+            CornerRadius="5,5,5,5"
+            Opacity="0.60">
+            <Image
+                Width="80"
+                Height="80"
+                Source="/Assets/icons/icon_movie.png" />
+        </Button>
+
     </Grid>
 </UserControl>
