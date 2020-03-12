@@ -411,7 +411,7 @@
                                 gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
                                 gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                BorderBrush="DarkGray"
+                                BorderBrush="DimGray"
                                 BorderThickness="2"
                                 Click="increaseBrightness"
                                 CornerRadius="5,5,5,5">
@@ -442,7 +442,7 @@
                                 gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
                                 gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                BorderBrush="DarkGray"
+                                BorderBrush="DimGray"
                                 BorderThickness="2"
                                 Click="decreaseBrightness"
                                 CornerRadius="5,5,5,5">
@@ -474,7 +474,7 @@
                                 gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
                                 gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                BorderBrush="DarkGray"
+                                BorderBrush="DimGray"
                                 BorderThickness="2"
                                 Click="increaseOpacity"
                                 CornerRadius="5,5,5,5">
@@ -504,7 +504,7 @@
                                 gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
                                 gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
                                 Background="Transparent"
-                                BorderBrush="DarkGray"
+                                BorderBrush="DimGray"
                                 BorderThickness="2"
                                 Click="decreaseOpacity"
                                 CornerRadius="5,5,5,5">

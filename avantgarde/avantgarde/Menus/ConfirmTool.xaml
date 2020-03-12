@@ -20,7 +20,7 @@
                 Width="{x:Bind width}"
                 Height="{x:Bind height}"
                 Background="Black"
-                BorderBrush="#4ffff6"
+                BorderBrush="#cdff59"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5"
                 Opacity="0.5" />
@@ -28,7 +28,7 @@
                 Width="{x:Bind width}"
                 Height="{x:Bind height}"
                 Background="Transparent"
-                BorderBrush="#4ffff6"
+                BorderBrush="#cdff59"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5">
                 <Grid>

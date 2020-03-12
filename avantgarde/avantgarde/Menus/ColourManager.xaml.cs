@@ -372,7 +372,7 @@ namespace avantgarde.Menus
                 colourPalette[editID] = selection;
                 resetSelection();
                 paletteEdited?.Invoke(this, EventArgs.Empty);
-                editingPalette = false;
+                
             }
             else
             {

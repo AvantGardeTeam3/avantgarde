@@ -21,7 +21,7 @@
             Margin="30"
             VerticalAlignment="Top"
             Background="LightGray"
-            BorderBrush="Coral"
+            BorderBrush="#cdff59"
             BorderThickness="2"
             Click="initToolbox"
             CornerRadius="5,5,5,5"
@@ -34,14 +34,56 @@
                 Source="/Assets/icons/icon_menu2.png" />
         </Button>
 
+        <StackPanel
+            x:Name="actionPanel"
+            Margin="30"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Horizontal"
+            Spacing="30">
+            <Button
+                Width="150"
+                Height="150"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="undo"
+                CornerRadius="5,5,5,5"
+                Opacity=".40">
+
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_undo.png" />
+            </Button>
+
+            <Button
+                Width="150"
+                Height="150"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="redo"
+                CornerRadius="5,5,5,5"
+                Opacity=".40">
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_redo.png" />
+            </Button>
+
+
+        </StackPanel>
+
         <Button
+            x:Name="playButton"
             Width="150"
             Height="150"
             Margin="30"
             HorizontalAlignment="{x:Bind playButtonPosition, Mode=OneWay}"
             VerticalAlignment="Bottom"
             Background="LightGray"
-            BorderBrush="Coral"
+            BorderBrush="#cdff59"
             BorderThickness="2"
             Click="changeDrawState"
             CornerRadius="5,5,5,5"
@@ -52,5 +94,27 @@
                 Height="80"
                 Source="{x:Bind drawStateIcon, Mode=OneWay}" />
         </Button>
+
+        <Button
+            x:Name="animationButton"
+            Width="150"
+            Height="150"
+            Margin="30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Background="LightGray"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            Click="changeDrawState"
+            CornerRadius="5,5,5,5"
+            Opacity="0.40"
+
+            >
+            <Image
+                Width="80"
+                Height="80"
+                Source="/Assets/icons/icon_movie.png" />
+        </Button>
+
     </Grid>
 </UserControl>

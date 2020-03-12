@@ -26,6 +26,7 @@
             <uc:ColourManager x:Name="colourManager" />
             <uc:ConfirmTool x:Name="confirmTool" />
             <uc:FileManager x:Name="fileManager" />
+            <uc:brushTool x:Name="brushTool" />
 
             <Border
                 Width="120"
@@ -48,440 +49,128 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical"
-                    Spacing="12">
+                    Spacing="5">
 
-                    <Grid>
-                        <Border
-                            Width="80"
-                            Height="80"
-                            Background="#4ffff6"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5"
-                            Opacity="0.80"
-                            Visibility="{x:Bind paintbrushButtonState, Mode=OneWay}" />
-                        <Button
-                            Width="80"
-                            Height="80"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="selectPaintbrush">
-                            <Image Source="/Assets/icons/icon_paintbrush.png" />
-                        </Button>
-                    </Grid>
-                    <Grid>
-                        <Border
-                            Width="80"
-                            Height="80"
-                            Background="#4ffff6"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5"
-                            Opacity="0.80"
-                            Visibility="{x:Bind pencilButtonState, Mode=OneWay}" />
-                        <Button
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="selectPencil">
-                            <Image Source="/Assets/icons/icon_pencil.png" />
-                        </Button>
-                    </Grid>
-                    <!--<Grid>
-                        <Border
-                            Width="80"
-                            Height="80"
-                            Background="#4ffff6"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            CornerRadius="5,5,5,5"
-                            Opacity="0.80"
-                            Visibility="{x:Bind highlighterButtonState, Mode=OneWay}" />
-                        <Button
-                            Width="80"
-                            Height="80"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="selectHighlighter">
-                            <Image Source="/Assets/icons/icon_highlighter.png" />
-                        </Button>
-                    </Grid>-->
+
+
 
                     <Button
+                        x:Name="colourPalette0"
                         Width="80"
                         Height="80"
+                        Margin="5"
                         HorizontalAlignment="Center"
-                        Background="Transparent"
+                        Background="{x:Bind colourPalette[0], Mode=OneWay}"
                         BorderBrush="White"
                         BorderThickness="2"
-                        CornerRadius="5,5,5,5"
-                        Visibility="{x:Bind mandalaLinesVisibility, Mode=OneWay}">
-                        <Button.Content>
-                            <StackPanel Orientation="Vertical" Spacing="3">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Tahoma"
-                                    FontSize="13"
-                                    Foreground="White"
-                                    Text="Lines" />
-                                <TextBlock
-                                    Width="100"
-                                    Height="30"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Tahoma"
-                                    FontSize="30"
-                                    Foreground="White"
-                                    Text="{x:Bind mandalaLines, Mode=OneWay}"
-                                    TextAlignment="Center" />
-                            </StackPanel>
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout x:Name="mandalaLinesFlyout" Placement="Right">
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-
-                                        <Setter Property="Background" Value="Transparent" />
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="IsDefaultShadowEnabled" Value="False" />
-                                        <Setter Property="Margin" Value="15,0,0,0" />
-
-
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                                <Grid>
-                                    <Border
-                                        Grid.Column="0"
-                                        Width="100"
-                                        Height="155"
-                                        Background="Black"
-                                        CornerRadius="5,5,5,5"
-                                        Opacity="0.50" />
-
-                                    <Border
-                                        Padding="10"
-                                        BorderBrush="#4ffff6"
-                                        BorderThickness="2"
-                                        CornerRadius="5,5,5,5">
-                                        <StackPanel Orientation="Vertical" Spacing="30">
-                                            <Button
-                                                Width="80"
-                                                Height="50"
-                                                HorizontalAlignment="Center"
-                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
-                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
-                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
-                                                gaze:GazeInput.MaxDwellRepeatCount="5"
-                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
-                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
-                                                Background="Transparent"
-                                                Click="increaseMandalaLines">
-                                                <Image Source="/Assets/icons/icon_up.png" />
-                                            </Button>
-
-                                            <Button
-                                                Width="80"
-                                                Height="50"
-                                                HorizontalAlignment="Center"
-                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
-                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
-                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
-                                                gaze:GazeInput.MaxDwellRepeatCount="5"
-                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
-                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
-                                                Background="Transparent"
-                                                Click="decreaseMandalaLines">
-                                                <Image Source="/Assets/icons/icon_down.png" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
-
-
+                        Click="colourPalette0Clicked"
+                        CornerRadius="5,5,5,5" />
 
                     <Button
+                        x:Name="colourPalette1"
                         Width="80"
                         Height="80"
+                        Margin="5"
                         HorizontalAlignment="Center"
-                        Background="Transparent"
+                        Background="{x:Bind colourPalette[1], Mode=OneWay}"
                         BorderBrush="White"
                         BorderThickness="2"
-                        CornerRadius="5,5,5,5">
-                        <Button.Content>
-                            <StackPanel Orientation="Vertical" Spacing="3">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Tahoma"
-                                    FontSize="13"
-                                    Foreground="White"
-                                    Text="Brush Size" />
-                                <TextBlock
-                                    Width="100"
-                                    Height="30"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontFamily="Tahoma"
-                                    FontSize="30"
-                                    Foreground="White"
-                                    Text="{x:Bind brushSize, Mode=OneWay}"
-                                    TextAlignment="Center" />
-                            </StackPanel>
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout x:Name="brushSizeFlyout" Placement="Right">
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-
-                                        <Setter Property="Background" Value="Transparent" />
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="IsDefaultShadowEnabled" Value="False" />
-                                        <Setter Property="Margin" Value="15,0,0,0" />
-
-
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Border
-                                        Grid.Column="0"
-                                        Width="100"
-                                        Height="155"
-                                        Background="Black"
-                                        CornerRadius="5,5,5,5"
-                                        Opacity="0.50" />
-
-                                    <Border
-                                        Padding="10"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        BorderBrush="#4ffff6"
-                                        BorderThickness="2"
-                                        CornerRadius="5,5,5,5">
-                                        <StackPanel
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Vertical"
-                                            Spacing="30">
-                                            <Button
-                                                Width="80"
-                                                Height="50"
-                                                HorizontalAlignment="Center"
-                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
-                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
-                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
-                                                gaze:GazeInput.MaxDwellRepeatCount="5"
-                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
-                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
-                                                Background="Transparent"
-                                                Click="increaseBrushSize">
-                                                <Image Source="/Assets/icons/icon_up.png" />
-                                            </Button>
-
-                                            <Button
-                                                Width="80"
-                                                Height="50"
-                                                HorizontalAlignment="Center"
-                                                gaze:GazeInput.DwellDuration="00:00:00.4000000"
-                                                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
-                                                gaze:GazeInput.FixationDuration="00:00:00.3500000"
-                                                gaze:GazeInput.MaxDwellRepeatCount="5"
-                                                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
-                                                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
-                                                Background="Transparent"
-                                                Click="decreaseBrushSize">
-                                                <Image Source="/Assets/icons/icon_down.png" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
-
-
-
+                        Click="colourPalette1Clicked"
+                        CornerRadius="5,5,5,5" />
 
                     <Button
+                        x:Name="colourPalette2"
+                        Width="80"
+                        Height="80"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="{x:Bind colourPalette[2], Mode=OneWay}"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="colourPalette2Clicked"
+                        CornerRadius="5,5,5,5" />
+
+                    <Button
+                        x:Name="colourPalette3"
+                        Width="80"
+                        Height="80"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="{x:Bind colourPalette[3], Mode=OneWay}"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="colourPalette3Clicked"
+                        CornerRadius="5,5,5,5" />
+
+                    <Button
+                        x:Name="colourPalette4"
+                        Width="80"
+                        Height="80"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="{x:Bind colourPalette[4], Mode=OneWay}"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="colourPalette4Clicked"
+                        CornerRadius="5,5,5,5" />
+
+                    <Button
+                        x:Name="autoswitchButton"
                         Width="90"
-                        Height="90"
+                        Height="50"
+                        Margin="5"
                         HorizontalAlignment="Center"
                         Background="Transparent"
-                        CornerRadius="5,5,5,5">
-                        <Button.Content>
-                            <Image Source="/Assets/icons/icon_palette.png" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout x:Name="paletteFlyout" Placement="Right">
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="toggleAutoSwitch"
+                        CornerRadius="5,5,5,5"
+                        Opacity="1">
 
-                                        <Setter Property="Background" Value="Transparent" />
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="IsDefaultShadowEnabled" Value="False" />
-                                        <Setter Property="Margin" Value="15,-50,0,0" />
-
-
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                                <Grid>
-                                    <Border
-                                        Grid.Column="0"
-                                        Width="120"
-                                        Height="Auto"
-                                        Background="Black"
-                                        CornerRadius="5,5,5,5"
-                                        Opacity="0.50" />
-
-                                    <Border
-                                        Padding="10"
-                                        BorderBrush="#4ffff6"
-                                        BorderThickness="2"
-                                        CornerRadius="5,5,5,5">
-                                        <StackPanel Orientation="Vertical" Spacing="10">
-                                            <Button
-                                                x:Name="colourPallette0"
-                                                Width="80"
-                                                Height="80"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="{x:Bind colourPalette[0], Mode=OneWay}"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="colourPalette0Clicked"
-                                                CornerRadius="5,5,5,5" />
-
-                                            <Button
-                                                x:Name="colourPallette1"
-                                                Width="80"
-                                                Height="80"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="{x:Bind colourPalette[1], Mode=OneWay}"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="colourPalette1Clicked"
-                                                CornerRadius="5,5,5,5" />
-
-                                            <Button
-                                                x:Name="colourPallette2"
-                                                Width="80"
-                                                Height="80"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="{x:Bind colourPalette[2], Mode=OneWay}"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="colourPalette2Clicked"
-                                                CornerRadius="5,5,5,5" />
-
-                                            <Button
-                                                x:Name="colourPallette3"
-                                                Width="80"
-                                                Height="80"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="{x:Bind colourPalette[3], Mode=OneWay}"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="colourPalette3Clicked"
-                                                CornerRadius="5,5,5,5" />
-
-                                            <Button
-                                                x:Name="colourPallette4"
-                                                Width="80"
-                                                Height="80"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="{x:Bind colourPalette[4], Mode=OneWay}"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="colourPalette4Clicked"
-                                                CornerRadius="5,5,5,5" />
-
-                                            <Button
-                                                x:Name="autoswitchButton"
-                                                Width="90"
-                                                Height="50"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="toggleAutoSwitch"
-                                                CornerRadius="5,5,5,5"
-                                                Opacity="1">
-
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="Tahoma"
-                                                    FontSize="13"
-                                                    Foreground="White"
-                                                    Text="AutoSwitch" />
-
-
-                                            </Button>
-
-                                            <Button
-                                                x:Name="editPaletteButton"
-                                                Width="90"
-                                                Height="50"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="editPalette"
-                                                CornerRadius="5,5,5,5"
-                                                Opacity="1">
-
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="Tahoma"
-                                                    FontSize="13"
-                                                    Foreground="White"
-                                                    Text="Edit Palette" />
-
-
-                                            </Button>
-
-
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
-                    <StackPanel Orientation="Vertical" Spacing="5">
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
-                            FontSize="15"
+                            FontSize="13"
                             Foreground="White"
-                            Text="Brush" />
+                            Text="AutoSwitch" />
 
-                        <Button
-                            Width="80"
-                            Height="80"
-                            Margin="5"
+
+                    </Button>
+
+                    <Button
+                        x:Name="editPaletteButton"
+                        Width="90"
+                        Height="50"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="White"
+                        BorderThickness="2"
+                        Click="editPalette"
+                        CornerRadius="5,5,5,5"
+                        Opacity="1">
+
+                        <TextBlock
                             HorizontalAlignment="Center"
-                            Background="{x:Bind colourHex, Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="initColourManager"
-                            CornerRadius="5,5,5,5" />
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="13"
+                            Foreground="White"
+                            Text="Edit Palette" />
+
+
+                    </Button>
+
+
+
+
+
+
+
+
+                   
+                        
 
                         <TextBlock
                             HorizontalAlignment="Center"
@@ -500,7 +189,7 @@
                             Click="setBackground"
                             CornerRadius="5,5,5,5"
                             Visibility="Visible" />
-                    </StackPanel>
+                    
 
 
                 </StackPanel>
@@ -526,146 +215,61 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical"
-                    Spacing="15">
+                    Spacing="5">
 
+
+
+
+
+
+
+
+                    <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="15"
+                            Foreground="White"
+                            Text="Brush Tools" />
                     <Button
-                        Width="80"
-                        Height="70"
-                        HorizontalAlignment="Center"
-                        Background="Transparent"
-                        Click="undo">
-                        <Image Source="/Assets/icons/icon_undo.png" />
-                    </Button>
+                            Width="80"
+                            Height="80"
+                            Padding="0,0,0,10"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="openBrushTool"
+                            CornerRadius="5,5,5,5"
+                        >
+                            <Image Source="/Assets/icons/icon_draw.png" />
+                        </Button>
+
+
+
+                    <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="15"
+                            Foreground="White"
+                            Text="Tutorial" />
                     <Button
-                        Width="80"
-                        Height="70"
-                        HorizontalAlignment="Center"
-                        Background="Transparent"
-                        Click="redo">
-                        <Image Source="/Assets/icons/icon_redo.png" />
-                    </Button>
+                            Width="80"
+                            Height="80"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            CornerRadius="5,5,5,5">
+                            <Image Source="/Assets/icons/icon_book.png" />
+                        </Button>
 
 
-
+                    <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="15"
+                            Foreground="White"
+                            Text="Clear" />
                     <Button
-                        Width="80"
-                        Height="80"
-                        HorizontalAlignment="Center"
-                        Background="Transparent"
-                        CornerRadius="5,5,5,5">
-                        <Button.Content>
-                            <Image Source="/Assets/icons/icon_file.png" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout x:Name="fileIOFlyout" Placement="Left">
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-
-                                        <Setter Property="Background" Value="Transparent" />
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="IsDefaultShadowEnabled" Value="False" />
-                                        <Setter Property="Margin" Value="-15,0,0,0" />
-
-
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                                <Grid>
-                                    <Border
-                                        Grid.Column="0"
-                                        Width="120"
-                                        Height="Auto"
-                                        Background="Black"
-                                        CornerRadius="5,5,5,5"
-                                        Opacity="0.50" />
-
-                                    <Border
-                                        Padding="10"
-                                        BorderBrush="#4ffff6"
-                                        BorderThickness="2"
-                                        CornerRadius="5,5,5,5">
-                                        <StackPanel Orientation="Vertical" Spacing="10">
-
-                                            <Button
-                                                Width="90"
-                                                Height="50"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="saveButtonClicked"
-                                                CornerRadius="5,5,5,5"
-                                                Opacity="1">
-
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="Tahoma"
-                                                    FontSize="16"
-                                                    Foreground="White"
-                                                    Text="Save..." />
-
-
-                                            </Button>
-
-                                            <Button
-                                                Width="90"
-                                                Height="50"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="loadButtonClicked"
-                                                CornerRadius="5,5,5,5"
-                                                Opacity="1">
-
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="Tahoma"
-                                                    FontSize="16"
-                                                    Foreground="White"
-                                                    Text="Load..." />
-
-
-                                            </Button>
-
-                                            <Button
-                                                Width="90"
-                                                Height="50"
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="White"
-                                                BorderThickness="2"
-                                                Click="exportButtonClicked"
-                                                CornerRadius="5,5,5,5"
-                                                Opacity="1">
-
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="Tahoma"
-                                                    FontSize="16"
-                                                    Foreground="White"
-                                                    Text="Export..." />
-
-
-                                            </Button>
-
-
-                                        </StackPanel>
-                                    </Border>
-                                </Grid>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
-
-
-                    <StackPanel Orientation="Vertical" Spacing="5">
-                        <Button
                             Width="80"
                             Height="80"
                             Padding="0,0,0,10"
@@ -676,61 +280,120 @@
                             <Image Source="/Assets/icons/icon_trash.png" />
                         </Button>
 
-                        <TextBlock
+
+                        <Button
+                            Width="90"
+                            Height="50"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            BorderBrush="White"
+                            BorderThickness="2"
+                            Click="saveButtonClicked"
+                            CornerRadius="5,5,5,5"
+                            Opacity="1">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="16"
+                                Foreground="White"
+                                Text="Save" />
+
+
+                        </Button>
+
+                        <Button
+                            Width="90"
+                            Height="50"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            BorderBrush="White"
+                            BorderThickness="2"
+                            Click="loadButtonClicked"
+                            CornerRadius="5,5,5,5"
+                            Opacity="1">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="16"
+                                Foreground="White"
+                                Text="Load" />
+
+
+                        </Button>
+
+                        <Button
+                            Width="90"
+                            Height="50"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            BorderBrush="White"
+                            BorderThickness="2"
+                            Click="exportButtonClicked"
+                            CornerRadius="5,5,5,5"
+                            Opacity="1">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="Tahoma"
+                                FontSize="16"
+                                Foreground="White"
+                                Text="Export" />
+
+
+                        </Button>
+
+
+
+                    <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
                             FontSize="15"
                             Foreground="White"
-                            Text="Tutorial" />
-
-                        <Button
+                            Text="Exit" />
+                    <Button
                             Width="80"
                             Height="80"
+                            Padding="0,0,0,10"
                             HorizontalAlignment="Center"
                             Background="Transparent"
+                            Click="goHome"
                             CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_book.png" />
+                            <Image Source="/Assets/icons/icon_exit.png" />
                         </Button>
-                    </StackPanel>
+
 
                     <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontFamily="Tahoma"
-                        FontSize="15"
-                        Foreground="White"
-                        Text="Exit" />
-
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Tahoma"
+                            FontSize="15"
+                            Foreground="White"
+                            Text="Close" />
                     <Button
-                        Width="80"
-                        Height="80"
-                        Padding="0,0,0,10"
-                        HorizontalAlignment="Center"
-                        Background="Transparent"
-                        Click="goHome"
-                        CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_exit.png" />
-                    </Button>
+                            Width="60"
+                            Height="60"
+                            Padding="0,0,0,10"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="closeToolbox"
+                            CornerRadius="5,5,5,5">
+                            <Image Source="/Assets/icons/icon_x.png" />
+                        </Button>
 
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontFamily="Tahoma"
-                        FontSize="15"
-                        Foreground="White"
-                        Text="Close Toolbox" />
 
-                    <Button
-                        Width="60"
-                        Height="60"
-                        Padding="0,0,0,10"
-                        HorizontalAlignment="Center"
-                        Background="Transparent"
-                        Click="closeToolbox"
-                        CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_x.png" />
-                    </Button>
+
+                    
+
+
                 </StackPanel>
             </Border>
 
