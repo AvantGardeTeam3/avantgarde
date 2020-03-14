@@ -6,55 +6,61 @@
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="using:avantgarde.Menus"
-    d:DesignHeight="{x:Bind HEIGHT}"
-    d:DesignWidth="{x:Bind WIDTH}"
     gaze:GazeInput.Interaction="Enabled"
     gaze:GazeInput.IsCursorVisible="True"
     mc:Ignorable="d">
 
 
-    <Popup x:Name="libreToolBox">
+    <Popup x:Name="libreToolBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SizeChanged="libreToolBox_SizeChanged">
 
 
-        <Grid Width="{x:Bind WIDTH}" Height="{x:Bind HEIGHT}">
+        <Grid x:Name="grid" Width="{Binding ElementName=libreToolBox, Path=ActualWidth}" Height="{Binding ElementName=libreToolBox, Path=ActualHeight}">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="4*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <uc:ColourManager x:Name="colourManager" />
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <uc:ColourManager x:Name="colourManager" Grid.Column="0"/>
             <uc:ConfirmTool x:Name="confirmTool" />
-            <uc:FileManager x:Name="fileManager" />
+            <uc:FileManager x:Name="fileManager"/>
             <uc:brushTool x:Name="brushTool" />
 
-            <Border
-                Width="120"
-                Height="750"
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" MinHeight="750"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border
+                Grid.Row="1"
+                
                 Background="Black"
                 BorderBrush="#4ffff6"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5"
                 Opacity="0.5" />
-            <Border
-                Grid.Column="0"
-                Width="120"
-                Height="750"
+                <Border
+                Grid.Row="1"
+
                 Background="Transparent"
                 BorderBrush="#4ffff6"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5">
-                <StackPanel
+                    <StackPanel
                     Width="Auto"
+                    Margin="5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Orientation="Vertical"
-                    Spacing="5">
+                    Orientation="Vertical">
 
 
 
 
-                    <Button
+                        <Button
                         x:Name="colourPalette0"
                         Width="80"
                         Height="80"
@@ -66,7 +72,7 @@
                         Click="colourPalette0Clicked"
                         CornerRadius="5,5,5,5" />
 
-                    <Button
+                        <Button
                         x:Name="colourPalette1"
                         Width="80"
                         Height="80"
@@ -78,7 +84,7 @@
                         Click="colourPalette1Clicked"
                         CornerRadius="5,5,5,5" />
 
-                    <Button
+                        <Button
                         x:Name="colourPalette2"
                         Width="80"
                         Height="80"
@@ -90,7 +96,7 @@
                         Click="colourPalette2Clicked"
                         CornerRadius="5,5,5,5" />
 
-                    <Button
+                        <Button
                         x:Name="colourPalette3"
                         Width="80"
                         Height="80"
@@ -102,7 +108,7 @@
                         Click="colourPalette3Clicked"
                         CornerRadius="5,5,5,5" />
 
-                    <Button
+                        <Button
                         x:Name="colourPalette4"
                         Width="80"
                         Height="80"
@@ -114,7 +120,7 @@
                         Click="colourPalette4Clicked"
                         CornerRadius="5,5,5,5" />
 
-                    <Button
+                        <Button
                         x:Name="autoswitchButton"
                         Width="90"
                         Height="50"
@@ -127,7 +133,7 @@
                         CornerRadius="5,5,5,5"
                         Opacity="1">
 
-                        <TextBlock
+                            <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
@@ -136,9 +142,9 @@
                             Text="AutoSwitch" />
 
 
-                    </Button>
+                        </Button>
 
-                    <Button
+                        <Button
                         x:Name="editPaletteButton"
                         Width="90"
                         Height="50"
@@ -151,7 +157,7 @@
                         CornerRadius="5,5,5,5"
                         Opacity="1">
 
-                        <TextBlock
+                            <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
@@ -160,7 +166,7 @@
                             Text="Edit Palette" />
 
 
-                    </Button>
+                        </Button>
 
 
 
@@ -172,14 +178,14 @@
 
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Background" />
-                    <Button
+                        <Button
                         Width="80"
                         Height="80"
                         HorizontalAlignment="Center"
@@ -192,25 +198,32 @@
 
 
 
-                </StackPanel>
-            </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
-            <Border
-                Grid.Column="2"
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border
+                Grid.Row="1"
                 Width="120"
                 Height="750"
                 Background="Black"
                 CornerRadius="5,5,5,5"
                 Opacity="0.5" />
-            <Border
-                Grid.Column="2"
+                <Border
+                Grid.Row="1"
                 Width="120"
                 Height="750"
                 Background="Transparent"
                 BorderBrush="#4ffff6"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5">
-                <StackPanel
+                    <StackPanel
                     Width="Auto"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -224,14 +237,14 @@
 
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Brush Tools" />
-                    <Button
+                        <Button
                         Width="80"
                         Height="80"
                         Padding="0,0,0,10"
@@ -239,36 +252,36 @@
                         Background="Transparent"
                         Click="openBrushTool"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_draw.png" />
-                    </Button>
+                            <Image Source="/Assets/icons/icon_draw.png" />
+                        </Button>
 
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Tutorial" />
-                    <Button
+                        <Button
                         Width="80"
                         Height="80"
                         HorizontalAlignment="Center"
                         Background="Transparent"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_book.png" />
-                    </Button>
+                            <Image Source="/Assets/icons/icon_book.png" />
+                        </Button>
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Clear" />
-                    <Button
+                        <Button
                         Width="80"
                         Height="80"
                         Padding="0,0,0,10"
@@ -276,11 +289,11 @@
                         Background="Transparent"
                         Click="clearCanvas"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_trash.png" />
-                    </Button>
+                            <Image Source="/Assets/icons/icon_trash.png" />
+                        </Button>
 
 
-                    <Button
+                        <Button
                         Width="90"
                         Height="50"
                         Margin="5"
@@ -292,7 +305,7 @@
                         CornerRadius="5,5,5,5"
                         Opacity="1">
 
-                        <TextBlock
+                            <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
@@ -301,9 +314,9 @@
                             Text="Save" />
 
 
-                    </Button>
+                        </Button>
 
-                    <Button
+                        <Button
                         Width="90"
                         Height="50"
                         Margin="5"
@@ -315,7 +328,7 @@
                         CornerRadius="5,5,5,5"
                         Opacity="1">
 
-                        <TextBlock
+                            <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
@@ -324,9 +337,9 @@
                             Text="Load" />
 
 
-                    </Button>
+                        </Button>
 
-                    <Button
+                        <Button
                         Width="90"
                         Height="50"
                         Margin="5"
@@ -338,7 +351,7 @@
                         CornerRadius="5,5,5,5"
                         Opacity="1">
 
-                        <TextBlock
+                            <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontFamily="Tahoma"
@@ -347,18 +360,18 @@
                             Text="Export" />
 
 
-                    </Button>
+                        </Button>
 
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Exit" />
-                    <Button
+                        <Button
                         Width="80"
                         Height="80"
                         Padding="0,0,0,10"
@@ -366,18 +379,18 @@
                         Background="Transparent"
                         Click="goHome"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_exit.png" />
-                    </Button>
+                            <Image Source="/Assets/icons/icon_exit.png" />
+                        </Button>
 
 
-                    <TextBlock
+                        <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Tahoma"
                         FontSize="15"
                         Foreground="White"
                         Text="Close" />
-                    <Button
+                        <Button
                         Width="60"
                         Height="60"
                         Padding="0,0,0,10"
@@ -385,17 +398,18 @@
                         Background="Transparent"
                         Click="closeToolbox"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_x.png" />
-                    </Button>
+                            <Image Source="/Assets/icons/icon_x.png" />
+                        </Button>
 
 
 
 
 
 
-                </StackPanel>
-            </Border>
-
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Popup>
+
 </UserControl>

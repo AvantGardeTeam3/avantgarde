@@ -7,14 +7,18 @@
     xmlns:local="using:avantgarde.Menus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="using:avantgarde.Menus"
-    d:DesignHeight="{x:Bind HEIGHT}"
-    d:DesignWidth="{x:Bind WIDTH}"
     gaze:GazeInput.Interaction="Enabled"
     gaze:GazeInput.IsCursorVisible="True"
     mc:Ignorable="d">
 
     <Grid>
-        <uc:LibreToolBox x:Name="libreToolBox" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <uc:LibreToolBox x:Name="libreToolBox" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button
             Width="150"
             Height="150"

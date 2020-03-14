@@ -56,8 +56,10 @@
 
             <uc2:UI
                 x:Name="ui"
-                Width="{x:Bind WIDTH}"
-                Height="{x:Bind HEIGHT}"
+                Grid.Column="1"
+                Grid.Row="1"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
                 Canvas.ZIndex="2" />
 
         </Grid>

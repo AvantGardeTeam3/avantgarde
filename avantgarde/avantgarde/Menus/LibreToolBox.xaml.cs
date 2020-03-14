@@ -569,5 +569,11 @@ namespace avantgarde.Menus
         {
             popupClosed?.Invoke(this, EventArgs.Empty);
         }
+
+        private void libreToolBox_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            grid.Width = libreToolBox.ActualWidth;
+            grid.Height = libreToolBox.ActualHeight;
+        }
     }
 }
