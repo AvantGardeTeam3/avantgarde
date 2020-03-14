@@ -332,6 +332,7 @@ namespace avantgarde.Menus
         public async void load() {
             await loadFileAsync(false);
             //generate new Canvas from updated strokeData
+            Controller.ControllerFactory.gazeController.Load(strokeData);
         }
 
         public void open(int m) {

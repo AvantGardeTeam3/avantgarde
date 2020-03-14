@@ -152,6 +152,7 @@ namespace avantgarde.Controller
                         container.DeleteSelected();
                     }
                     StrokeIndication = Util.MakeStroke(lineStartPoint, point);
+                    StrokeIndication.DrawingAttributes = ui.getDrawingAttributes();
                     container.AddStroke(StrokeIndication);
                     break;
             }
@@ -271,6 +272,7 @@ namespace avantgarde.Controller
                 drawingModel.newCurve(lineStartPoint, GazePoint, ui.getDrawingAttributes());
             }
             this.state = ControllerState.idle;
+            ((Fleur)page).curveDrawn(null, null);
             UpdateView();
         }
 
@@ -628,6 +630,20 @@ namespace avantgarde.Controller
             ellipse.RenderTransform = translateTarget;
             indicators.Add(ellipse);
             this.page.GetCanvas().Children.Add(ellipse);
+        }
+
+        public void Load(List<StrokeData> strokeDatas)
+        {
+            drawingModel.Load(strokeDatas);
+            page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+            Fleur fleur = (Fleur)page;
+            List<BezierCurve> curves = drawingModel.getCurves();
+            foreach (var curve in curves)
+            {
+                InkStroke stroke = curve.InkStroke;
+                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(stroke);
+                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(fleur.TransformStroke(stroke, curve.NumOfReflection));
+            }
         }
 
         private void AddCurve(BezierCurve curve)

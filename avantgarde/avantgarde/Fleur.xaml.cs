@@ -181,23 +181,21 @@ namespace avantgarde
             strokeData.Add(newStrokeData);
         }
 
-        private void curveDrawn(object sender, EventArgs e) {
-            DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
-            InkStroke s = arg.stroke;
-            s.DrawingAttributes = ui.getDrawingAttributes();
+        public void curveDrawn(object sender, EventArgs e) {
+            //DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
+            //InkStroke s = arg.stroke;
+            //s.DrawingAttributes = ui.getDrawingAttributes();
             
             storeStrokeData();
-            userStrokes.Add(s);
-            inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
-            mandalaStrokes.AddRange(this.Transfrom(userStrokes));
+            //userStrokes.Add(s);
+            //inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
+            //mandalaStrokes.AddRange(this.Transfrom(userStrokes));
 
             if (autoswitch)
             {
                 ui.UIGetColourManager().nextColour();
                 ui.getToolbox().next();
             }
-
-
         }
         
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
@@ -212,7 +210,7 @@ namespace avantgarde
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
         }
-        private List<InkStroke> Transfrom(List<InkStroke> u)
+        public List<InkStroke> Transfrom(List<InkStroke> u)
         {
             List<InkStroke> transformedStrokes = new List<InkStroke>();
             foreach (InkStroke stroke in u)
@@ -221,7 +219,7 @@ namespace avantgarde
             }
             return transformedStrokes;
         }
-        private List<InkStroke> TransformStroke(InkStroke stroke, int num)
+        public List<InkStroke> TransformStroke(InkStroke stroke, int num)
         {   //turning a stroke into a set of transformed strokes
             IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
             List<InkStroke> ret = new List<InkStroke>();
@@ -420,7 +418,7 @@ namespace avantgarde
             drawingAttributes.Color = colourSelection;
             radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
         }
-
+        
         private void clearCanvas(object sender, EventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();

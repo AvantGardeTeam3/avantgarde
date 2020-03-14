@@ -102,8 +102,27 @@ namespace avantgarde.Drawing
                 this._halfPoint = value;
             }
         }
+
+        private int numOfReflection;
+        public int NumOfReflection
+        {
+            get { return numOfReflection; }
+            set { numOfReflection = value; }
+        }
         public InkDrawingAttributes DrawingAttributes { get; private set; }
         public InkStroke InkStroke { get; private set; }
+        public BezierCurve(StrokeData data, InkDrawingAttributes attributes)
+        {
+            this._p0 = data.p0;
+            this._p1 = data.p1;
+            this._p2 = data.p2;
+            this._p3 = data.p3;
+            _midPoint = data.midpoint;
+            _halfPoint = CurveFunction(0.5);
+            this.DrawingAttributes = attributes;
+            this.numOfReflection = data.reflections;
+            UpdateStroke();
+        }
         public BezierCurve(Point p0, Point p3, InkDrawingAttributes drawingAttributes)
         {
             _p0 = p0;

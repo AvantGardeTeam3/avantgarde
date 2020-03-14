@@ -16,7 +16,6 @@ namespace avantgarde
         public List<BezierCurve> curves = new List<BezierCurve>();
         private List<Point> midPoints = new List<Point>(); 
         private List<Point> endPoints = new List<Point>();
-        private List<Point> controlPoints = new List<Point>();
         
         private Stack<BezierCurve> undoStack = new Stack<BezierCurve>();
 
@@ -134,21 +133,21 @@ namespace avantgarde
             //    points.Remove(p2);
             //}
         }
-        public void move(Point point, Point position)
+        public void Load(List<StrokeData> data)
         {
-            if (midPoints.Contains(point))
+            this.curves.Clear();
+            this.midPoints.Clear();
+            this.endPoints.Clear();
+            foreach(StrokeData stroke in data)
             {
-                moveMidPoint(point, position);
-            }
-            else if (controlPoints.Contains(point))
-            {
-                moveControlPoint(point, position);
-            }
-            else if (endPoints.Contains(point))
-            {
-                moveEndPoints(point, position);
+                BezierCurve curve = new BezierCurve(stroke, InkDrawingAttributes.CreateForPencil());
+                curves.Add(curve);
+                this.midPoints.Add(curve.MidPoint);
+                this.endPoints.Add(curve.P0);
+                this.endPoints.Add(curve.P3);
             }
         }
+
         public void moveMidPoint(Point point, Point position)
         {
             BezierCurve curve = curves.Find(x => x.MidPoint == point);
