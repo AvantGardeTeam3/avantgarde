@@ -76,7 +76,7 @@ namespace avantgarde
                 Windows.UI.Core.CoreInputDeviceTypes.Touch;
             DataContext = this;
 
-            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, false);
+            drawingModel = new DrawingModel();
             controller = new Controller.GazeController(this);         
         }
         public GazeInputSourcePreview GetGazeInputSourcePreview() { return GazeInputSourcePreview.GetForCurrentView(); }

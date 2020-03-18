@@ -119,7 +119,7 @@ namespace avantgarde
             ui.clearCanvas += new EventHandler(clearCanvas);
             ui.saveIamgeClicked += saveIamge;
 
-            drawingModel = new DrawingModel(inkCanvas.InkPresenter.StrokeContainer, true);
+            drawingModel = new DrawingModel();
             // controller = new Controller.GazeController(this);       
             Controller.ControllerFactory.MakeAController(this);
             controller = Controller.ControllerFactory.gazeController;
@@ -312,6 +312,11 @@ namespace avantgarde
 
         public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
 
+        public void SetContainer(InkStrokeContainer container)
+        {
+            inkCanvas.InkPresenter.StrokeContainer = container;
+        }
+
 
         private async void redo(object sender, EventArgs e)
         {
@@ -365,42 +370,6 @@ namespace avantgarde
         private void drawStateButtonClicked(object sender, EventArgs e)
         {
             controller.Paused = !controller.Paused;
-
-            //inkCanvas.InkPresenter.StrokeContainer.Clear();
-            //List<InkStroke> newStrokes;
-
-            //if (controller.Paused)
-            //{
-            //    newStrokes = mandalaStrokes;
-            //}
-            //else
-            //{
-            //    newStrokes = userStrokes;
-            //}
-
-            //foreach (InkStroke s in newStrokes)
-            //{
-            //    inkCanvas.InkPresenter.StrokeContainer.AddStroke(s.Clone());
-            //}
-            List<InkStroke> strokes = drawingModel.GetStrokes();
-            if (controller.Paused)
-            {
-                strokes = Transfrom(strokes);
-                strokes.ForEach(x => inkCanvas.InkPresenter.StrokeContainer.AddStroke(x));
-            } else
-            {
-                IReadOnlyList<InkStroke> all = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-                foreach(InkStroke stroke in all)
-                {
-                    if (!strokes.Contains(stroke))
-                    {
-                        stroke.Selected = true;
-                    }
-                }
-                inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
-            }
-            
-            //inkCanvas.InkPresenter.StrokeContainer.AddStrokes(strokes);
         }
         private void drawingPropertiesUpdated(object sender, EventArgs e)
         {

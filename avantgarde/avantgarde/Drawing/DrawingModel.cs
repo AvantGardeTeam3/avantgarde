@@ -24,19 +24,13 @@ namespace avantgarde
             return curves.Find(x => x.HalfPoint == point);
         }
 
-        private bool fleur;
-
         public InkDrawingAttributes attributes { get; set; }
-
-        private InkStrokeContainer container;
 
         public List<BezierCurve> getCurves() {
             return curves;
         }
-        public DrawingModel(InkStrokeContainer inkStrokeContainer, bool f)
+        public DrawingModel()
         {
-            this.container = inkStrokeContainer;
-            this.fleur = f;
         }
         public List<Point> GetMidPoints()
         {
@@ -148,22 +142,16 @@ namespace avantgarde
             }
         }
 
-        public void moveMidPoint(Point point, Point position)
+        public BezierCurve moveMidPoint(Point point, Point position)
         {
             BezierCurve curve = curves.Find(x => x.MidPoint == point);
-            InkStroke stroke = curve.InkStroke;
-            stroke.Selected = true;
-            container.DeleteSelected();
             curve.MidPoint = position;
-            container.AddStroke(curve.InkStroke);
+            return curve;
         }
 
-        public void moveControlPoint(Point point, Point position)
+        public BezierCurve moveControlPoint(Point point, Point position)
         {
             BezierCurve curve = curves.Find(x => x.P1 == point || x.P2 == point);
-            InkStroke stroke = curve.InkStroke;
-            stroke.Selected = true;
-            container.DeleteSelected();
             if(curve.P1 == point)
             {
                 curve.P1 = position;
@@ -171,14 +159,13 @@ namespace avantgarde
             {
                 curve.P2 = position;
             }
-            container.AddStroke(curve.InkStroke);
+            return curve;
         }
 
-        public Point moveEndPoints(Point point, Point position)
+        public List<BezierCurve> moveEndPoints(Point point, Point position)
         {
             List<BezierCurve> involvedCurves = curves.FindAll(x => x.P0 == point || x.P3 == point);
             involvedCurves.ForEach(x => x.InkStroke.Selected = true);
-            container.DeleteSelected();
 
             foreach(BezierCurve curve in involvedCurves)
             {
@@ -191,40 +178,23 @@ namespace avantgarde
                     curve.P3 = position;
                 }
             }
-
-            involvedCurves.ForEach(x => container.AddStroke(x.InkStroke));
-            return position;
+            return involvedCurves;
         }
 
         // public event EventHandler curveDrawn;
-        public void newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
+        public BezierCurve newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
         {
             BezierCurve curve = new BezierCurve(p0, p3, attributes);
-            Point p1 = curve.P1;
-            Point p2 = curve.P2;
             Point midPoint = curve.MidPoint;
             midPoints.Add(midPoint);
-            if (!endPoints.Contains(p0)){
-                endPoints.Add(p0);
-            }
+            if (!endPoints.Contains(p0)) { endPoints.Add(p0); }
             if (!endPoints.Contains(p3)) { endPoints.Add(p3); }
-            // controlPoints.Add(p1);
-            // controlPoints.Add(p2);
 
             curves.Add(curve);
-            //if (fleur) {
-            //    LineDrawnEventArgs args = new LineDrawnEventArgs();
-            //    args.stroke = curve.InkStroke;
-            //    curveDrawn?.Invoke(this, args);
-            //}
-            //else
-            //{
-            //    container.AddStroke(curve.InkStroke);
-            //}
-            container.AddStroke(curve.InkStroke);
+            return curve;
         }
 
-        public void delteCruve(BezierCurve curve)
+        public void deleteCurve(BezierCurve curve)
         {
             this.curves.Remove(curve);
         }
