@@ -78,6 +78,12 @@ namespace avantgarde
             }
             return retPoints;
         }
+        public void Clear()
+        {
+            this.curves.Clear();
+            this.endPoints.Clear();
+            this.midPoints.Clear();
+        }
         public void redo()
         {
             //if (undoStack.Count == 0)

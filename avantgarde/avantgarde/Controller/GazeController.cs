@@ -603,6 +603,14 @@ namespace avantgarde.Controller
             UpdateIndicator();
         }
         
+        public void ClearCanvas()
+        {
+            drawingModel.Clear();
+            mandalaStrokes = null;
+            _selectedCurve = null;
+            page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+        }
+
         public void UpdateCanvas()
         {
             InkStrokeContainer container = page.GetInkCanvas().InkPresenter.StrokeContainer;

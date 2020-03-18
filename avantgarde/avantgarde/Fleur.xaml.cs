@@ -390,8 +390,7 @@ namespace avantgarde
         
         private void clearCanvas(object sender, EventArgs e)
         {
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            // clear all lists
+            controller.ClearCanvas();
         }
     }
 }
