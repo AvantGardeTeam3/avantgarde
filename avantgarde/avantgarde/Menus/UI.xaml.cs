@@ -94,6 +94,11 @@ namespace avantgarde.Menus
             return libreToolBox.getColourManager().getBackgroundColour().ToString();
         }
 
+        public Color getColour(int profile, int brightness, int opacity)
+        {
+            return libreToolBox.getColourManager().getColour(profile, brightness, opacity);
+        }
+
         public Color getColour() {
             return colourSelection;
         }

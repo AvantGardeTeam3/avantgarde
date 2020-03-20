@@ -42,8 +42,14 @@ namespace avantgarde
 {
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
-        public static List<StrokeData> getStrokeData() {
-            return strokeData;
+        public List<StrokeData> getAllStrokeData() {
+            List<Drawing.BezierCurve> curves = drawingModel.getCurves();
+            List<StrokeData> data = new List<StrokeData>();
+            foreach(var curve in curves)
+            {
+                data.Add(curve.strokeData);
+            }
+            return data;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -52,7 +58,7 @@ namespace avantgarde
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public static bool autoswitch = true;
+        public bool Autoswitch = true;
 
         private Controller.GazeController controller;
 
@@ -75,11 +81,7 @@ namespace avantgarde
         public List<InkStroke> userStrokes = new List<InkStroke>();
         public List<InkStroke> mandalaStrokes = new List<InkStroke>();
         private InkStrokeBuilder inkStrokeBuilder;
-
-
-        Stack<InkStroke> redoStack = new Stack<InkStroke>();
-
-       
+ 
         private void getWindowAttributes()
         {
             WIDTH = (int)Window.Current.Bounds.Width;
@@ -126,7 +128,7 @@ namespace avantgarde
 
             // drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
-
+            Configuration.fleur = this;
             controller.HideGrid();
         }
 
@@ -158,6 +160,30 @@ namespace avantgarde
             }
         }
 
+        public StrokeData getStrokeData()
+        {
+            int COLOUR_PROFILE = 0;
+            int BRIGHTNESS = 1;
+            int OPACITY = 2;
+
+            StrokeData newStrokeData = new StrokeData();
+            newStrokeData.reflections = numberOfLines;
+            newStrokeData.colourProfile = ui.getColourAttributes(COLOUR_PROFILE);
+            newStrokeData.brightness = ui.getColourAttributes(BRIGHTNESS);
+            newStrokeData.opacity = ui.getColourAttributes(OPACITY);
+            newStrokeData.size = drawingAttributes.Size;
+
+            if (String.Compare(ui.getBrush(), "pencil") == 0)
+            {
+                newStrokeData.brush = "pencil";
+            }
+            else
+            {
+                newStrokeData.brush = "paint";
+            }
+            return newStrokeData;
+        }
+
         private void storeStrokeData() {
             int COLOUR_PROFILE = 0;
             int BRIGHTNESS = 1;
@@ -179,23 +205,6 @@ namespace avantgarde
             }
 
             strokeData.Add(newStrokeData);
-        }
-
-        public void curveDrawn(object sender, EventArgs e) {
-            //DrawingModel.LineDrawnEventArgs arg = (DrawingModel.LineDrawnEventArgs)e;
-            //InkStroke s = arg.stroke;
-            //s.DrawingAttributes = ui.getDrawingAttributes();
-            
-            storeStrokeData();
-            //userStrokes.Add(s);
-            //inkCanvas.InkPresenter.StrokeContainer.AddStroke(s);
-            //mandalaStrokes.AddRange(this.Transfrom(userStrokes));
-
-            if (autoswitch)
-            {
-                ui.UIGetColourManager().nextColour();
-                ui.getToolbox().next();
-            }
         }
         
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
@@ -296,13 +305,6 @@ namespace avantgarde
             return new Point(point.X + inkCanvasCentre.X, inkCanvasCentre.Y - point.Y);
         }
 
-        private void InkCanvas_refresh()
-        {
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
-        }
-
-
         public GazeInputSourcePreview GetGazeInputSourcePreview() { return GazeInputSourcePreview.GetForCurrentView(); }
         public DrawingModel GetDrawingModel() { return this.drawingModel; }
         public UI GetUI() { return this.ui; }
@@ -312,61 +314,50 @@ namespace avantgarde
 
         public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
 
-        public void SetContainer(InkStrokeContainer container)
-        {
-            inkCanvas.InkPresenter.StrokeContainer = container;
-        }
-
-
         private async void redo(object sender, EventArgs e)
         {
-            if (redoStack.Count() == 0)
-            {
-                return;
-            }
-            userStrokes.Add(redoStack.Pop());
-            InkCanvas_refresh();
+            //if (redoStack.Count() == 0)
+            //{
+            //    return;
+            //}
+            //userStrokes.Add(redoStack.Pop());
+            //InkCanvas_refresh();
+            controller.Redo();
         }
 
         private async void undo(object sender, EventArgs e)
         {
-            int containerSize = 0;
-            var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-            foreach (InkStroke stroke in strokes)
-            {
-                containerSize++;
-            }
-            if (containerSize == 0)
-            {
-                return;
-            }
-            int index = 0;
-            foreach (InkStroke s in strokes)
-            {
-                index++;
-                if (index >= containerSize - (numberOfLines - 1))
-                {
-                    s.Selected = true;
-                }
-            }
-            int size = userStrokes.Count();
-            redoStack.Push(userStrokes.ElementAt(size - 1));
-            userStrokes.RemoveAt(userStrokes.Count() - 1);
-            inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            //int containerSize = 0;
+            //var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            //foreach (InkStroke stroke in strokes)
+            //{
+            //    containerSize++;
+            //}
+            //if (containerSize == 0)
+            //{
+            //    return;
+            //}
+            //int index = 0;
+            //foreach (InkStroke s in strokes)
+            //{
+            //    index++;
+            //    if (index >= containerSize - (numberOfLines - 1))
+            //    {
+            //        s.Selected = true;
+            //    }
+            //}
+            //int size = userStrokes.Count();
+            //redoStack.Push(userStrokes.ElementAt(size - 1));
+            //userStrokes.RemoveAt(userStrokes.Count() - 1);
+            //inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            controller.Undo();
         }
 
         private void goHomeButtonClicked(object sender, EventArgs e)
         {
             Frame.Navigate(typeof(MainPage));
         }
-        private void redoButtonClicked(object sender, EventArgs e)
-        {
-            drawingModel.redo();
-        }
-        private void undoButtonClicked(object sender, EventArgs e)
-        {
-            drawingModel.undo();
-        }
+        
         private void drawStateButtonClicked(object sender, EventArgs e)
         {
             controller.Paused = !controller.Paused;

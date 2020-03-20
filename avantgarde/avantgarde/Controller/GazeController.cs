@@ -248,7 +248,6 @@ namespace avantgarde.Controller
             }
         }
 
-        private InkStrokeContainer backUpContainer = null;
         private void Pause()
         {
             // InkStrokeContainer container = page.GetInkCanvas().InkPresenter.StrokeContainer;
@@ -256,6 +255,7 @@ namespace avantgarde.Controller
             mandalaStrokes = new List<InkStroke>();
             foreach(BezierCurve curve in curves)
             {
+                // add all mandala stroke
                 List<InkStroke> strokes = ((Fleur)page).TransformStroke(curve.InkStroke, curve.NumOfReflection);
                 strokes.ForEach(x => x.DrawingAttributes = curve.InkStroke.DrawingAttributes);
                 page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(strokes);
@@ -271,6 +271,7 @@ namespace avantgarde.Controller
         {
             if (mandalaStrokes != null)
             {
+                // remove all mandala strokes
                 mandalaStrokes.ForEach(x => x.Selected = true);
                 page.GetInkCanvas().InkPresenter.StrokeContainer.DeleteSelected();
                 mandalaStrokes = null;
@@ -307,9 +308,15 @@ namespace avantgarde.Controller
                 Double midY = (lineStartPoint.Y + GazePoint.Y) / 2;
                 bezierCurve = drawingModel.newCurve(lineStartPoint, GazePoint, ui.getDrawingAttributes());
             }
+            bezierCurve.strokeData = ((Fleur)page).getStrokeData();
             bezierCurve.NumOfReflection = page.GetUI().getMandalaLines();
             this.state = ControllerState.idle;
-            ((Fleur)page).curveDrawn(null, null);
+            if (Configuration.fleur.Autoswitch)
+            {
+                page.GetUI().UIGetColourManager().nextColour();
+                page.GetUI().getToolbox().next();
+            }
+            // ((Fleur)page).curveDrawn(null, null);
             // UpdateCanvas();
             page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(bezierCurve.InkStroke);
             UpdateView();
@@ -603,6 +610,30 @@ namespace avantgarde.Controller
             UpdateIndicator();
         }
         
+        public void Undo()
+        {
+            BezierCurve curve = drawingModel.undo();
+            if (curve != null)
+            {
+                curve.InkStroke.Selected = true;
+                page.GetInkCanvas().InkPresenter.StrokeContainer.DeleteSelected();
+            }
+            Resume();
+            Pause();
+        }
+
+        public void Redo()
+        {
+            BezierCurve curve = drawingModel.redo();
+            if (curve != null)
+            {
+                curve.UpdateStroke();
+                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(curve.InkStroke);
+            }
+            Resume();
+            Pause();
+        }
+
         public void ClearCanvas()
         {
             drawingModel.Clear();
@@ -615,8 +646,7 @@ namespace avantgarde.Controller
         {
             InkStrokeContainer container = page.GetInkCanvas().InkPresenter.StrokeContainer;
             List<InkStroke> dm_strokes = drawingModel.GetStrokes();
-            IReadOnlyList<InkStroke> c_strokes = container.GetStrokes();
-            foreach (InkStroke stroke in c_strokes)
+            foreach (InkStroke stroke in container.GetStrokes())
             {
                 if (!dm_strokes.Contains(stroke))
                 {
@@ -626,7 +656,7 @@ namespace avantgarde.Controller
             container.DeleteSelected();
             foreach (InkStroke stroke in dm_strokes)
             {
-                if (!c_strokes.Contains(stroke))
+                if (!container.GetStrokes().Contains(stroke))
                 {
                     container.AddStroke(stroke);
                 }
@@ -638,7 +668,6 @@ namespace avantgarde.Controller
         
         private void UpdateView()
         {
-            List<BezierCurve> curves = drawingModel.getCurves();
             if (Paused)
             {
                 HideGrid();
@@ -742,16 +771,34 @@ namespace avantgarde.Controller
 
         public void Load(List<StrokeData> strokeDatas)
         {
-            drawingModel.Load(strokeDatas);
+            drawingModel.Clear();
             page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
-            Fleur fleur = (Fleur)page;
-            List<BezierCurve> curves = drawingModel.getCurves();
-            foreach (var curve in curves)
+            _selectedCurve = null;
+            foreach(StrokeData data in strokeDatas)
             {
-                InkStroke stroke = curve.InkStroke;
-                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(stroke);
-                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(fleur.TransformStroke(stroke, curve.NumOfReflection));
+                InkDrawingAttributes attributes;
+                if (data.brush.Equals("pencil"))
+                {
+                    attributes = InkDrawingAttributes.CreateForPencil();
+                }
+                else
+                {
+                    attributes = new InkDrawingAttributes();
+                }
+                attributes.Color = page.GetUI().getColour(data.colourProfile, data.brightness, data.opacity);
+                attributes.Size = data.size;
+                BezierCurve curve = drawingModel.newCurve(data.p0, data.p3, attributes);
+                curve.P1 = data.p1;
+                curve.P2 = data.p2;
+                curve.Modified = data.modified;
+                curve.NumOfReflection = data.reflections;
+                curve.strokeData = data;
+                page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(curve.InkStroke);
             }
+            List<BezierCurve> curves = drawingModel.getCurves();
+            mandalaStrokes.Clear();
+            Resume();
+            Pause();
         }
 
         private void AddCurve(BezierCurve curve)

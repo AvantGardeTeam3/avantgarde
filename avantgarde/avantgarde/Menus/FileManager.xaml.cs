@@ -213,7 +213,7 @@ namespace avantgarde.Menus
         }
 
         private void getCanvasData() {
-            strokeData = Fleur.getStrokeData();
+            strokeData = Configuration.fleur.getAllStrokeData();
             curveData = Controller.ControllerFactory.gazeController.drawingModel.getCurves();
 
             if (strokeData.Count != curveData.Count) {

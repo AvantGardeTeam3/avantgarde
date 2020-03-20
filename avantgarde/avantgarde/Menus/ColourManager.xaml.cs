@@ -101,6 +101,11 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
+        public Color getColour(int profile, int brightness, int opacity)
+        {
+            return hexToColor(getOpacityHex(opacity) + colourPickerData.getColourHex(profile, brightness));
+        }
+
         public Color getColour() {
             return selection;
         }

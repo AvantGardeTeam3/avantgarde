@@ -32,7 +32,7 @@ namespace avantgarde.Menus
         private String paintbrushButtonState { get; set; }
         private String pencilButtonState { get; set; }
 
-        public InkDrawingAttributes drawingAttributes;
+    public InkDrawingAttributes drawingAttributes;
         public brushTool()
         {
             paintbrushButtonState = "Visible";

@@ -11,5 +11,6 @@ namespace avantgarde
         public static int DrawingDwellTimeMs = 600;
         public static double GazeSnapDistance = 50.0;
         public static int JoystickMoveDistance = 10;
+        public static Fleur fleur;
     }
 }

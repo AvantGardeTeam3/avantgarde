@@ -84,8 +84,23 @@ namespace avantgarde
             this.endPoints.Clear();
             this.midPoints.Clear();
         }
-        public void redo()
+        public BezierCurve redo()
         {
+            if (undoStack.Count == 0)
+            {
+                return null;
+            }
+            BezierCurve curve = undoStack.Pop();
+            if (!endPoints.Contains(curve.P0))
+            {
+                endPoints.Add(curve.P0);
+            }
+            if (!endPoints.Contains(curve.P3))
+            {
+                endPoints.Add(curve.P3);
+            }
+            curves.Add(curve);
+            return curve;
             //if (undoStack.Count == 0)
             //{
             //    // no previous undo, do nothing
@@ -103,8 +118,31 @@ namespace avantgarde
             //this.lines.Add(line);
             //this.container.AddStroke(line.inkStroke);
         }
-        public void undo()
+        public BezierCurve undo()
         {
+            if (curves.Count == 0)
+            {
+                return null;
+            }
+            BezierCurve curve = curves.ElementAt(curves.Count - 1);
+            Point p0 = curve.P0;
+            Point p3 = curve.P3;
+
+            List<BezierCurve> p0Curves = curves.FindAll(x => x.P0 == p0 || x.P3 == p0);
+            List<BezierCurve> p3Curves = curves.FindAll(x => x.P0 == p3 || x.P3 == p3);
+
+            if(p0Curves.Count == 1)
+            {
+                endPoints.Remove(p0);
+            }
+            else
+            if(p3Curves.Count == 1)
+            {
+                endPoints.Remove(p3);
+            }
+            curves.Remove(curve);
+            undoStack.Push(curve);
+            return curve;
             //if (lines.Count == 0)
             //{
             //    // no drawn stroke(s), do nothing
@@ -143,8 +181,10 @@ namespace avantgarde
                 BezierCurve curve = new BezierCurve(stroke, InkDrawingAttributes.CreateForPencil());
                 curves.Add(curve);
                 this.midPoints.Add(curve.MidPoint);
-                this.endPoints.Add(curve.P0);
-                this.endPoints.Add(curve.P3);
+                List<Point> p0s = endPoints.FindAll(x => x == curve.P0);
+                List<Point> p3s = endPoints.FindAll(x => x == curve.P3);
+                if (p0s.Count != 0) endPoints.Add(curve.P0);
+                if (p3s.Count != 0) endPoints.Add(curve.P3);
             }
         }
 
@@ -186,8 +226,6 @@ namespace avantgarde
             }
             return involvedCurves;
         }
-
-        // public event EventHandler curveDrawn;
         public BezierCurve newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
         {
             BezierCurve curve = new BezierCurve(p0, p3, attributes);

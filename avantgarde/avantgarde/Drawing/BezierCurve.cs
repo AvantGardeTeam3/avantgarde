@@ -14,7 +14,7 @@ namespace avantgarde.Drawing
         public bool Modified
         {
             get { return _modified; }
-            private set { _modified = value; }
+            set { _modified = value; }
         }
         private Point _p0;
         public Point P0
@@ -103,6 +103,8 @@ namespace avantgarde.Drawing
             }
         }
 
+        public StrokeData strokeData = null;
+
         private int numOfReflection;
         public int NumOfReflection
         {
@@ -179,7 +181,7 @@ namespace avantgarde.Drawing
             P2 = new Point(P3.X + dhx, P3.Y + dhy);
             _halfPoint = CurveFunction(0.5);
         }
-        private void UpdateStroke()
+        public void UpdateStroke()
         {
             this.InkStroke = MakeStroke(this);
         }

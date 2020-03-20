@@ -56,6 +56,11 @@ namespace avantgarde.Menus
         public Color colourSelection;
         public String colourHex { get; set; }
 
+        public brushTool getBrushTool()
+        {
+            return this.brushTool;
+        }
+
         public LibreToolBox()
         {
             autoswitch = true;
@@ -196,8 +201,6 @@ namespace avantgarde.Menus
             return drawingAttributes;
         }
 
-
-
         private void colourPalette0Clicked(object sender, RoutedEventArgs e)
         {
             if (editingPalette) 
@@ -322,7 +325,7 @@ namespace avantgarde.Menus
         private void toggleAS() {
             autoswitch = !autoswitch;
 
-            Fleur.autoswitch = autoswitch;
+            Configuration.fleur.Autoswitch = autoswitch;
 
             if (autoswitch)
             {
