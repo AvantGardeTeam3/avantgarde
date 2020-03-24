@@ -779,9 +779,10 @@ namespace avantgarde.Controller
         private void AddIndicator(Point point)
         {
             var ellipse = new Ellipse();
-            ellipse.Width = 20;
-            ellipse.Height = 20;
-            ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            ellipse.Width = 30;
+            ellipse.Height = 30;
+            ellipse.Fill = new SolidColorBrush(ColourManager.hexToColor("#ffcdff59"));
+            ellipse.Opacity = 0.5d;
             ellipse.Visibility = Visibility.Visible;
             TranslateTransform translateTarget = new TranslateTransform();
             translateTarget.X = point.X - ellipse.Width / 2;
@@ -834,9 +835,10 @@ namespace avantgarde.Controller
         private void AddControlIndicator(Point point)
         {
             var rectangle = new Rectangle();
-            rectangle.Width = 15;
-            rectangle.Height = 15;
-            rectangle.Fill = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            rectangle.Width = 20;
+            rectangle.Height = 20;
+            rectangle.Fill = new SolidColorBrush(ColourManager.hexToColor("#ff4ffff6"));
+            rectangle.Opacity = 0.5;
             rectangle.Visibility = Visibility.Visible;
             TranslateTransform translateTarget = new TranslateTransform();
             translateTarget.X = point.X - rectangle.Width / 2;
