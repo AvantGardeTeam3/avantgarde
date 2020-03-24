@@ -89,9 +89,10 @@ namespace avantgarde.Menus
           
    
             getWindowAttributes();
-            
 
-            colourManager.colourManagerClosed += new EventHandler(colourManagerClosed);
+            tutorial.open(1);
+
+            colourManager.colourManagerClosed += new EventHandler(popupClosedEvent);
             colourManager.updateColourSelection += new EventHandler(updateColourSelection);
             colourManager.backgroundSelectionChanged += new EventHandler(updateBackground);
             colourManager.paletteEdited += new EventHandler(updatePalette);
@@ -101,7 +102,8 @@ namespace avantgarde.Menus
             fileManager.saveRequested += new EventHandler(save);
             fileManager.fileLoaded += new EventHandler(fileLoaded);
             brushTool.propertiesUpdated += new EventHandler(drawingAttributesUpdated);
-            brushTool.menuClosed += new EventHandler(brushToolClosed);
+            brushTool.menuClosed += new EventHandler(popupClosedEvent);
+            tutorial.tutorialClosed += new EventHandler(popupClosedEvent);
         }
 
 
@@ -454,6 +456,10 @@ namespace avantgarde.Menus
             {
                 brushTool.close();
             }
+            if (tutorial != null)
+            {
+                tutorial.close();
+            }
 
             popupClosed?.Invoke(this, EventArgs.Empty);
 
@@ -542,13 +548,21 @@ namespace avantgarde.Menus
             }
         }
 
-        private void colourManagerClosed(object sender, EventArgs e)
+        private void popupClosedEvent(object sender, EventArgs e)
         {
           
                 popupClosed?.Invoke(this, EventArgs.Empty);
             
             
         }
+
+        private void initTutorial(object sender, RoutedEventArgs e)
+        {
+            clearPopups();
+            tutorial.open(2);
+            popupOpened?.Invoke(this, EventArgs.Empty);
+        }
+
 
         private void fileLoaded(object sender, EventArgs e)
         {   
@@ -566,11 +580,6 @@ namespace avantgarde.Menus
             drawingAttributes.Color = colourManager.getColour();
             mandalaLines = brushTool.mandalaLines;
             propertyUpdate();
-        }
-
-        private void brushToolClosed(object sender, EventArgs e)
-        {
-            popupClosed?.Invoke(this, EventArgs.Empty);
         }
 
         private void libreToolBox_SizeChanged(object sender, SizeChangedEventArgs e)

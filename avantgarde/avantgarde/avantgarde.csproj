@@ -161,6 +161,9 @@
     <Compile Include="Menus\ToolBar.xaml.cs">
       <DependentUpon>ToolBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menus\Tutorial.xaml.cs">
+      <DependentUpon>Tutorial.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menus\UI.xaml.cs">
       <DependentUpon>UI.xaml</DependentUpon>
     </Compile>
@@ -209,6 +212,14 @@
     <Content Include="Assets\mandala2.png" />
     <Content Include="Assets\mandala3.png" />
     <Content Include="Assets\microsoft footer.png" />
+    <Content Include="Assets\tutorial\page_1.png" />
+    <Content Include="Assets\tutorial\page_2.png" />
+    <Content Include="Assets\tutorial\page_3.png" />
+    <Content Include="Assets\tutorial\page_4.png" />
+    <Content Include="Assets\tutorial\page_5.png" />
+    <Content Include="Assets\tutorial\page_6.png" />
+    <Content Include="Assets\tutorial\page_7.png" />
+    <Content Include="Assets\tutorial\page_8.png" />
     <Content Include="Assets\ucl footer.png" />
     <Content Include="Assets\icons\icon_undo.jpg" />
     <Content Include="Assets\headings\Libre Heading.png" />
@@ -283,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Menus\ToolBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Menus\Tutorial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

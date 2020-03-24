@@ -1,0 +1,145 @@
+﻿<Page
+    x:Class="avantgarde.Menus.Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    xmlns:local="using:avantgarde.Menus"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    gaze:GazeInput.Interaction="Enabled"
+    gaze:GazeInput.IsCursorVisible="True"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Popup
+        x:Name="tutorial"
+        HorizontalOffset="{x:Bind horizontalOffset}"
+        VerticalOffset="{x:Bind verticalOffset}">
+        <Grid>
+            <Border
+                Width="{x:Bind width}"
+                Height="{x:Bind height}"
+                Background="Black"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                CornerRadius="5,5,5,5" />
+            <Border
+                Width="{x:Bind width}"
+                Height="{x:Bind height}"
+                Background="Transparent"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                CornerRadius="5,5,5,5">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="1.5*" />
+
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Tahoma"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Tutorial" />
+
+                    <Button
+                        x:Name="right_button"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Width="60"
+                        Height="80"
+                        Padding="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                        gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                        gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                        gaze:GazeInput.MaxDwellRepeatCount="5"
+                        gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                        gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                        Background="Transparent"
+                        BorderBrush="DimGray"
+                        BorderThickness="2"
+                        Click="right"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_right.png" />
+                    </Button>
+                    <Button
+                        x:Name="left_button"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Width="60"
+                        Height="80"
+                        Padding="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                        gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                        gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                        gaze:GazeInput.MaxDwellRepeatCount="5"
+                        gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                        gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                        Background="Transparent"
+                        BorderBrush="DimGray"
+                        BorderThickness="2"
+                        Click="left"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_left.png" />
+                    </Button>
+
+
+                    <Image
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Height="Auto"
+                        Width="Auto"
+                        Source="{x:Bind tutorialPagePath, Mode=OneWay}"
+                        
+                        />
+
+
+                    <Button
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Width="80"
+                        Height="80"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="#cdff59"
+                        BorderThickness="2"
+                        Click="close"
+                        CornerRadius="5,5,5,5">
+                        <Image Source="/Assets/icons/icon_checkmark.png" />
+                    </Button>
+
+
+                </Grid>
+
+
+            </Border>
+        </Grid>
+    </Popup>
+</Page>
+
+
+
+

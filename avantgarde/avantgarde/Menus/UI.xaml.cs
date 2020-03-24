@@ -58,7 +58,7 @@ namespace avantgarde.Menus
             isDrawing = false;
             playButtonPosition = "Center";
             toolBoxButtonVisibility = "Collapsed";
-            playButtonVisibility = "Visible";
+            playButtonVisibility = "Collapsed";
             
             colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
