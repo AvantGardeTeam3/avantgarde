@@ -137,14 +137,11 @@
     <Compile Include="Joysticks\VerticalJoystick.xaml.cs">
       <DependentUpon>VerticalJoystick.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Libre.xaml.cs">
-      <DependentUpon>Libre.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Menus\brushTool.xaml.cs">
-      <DependentUpon>brushTool.xaml</DependentUpon>
+    <Compile Include="Menus\BrushTools.xaml.cs">
+      <DependentUpon>BrushTools.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menus\ColourManager.xaml.cs">
       <DependentUpon>ColourManager.xaml</DependentUpon>
@@ -157,9 +154,6 @@
     </Compile>
     <Compile Include="Menus\LibreToolBox.xaml.cs">
       <DependentUpon>LibreToolBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Menus\ToolBar.xaml.cs">
-      <DependentUpon>ToolBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menus\Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
@@ -265,15 +259,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Libre.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Menus\brushTool.xaml">
+    <Page Include="Menus\BrushTools.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,10 +280,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Menus\LibreToolBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Menus\ToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

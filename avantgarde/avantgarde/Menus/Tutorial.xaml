@@ -63,8 +63,8 @@
                         x:Name="right_button"
                         Grid.Row="1"
                         Grid.Column="2"
-                        Width="60"
-                        Height="80"
+                        Width="80"
+                        Height="100"
                         Padding="10"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -85,8 +85,8 @@
                         x:Name="left_button"
                         Grid.Row="1"
                         Grid.Column="0"
-                        Width="60"
-                        Height="80"
+                        Width="80"
+                        Height="100"
                         Padding="10"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -108,11 +108,9 @@
                     <Image
                         Grid.Row="1"
                         Grid.Column="1"
-                        Height="Auto"
                         Width="Auto"
-                        Source="{x:Bind tutorialPagePath, Mode=OneWay}"
-                        
-                        />
+                        Height="Auto"
+                        Source="{x:Bind tutorialPagePath, Mode=OneWay}" />
 
 
                     <Button

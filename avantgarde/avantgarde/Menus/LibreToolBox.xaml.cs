@@ -22,13 +22,14 @@ using Windows.UI.Xaml.Navigation;
 using avantgarde.Controller;
 using static avantgarde.Menus.ColourManager;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
+    //Toolbox class. Contains all user controls accessed from toolbox: file manager, colour manager, confirm tool, tutorial, brush tool
+    //Controls data flow from user controls to UI or main class (Fleur)
+    //Eduardo Battistini
     public sealed partial class LibreToolBox : UserControl, INotifyPropertyChanged
     {   
-
 
         private int restrictedID = 0;
         private int RESTRICTED_NONE = 0;
@@ -48,18 +49,34 @@ namespace avantgarde.Menus
         public bool editingPalette;
         private bool autoswitch;
 
+        private double brushSize { get; set; }
+        public int mandalaLines { get; set; }
+        private int WIDTH { get; set; }
+        private int HEIGHT { get; set; }
+
+
+
+        public Color colourSelection;
+
         public String backgroundHex { get; set; }
         private int[,] colourPaletteData = 
             new int[,] { { 5, 6, 100 }, { 0, 7, 100 }, { 6, 7, 100 }, { 2, 7, 100 }, { 9, 7, 100 } };
         public String[] colourPalette { get; set; }
-
-        public Color colourSelection;
         public String colourHex { get; set; }
 
-        public brushTool getBrushTool()
-        {
-            return this.brushTool;
-        }
+        private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler goHomeButtonClicked;
+        public event EventHandler setBackgroundButtonClicked;
+        public event EventHandler propertiesUpdated;
+        public event EventHandler toolboxClosed;
+        public event EventHandler colourSelectionUpdated;
+        public event EventHandler clearCanvasButtonClicked;
+        public event EventHandler popupOpened;
+        public event EventHandler popupClosed;
+        public event EventHandler saveImageClicked;
+
 
         public LibreToolBox()
         {
@@ -67,8 +84,8 @@ namespace avantgarde.Menus
             editingPalette = false;
             brushSelection = "paint";
             colourPalette = new String[5];
-            
-           
+            getWindowAttributes();
+
             mandalaLines = 8;
             propertyUpdate();
             this.InitializeComponent();
@@ -88,7 +105,7 @@ namespace avantgarde.Menus
             brushTool.mandalaLines = this.mandalaLines;
           
    
-            getWindowAttributes();
+            
 
             tutorial.open(1);
 
@@ -101,13 +118,16 @@ namespace avantgarde.Menus
             fileManager.loadRequested += new EventHandler(load);
             fileManager.saveRequested += new EventHandler(save);
             fileManager.fileLoaded += new EventHandler(fileLoaded);
+            fileManager.fileManagerClosed += new EventHandler(popupClosedEvent);
             brushTool.propertiesUpdated += new EventHandler(drawingAttributesUpdated);
             brushTool.menuClosed += new EventHandler(popupClosedEvent);
             tutorial.tutorialClosed += new EventHandler(popupClosedEvent);
         }
 
-
-
+        public BrushTools getBrushTool()
+        {
+            return this.brushTool;
+        }
         private void updatePaletteSelection() {
             colourPalette0.BorderBrush = new SolidColorBrush(Colors.White);
             colourPalette1.BorderBrush = new SolidColorBrush(Colors.White);
@@ -148,7 +168,6 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
        
-        
         private void updateBackgroundButton() {
             backgroundHex = colourManager.backgroundSelection.ToString();
             NotifyPropertyChanged();
@@ -175,21 +194,10 @@ namespace avantgarde.Menus
             
         }
 
-        private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private void NotifyPropertyChanged(String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private double brushSize { get; set; }
-
-        public int mandalaLines { get; set; }
-
-        private int WIDTH { get; set; }
-        private int HEIGHT { get; set; }
 
         private void getWindowAttributes()
         {
@@ -215,10 +223,8 @@ namespace avantgarde.Menus
                 colourManager.switchID = 0;
 
             }
-
             else
             {
-
                 selectedPalette = 0;
                 updatePaletteSelection();
                 colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS], colourPaletteData[0, OPACITY]);
@@ -234,9 +240,7 @@ namespace avantgarde.Menus
                 colourManager.loadColourData();
                 popupOpened?.Invoke(this, EventArgs.Empty);
                 colourManager.openMenu();
-                
             }
-
             else
             {
                 selectedPalette = 1;
@@ -266,7 +270,6 @@ namespace avantgarde.Menus
                 colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS], colourPaletteData[2, OPACITY]);
             }
         }
-
         private void colourPalette3Clicked(object sender, RoutedEventArgs e)
         {
             if (editingPalette)
@@ -388,7 +391,6 @@ namespace avantgarde.Menus
             saveImageClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        
 
         public bool isOpen() {
             return libreToolBox.IsOpen;
@@ -416,6 +418,9 @@ namespace avantgarde.Menus
         }
 
         private void executeRestricted() {
+
+            //executes actions that require confirmation from confirm tool
+
             if (restrictedID == RESTRICTED_NONE)
             {
                 return;
@@ -464,19 +469,7 @@ namespace avantgarde.Menus
             popupClosed?.Invoke(this, EventArgs.Empty);
 
         }
-
-        public event EventHandler goHomeButtonClicked;
-        public event EventHandler setBackgroundButtonClicked;
-        public event EventHandler propertiesUpdated;
-        public event EventHandler toolboxClosed;
-        public event EventHandler colourSelectionUpdated;
-        public event EventHandler clearCanvasButtonClicked;
-        public event EventHandler popupOpened;
-        public event EventHandler popupClosed;
-        public event EventHandler saveImageClicked;
-      
-
-
+    
         private void confirmDecisionMade(object sender, EventArgs e)
         {
             popupClosed?.Invoke(this, EventArgs.Empty);
@@ -550,10 +543,7 @@ namespace avantgarde.Menus
 
         private void popupClosedEvent(object sender, EventArgs e)
         {
-          
-                popupClosed?.Invoke(this, EventArgs.Empty);
-            
-            
+            popupClosed?.Invoke(this, EventArgs.Empty);
         }
 
         private void initTutorial(object sender, RoutedEventArgs e)
@@ -568,10 +558,7 @@ namespace avantgarde.Menus
         {   
             initColourPalette(fileManager.colourPalette);
             colourManager.setBGColour(fileManager.bgProfile, fileManager.bgBrightness, fileManager.bgOpacity);
-
             NotifyPropertyChanged();
-
-            // generate canvas from Stroke data
         }
 
 

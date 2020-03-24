@@ -15,11 +15,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
-    public sealed partial class brushTool : UserControl, INotifyPropertyChanged
+
+    //Pop up menu to give user customisation options for pen size, number of mandala reflections, and brush type (paintbrush or pencil).
+    //Eduardo Battistini
+    public sealed partial class BrushTools : UserControl, INotifyPropertyChanged
 
     {
         public String brushSelection;
@@ -32,36 +34,14 @@ namespace avantgarde.Menus
         private String paintbrushButtonState { get; set; }
         private String pencilButtonState { get; set; }
 
-    public InkDrawingAttributes drawingAttributes;
-        public brushTool()
+        public InkDrawingAttributes drawingAttributes;
+
+        public BrushTools()
         {
             paintbrushButtonState = "Visible";
             pencilButtonState = "Collapsed";
             getWindowAttributes();
             this.InitializeComponent();
-        }
-
-        public void close()
-        {
-            if (brushToolMenu.IsOpen) { brushToolMenu.IsOpen = false; }
-            NotifyPropertyChanged();
-
-        }
-        public void open() {
-
-            if (!brushToolMenu.IsOpen) { brushToolMenu.IsOpen = true; }
-            NotifyPropertyChanged();
-        }
-
-        public InkDrawingAttributes getDrawingAttributes() {
-            updateSize();
-            return drawingAttributes;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void getWindowAttributes()
@@ -72,20 +52,28 @@ namespace avantgarde.Menus
             verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
         }
 
-        private void increaseBrushSize(object sender, RoutedEventArgs e)
-        {
 
-            if (brushSize < 21)
-            {
-                brushSize++;
-            }
-            else
-            {
-                return;
-            }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void close()
+        {
+            if (brushToolMenu.IsOpen) { brushToolMenu.IsOpen = false; }
             NotifyPropertyChanged();
-            drawingAttributes.Size = new Size(brushSize, brushSize);
-            propertyUpdate();
+        }
+        public void open()
+        {
+            if (!brushToolMenu.IsOpen) { brushToolMenu.IsOpen = true; }
+            NotifyPropertyChanged();
+        }
+
+        public InkDrawingAttributes getDrawingAttributes()
+        {
+            updateSize();
+            return drawingAttributes;
         }
 
         private void decreaseMandalaLines(object sender, RoutedEventArgs e)
@@ -133,6 +121,22 @@ namespace avantgarde.Menus
             propertyUpdate();
         }
 
+        private void increaseBrushSize(object sender, RoutedEventArgs e)
+        {
+
+            if (brushSize < 21)
+            {
+                brushSize++;
+            }
+            else
+            {
+                return;
+            }
+            NotifyPropertyChanged();
+            drawingAttributes.Size = new Size(brushSize, brushSize);
+            propertyUpdate();
+        }
+
 
         private void selectPaintbrush(object sender, RoutedEventArgs e)
         {
@@ -155,19 +159,20 @@ namespace avantgarde.Menus
 
         }
 
-        private void closeMenu(object sender, RoutedEventArgs e)
-        {
-            close();
-            menuClosed?.Invoke(this, EventArgs.Empty);
-        }
-
         private void updateSize()
         {
             drawingAttributes.Size = new Size(brushSize, brushSize);
         }
 
+
         public event EventHandler propertiesUpdated;
         public event EventHandler menuClosed;
+
+        private void closeMenu(object sender, RoutedEventArgs e)
+        {
+            close();
+            menuClosed?.Invoke(this, EventArgs.Empty);
+        }
         private void propertyUpdate()
         {
             updateSize();

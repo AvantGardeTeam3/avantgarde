@@ -19,9 +19,8 @@ using Windows.UI.Xaml.Navigation;
 
 namespace avantgarde.Menus
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    // Tutorial logic for switching between tutorial pages
+    //Eduardo Battistini
     public sealed partial class Tutorial : Page, INotifyPropertyChanged
     {
 
@@ -35,6 +34,7 @@ namespace avantgarde.Menus
         private String tutorialPagePath { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler tutorialClosed;
 
         public Tutorial()
         {
@@ -87,7 +87,6 @@ namespace avantgarde.Menus
             updatePage();
         }
 
-        public event EventHandler tutorialClosed;
         private void close(object sender, RoutedEventArgs e)
         {
             close();

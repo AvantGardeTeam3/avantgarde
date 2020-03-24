@@ -24,15 +24,15 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
+    //File IO system. Users have 3 slots they can save/load from. They may also export.
+    //
     public sealed partial class FileManager : UserControl, INotifyPropertyChanged
     {
         public int selectedSlot = 0;
 
-        private Fleur page;
         private List<StrokeData> strokeData;
         private List<BezierCurve> curveData;
 
@@ -58,7 +58,10 @@ namespace avantgarde.Menus
         public int horizontalOffset { get; set; }
         public int verticalOffset { get; set; }
 
-
+        public event EventHandler fileLoaded;
+        public event EventHandler loadRequested;
+        public event EventHandler saveRequested;
+        public event EventHandler fileManagerClosed;
 
         public FileManager()
         {
@@ -69,7 +72,7 @@ namespace avantgarde.Menus
             slot2State = "Collapsed";
             slot3State = "Collapsed";
             getWindowAttributes();
-            Debug.WriteLine("hello1");
+            
             loadPresets();
             this.InitializeComponent();
 
@@ -88,8 +91,6 @@ namespace avantgarde.Menus
             horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
             verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
         }
-
-
 
         private String serialize()
         {
@@ -125,8 +126,6 @@ namespace avantgarde.Menus
             
             return content.ToString();
         }
-
-        public event EventHandler fileLoaded;
         private void deserialize(String content) {
             List<StrokeData> newData = new List<StrokeData>();
 
@@ -153,8 +152,6 @@ namespace avantgarde.Menus
                     continue;
                 }
                 string[] vals = line.Split(",");
-                Debug.WriteLine("line"+line);
-                Debug.WriteLine(vals.Length);
                 data = new StrokeData();
                 data.p0 = new Point(Double.Parse(vals[0]+".0"), Double.Parse(vals[1] + ".0"));
                 data.p1 = new Point(Double.Parse(vals[2] + ".0"), Double.Parse(vals[3] + ".0"));
@@ -188,7 +185,6 @@ namespace avantgarde.Menus
             bgBrightness = Int32.Parse(vals[1]);
             bgOpacity = Int32.Parse(vals[2]);
         }
-
 
         private void loadColourPalette(String data) {
             string[] vals = data.Split(",");
@@ -239,72 +235,36 @@ namespace avantgarde.Menus
         }
 
         public async void save() {
-            getCanvasData();
+
+            if (presetsLoaded)
+            {
+                getCanvasData();
+            }
             await saveFileAsync();
-            //await saveImageAsync(); will add back for thumbnails if time permits
+            
         }
-
-        private async Task saveImageAsync() {
-            InkCanvas inkCanvas = Controller.ControllerFactory.gazeController.inkCanvas;
-            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
-
-            CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
-
-            StorageFile file = await localFolder.CreateFileAsync("img" + selectedSlot.ToString() + ".jpg", CreationCollisionOption.ReplaceExisting);
-            using (var ds = renderTarget.CreateDrawingSession())
-            {
-                ds.Clear(background);
-                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
-            }
-            if (file != null)
-            {
-                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Jpeg, 1f);
-                }
-
-
-            }
-
-            NotifyPropertyChanged();
-
-        }
-
 
         private async void loadPresets()
         {
             await checkSlotsEmpty();
-            Debug.WriteLine("hello2");
-            Debug.WriteLine(presetsLoaded);
+
             if (!presetsLoaded) {
                 for (int i = 1; i < 4; i++)
                 {
-                    Debug.WriteLine("yeet"+i);
                     selectedSlot = i;
                     await loadFileAsync(true);
                     save();
                 }
                 presetsLoaded = true;
             }
-
-
-           
         }
 
         private async Task checkSlotsEmpty() {
             var slot1 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot1.txt");
             var slot2 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot2.txt");
             var slot3 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("slot3.txt");
-            //var img1 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img1.jpg");
-            //var img2 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img2.jpg");
-            //var img3 = await ApplicationData.Current.LocalFolder.TryGetItemAsync("img3.jpg");
-
-            Debug.WriteLine("hello3");
 
             presetsLoaded = (slot1 != null) && (slot2 != null) && (slot3 != null);
-
-            Debug.WriteLine(presetsLoaded);
 
         }
 
@@ -312,13 +272,9 @@ namespace avantgarde.Menus
             
             StorageFile file;
 
-            Debug.WriteLine("hello5");
-
             if (fromPresets)
             {
                 file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(@"Assets\data\slot" + selectedSlot.ToString() + ".txt");
-                Debug.WriteLine("file is not null:" + file != null);
-                
             }
             else 
             {
@@ -331,7 +287,6 @@ namespace avantgarde.Menus
 
         public async void load() {
             await loadFileAsync(false);
-            //generate new Canvas from updated strokeData
             Controller.ControllerFactory.gazeController.Load(strokeData);
         }
 
@@ -349,9 +304,6 @@ namespace avantgarde.Menus
             if (!FileManagerMenu.IsOpen) { FileManagerMenu.IsOpen = true; }
 
         }
-
-        public event EventHandler loadRequested;
-        public event EventHandler saveRequested;
 
         private void confirm(object sender, RoutedEventArgs e) {
             if (mode == SAVING)
@@ -372,6 +324,7 @@ namespace avantgarde.Menus
 
         public void close() {
             if (FileManagerMenu.IsOpen) { FileManagerMenu.IsOpen = false; }
+            fileManagerClosed?.Invoke(this, EventArgs.Empty);
         }
 
         private void selectSlot1(object sender, RoutedEventArgs e)
@@ -403,5 +356,37 @@ namespace avantgarde.Menus
             
             NotifyPropertyChanged();
         }
+
+        private async Task saveImageAsync()
+        {
+            //method is used to create thumbnails, not implemented for this version, but will be used in future versions
+
+            InkCanvas inkCanvas = Controller.ControllerFactory.gazeController.inkCanvas;
+            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
+
+            StorageFile file = await localFolder.CreateFileAsync("img" + selectedSlot.ToString() + ".jpg", CreationCollisionOption.ReplaceExisting);
+            using (var ds = renderTarget.CreateDrawingSession())
+            {
+                ds.Clear(background);
+                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+            }
+            if (file != null)
+            {
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Jpeg, 1f);
+                }
+
+
+            }
+            NotifyPropertyChanged();
+        }
+
+
     }
+
+
 }

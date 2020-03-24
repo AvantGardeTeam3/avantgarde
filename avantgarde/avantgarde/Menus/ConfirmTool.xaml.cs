@@ -14,17 +14,17 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
+    //Mechanism to ensure user's intentions before executing a potentially destructive action
+    //Eduardo Battistini
     public sealed partial class ConfirmTool : UserControl, INotifyPropertyChanged
     {
         private int width { get; set; }
         private int height { get; set; }
         private int horizontalOffset { get; set; }
         private int verticalOffset { get; set; }
-
         public String message { get; set; }
 
         public bool decision = true;
@@ -35,14 +35,9 @@ namespace avantgarde.Menus
 
         public ConfirmTool()
         {
-            
             message = "Are you sure?";
             getWindowAttributes();
             this.InitializeComponent();
-        }
-
-        public bool isOpen() {
-            return confirmTool.IsOpen;
         }
         private void NotifyPropertyChanged(String propertyName = "")
         {
@@ -54,6 +49,11 @@ namespace avantgarde.Menus
             height = 250;
             horizontalOffset = (int)(Window.Current.Bounds.Width - width) / 2;
             verticalOffset = (int)(Window.Current.Bounds.Height - height) / 2;
+        }
+
+        public bool isOpen()
+        {
+            return confirmTool.IsOpen;
         }
 
         public void setMessage(String s) {

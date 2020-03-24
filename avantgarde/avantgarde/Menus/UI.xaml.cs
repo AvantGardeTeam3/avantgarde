@@ -17,10 +17,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace avantgarde.Menus
 {
+    //Main UI Class. Connects Toolbox events to main class (Fleur). Contains logic for switching between Drawing and Viewing Mode
     public sealed partial class UI : UserControl, INotifyPropertyChanged
 
     {
@@ -32,26 +32,21 @@ namespace avantgarde.Menus
         public String colourHex { get; set; }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
-
         public bool drawState { get; set; }
         public String drawStateIcon { get; set; }
 
         public Color colourSelection;
        
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-
-        private void NotifyPropertyChanged(String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void getWindowAttributes()
-        {
-            WIDTH = (int)Window.Current.Bounds.Width;
-            HEIGHT = (int)Window.Current.Bounds.Height;
-        }
+        public event EventHandler undoButtonClicked;
+        public event EventHandler redoButtonClicked;
+        public event EventHandler backgroundButtonClicked;
+        public event EventHandler goHomeButtonClicked;
+        public event EventHandler drawStateChanged;
+        public event EventHandler drawingPropertiesUpdated;
+        public event EventHandler colourSelectionUpdated;
+        public event EventHandler clearCanvas;
+        public event EventHandler saveIamgeClicked;
 
         public UI()
         {
@@ -82,6 +77,19 @@ namespace avantgarde.Menus
             libreToolBox.saveImageClicked += new EventHandler(saveIamge);
 
         }
+
+
+        private void NotifyPropertyChanged(String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void getWindowAttributes()
+        {
+            WIDTH = (int)Window.Current.Bounds.Width;
+            HEIGHT = (int)Window.Current.Bounds.Height;
+        }
+
 
         public InkDrawingAttributes getDrawingAttributes() {
             return libreToolBox.getDrawingAttributes();
@@ -123,6 +131,8 @@ namespace avantgarde.Menus
         public LibreToolBox getToolbox() {
             return libreToolBox;
         }
+
+        public ColourManager UIGetColourManager() { return libreToolBox.getColourManager(); }
         private void updateDrawStateUI() {
             if (drawState)
             {
@@ -141,16 +151,6 @@ namespace avantgarde.Menus
                 drawStateIcon = "/Assets/icons/icon_play.png";
             }
         }
-
-        public event EventHandler undoButtonClicked;
-        public event EventHandler redoButtonClicked;
-        public event EventHandler backgroundButtonClicked;
-        public event EventHandler goHomeButtonClicked;
-        public event EventHandler drawStateChanged;
-        public event EventHandler drawingPropertiesUpdated;
-        public event EventHandler colourSelectionUpdated;
-        public event EventHandler clearCanvas;
-        public event EventHandler saveIamgeClicked;
 
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
@@ -250,9 +250,6 @@ namespace avantgarde.Menus
             playButtonVisibility = "Visible";
             NotifyPropertyChanged();
         }
-
-
-        public ColourManager UIGetColourManager() { return libreToolBox.getColourManager(); }
 
     }
 }
