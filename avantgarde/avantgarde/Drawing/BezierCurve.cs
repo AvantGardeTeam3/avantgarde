@@ -125,7 +125,7 @@ namespace avantgarde.Drawing
             this.numOfReflection = data.reflections;
             UpdateStroke();
         }
-        public BezierCurve(Point p0, Point p3, InkDrawingAttributes drawingAttributes)
+        public BezierCurve(Point p0, Point p3, StrokeData data)
         {
             _p0 = p0;
             _p1 = p0;
@@ -133,7 +133,19 @@ namespace avantgarde.Drawing
             _p3 = p3;
             _midPoint = Util.MidPoint(_p0, _p3);
             _halfPoint = CurveFunction(0.5);
-            this.DrawingAttributes = drawingAttributes;
+            InkDrawingAttributes attributes;
+            if (data.brush.Equals("pencil"))
+            {
+                attributes = InkDrawingAttributes.CreateForPencil();
+            }
+            else
+            {
+                attributes = new InkDrawingAttributes();
+            }
+            attributes.Size = data.size;
+            attributes.Color = Configuration.ui.getColour(data.colourProfile, data.brightness, data.opacity);
+            this.DrawingAttributes = attributes;
+            this.strokeData = data;
             UpdateStroke();
         }
         private List<Point> GetPoints(int num)
@@ -165,7 +177,19 @@ namespace avantgarde.Drawing
             }
             InkStrokeBuilder isb = new InkStrokeBuilder();
             InkStroke stroke = isb.CreateStrokeFromInkPoints(inkPoints, System.Numerics.Matrix3x2.Identity);
-            stroke.DrawingAttributes = curve.DrawingAttributes;
+            StrokeData data = curve.strokeData;
+            InkDrawingAttributes attributes;
+            if (data.brush.Equals("pencil"))
+            {
+                attributes = InkDrawingAttributes.CreateForPencil();
+            }
+            else
+            {
+                attributes = new InkDrawingAttributes();
+            }
+            attributes.Size = data.size;
+            attributes.Color = Configuration.ui.getColour(data.colourProfile, data.brightness, data.opacity);
+            stroke.DrawingAttributes = attributes;
             return stroke;
         }
         private void MoveMidPoint()

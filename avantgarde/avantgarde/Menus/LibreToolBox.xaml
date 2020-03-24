@@ -29,7 +29,7 @@
             <uc:FileManager x:Name="fileManager"/>
             <uc:brushTool x:Name="brushTool" />
 
-            <Grid Grid.Column="0">
+            <Grid Grid.Column="0" Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto" MinHeight="750"/>
@@ -202,7 +202,7 @@
                 </Border>
             </Grid>
 
-            <Grid Grid.Column="2">
+            <Grid Grid.Column="2" Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>

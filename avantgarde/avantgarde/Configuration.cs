@@ -12,5 +12,6 @@ namespace avantgarde
         public static double GazeSnapDistance = 50.0;
         public static int JoystickMoveDistance = 10;
         public static Fleur fleur;
+        public static avantgarde.Menus.UI ui;
     }
 }

@@ -129,6 +129,7 @@ namespace avantgarde
             // drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
             Configuration.fleur = this;
+            Configuration.ui = this.GetUI();
             controller.HideGrid();
         }
 

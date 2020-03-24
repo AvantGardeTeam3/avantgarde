@@ -226,9 +226,9 @@ namespace avantgarde
             }
             return involvedCurves;
         }
-        public BezierCurve newCurve(Point p0, Point p3, InkDrawingAttributes attributes)
+        public BezierCurve newCurve(Point p0, Point p3, StrokeData data)
         {
-            BezierCurve curve = new BezierCurve(p0, p3, attributes);
+            BezierCurve curve = new BezierCurve(p0, p3, data);
             Point midPoint = curve.MidPoint;
             midPoints.Add(midPoint);
             if (!endPoints.Contains(p0)) { endPoints.Add(p0); }
