@@ -432,6 +432,11 @@ namespace avantgarde.Controller
                     this.StartLine(joystickPosition);
                     this.state = ControllerState.drawing;
                     break;
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
+                    this.state = ControllerState.idle;
+                    break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
@@ -460,6 +465,11 @@ namespace avantgarde.Controller
                     UpdateView();
                     this.state = ControllerState.idle;
                     break;
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
+                    this.state = ControllerState.idle;
+                    break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
@@ -480,6 +490,11 @@ namespace avantgarde.Controller
                     page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
                     state = ControllerState.idle;
+                    break;
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
+                    this.state = ControllerState.idle;
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
@@ -505,6 +520,11 @@ namespace avantgarde.Controller
                     container.DeleteSelected();
                     _selectedCurve = null;
                     UpdateView();
+                    this.state = ControllerState.idle;
+                    break;
+                case "MidKey":
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     this.state = ControllerState.idle;
                     break;
                 case "DownKey":
