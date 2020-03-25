@@ -116,6 +116,7 @@ namespace avantgarde
             ui.drawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);
             ui.undoButtonClicked += new EventHandler(undo);
             ui.redoButtonClicked += new EventHandler(redo);
+            ui.animationButtonClicked += new EventHandler(animationButtonClicked);
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
             ui.clearCanvas += new EventHandler(clearCanvas);
@@ -358,7 +359,6 @@ namespace avantgarde
         {
             Frame.Navigate(typeof(MainPage));
         }
-        
         private void drawStateButtonClicked(object sender, EventArgs e)
         {
             controller.Paused = !controller.Paused;
@@ -379,7 +379,10 @@ namespace avantgarde
             drawingAttributes.Color = colourSelection;
             radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
         }
-        
+        private void animationButtonClicked(object sender, EventArgs e)
+        {
+            controller.StartReplay();
+        }
         private void clearCanvas(object sender, EventArgs e)
         {
             controller.ClearCanvas();

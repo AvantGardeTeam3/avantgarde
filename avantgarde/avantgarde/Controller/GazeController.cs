@@ -886,6 +886,173 @@ namespace avantgarde.Controller
         {
             return thisController;
         }
+
+
+        private List<InkStroke> strokesToReplay = null;
+        private InkStrokeBuilder strokeBuilder = null;
+        private DispatcherTimer inkReplayTimer;
+        private DateTime beginTimeOfReplay;
+        private DateTimeOffset beginTimeOfRecordedSession;
+        private DateTimeOffset endTimeOfRecordedSession;
+        private TimeSpan durationOfRecordedSession;
+
+        private List<InkStroke> GetTimedStrokes(List<BezierCurve> curves)
+        {
+            List<InkStroke> retStrokes = new List<InkStroke>();
+            DateTime dateTime = DateTime.Now;
+            foreach (var curve in curves)
+            {
+                InkStroke newStroke = curve.InkStroke.Clone();
+                newStroke.StrokeStartedTime = dateTime;
+                newStroke.StrokeDuration = TimeSpan.FromSeconds(Configuration.StokeDuration);
+                retStrokes.Add(newStroke);
+
+                List<InkStroke> relStrokes = ((Fleur)page).TransformStroke(newStroke, curve.NumOfReflection);
+                relStrokes.ForEach(x => x.StrokeStartedTime = dateTime);
+                relStrokes.ForEach(x => x.StrokeDuration = TimeSpan.FromSeconds(Configuration.StokeDuration));
+
+                retStrokes.AddRange(relStrokes);
+                dateTime = dateTime.AddSeconds(Configuration.StokeDuration);
+            }
+            return retStrokes;
+        }
+
+        public void StartReplay()
+        {
+            page.GetUI().StartReplay();
+            if (strokeBuilder == null)
+            {
+                strokeBuilder = new InkStrokeBuilder();
+                inkReplayTimer = new DispatcherTimer();
+                inkReplayTimer.Interval = new TimeSpan(TimeSpan.TicksPerSecond / Configuration.ReplayFPS);
+                inkReplayTimer.Tick += InkReplayTimer_Tick;
+            }
+
+            strokesToReplay = GetTimedStrokes(drawingModel.getCurves());
+
+            //ReplayButton.IsEnabled = false;
+            //inkCanvas.InkPresenter.IsInputEnabled = false;
+            //ClearCanvasStrokeCache();
+
+            // Calculate the beginning of the earliest stroke and the end of the latest stroke.
+            // This establishes the time period during which the strokes were collected.
+            beginTimeOfRecordedSession = DateTimeOffset.MaxValue;
+            endTimeOfRecordedSession = DateTimeOffset.MinValue;
+            foreach (InkStroke stroke in strokesToReplay)
+            {
+                DateTimeOffset? startTime = stroke.StrokeStartedTime;
+                TimeSpan? duration = stroke.StrokeDuration;
+                if (startTime.HasValue && duration.HasValue)
+                {
+                    if (beginTimeOfRecordedSession > startTime.Value)
+                    {
+                        beginTimeOfRecordedSession = startTime.Value;
+                    }
+                    if (endTimeOfRecordedSession < startTime.Value + duration.Value)
+                    {
+                        endTimeOfRecordedSession = startTime.Value + duration.Value;
+                    }
+                }
+            }
+
+            // If we found at least one stroke with a timestamp, then we can replay.
+            if (beginTimeOfRecordedSession != DateTimeOffset.MaxValue)
+            {
+                page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+                durationOfRecordedSession = endTimeOfRecordedSession - beginTimeOfRecordedSession;
+
+                beginTimeOfReplay = DateTime.Now;
+                inkReplayTimer.Start();
+                // backupContainer = page.GetInkCanvas().InkPresenter.StrokeContainer;
+            }
+            else
+            {
+                // There was nothing to replay. Either there were no strokes at all,
+                // or none of the strokes had timestamps.
+                StopReplay();
+            }
+        }
+
+        private void StopReplay()
+        {
+            page.GetUI().EndReplay();
+            inkReplayTimer?.Stop();
+            page.GetInkCanvas().InkPresenter.IsInputEnabled = true;
+            drawingModel.getCurves().ForEach(x => x.UpdateStroke());
+            List<InkStroke> strokes = drawingModel.GetStrokes();
+            page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+            List<InkStroke> transformedStrokes = ((Fleur)page).Transfrom(strokes);
+            mandalaStrokes = transformedStrokes;
+            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(strokes);
+            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(transformedStrokes);
+        }
+        private void InkReplayTimer_Tick(object sender, object e)
+        {
+            var currentTimeOfReplay = DateTimeOffset.Now;
+            TimeSpan timeElapsedInReplay = currentTimeOfReplay - beginTimeOfReplay;
+
+            DateTimeOffset timeEquivalentInRecordedSession = beginTimeOfRecordedSession + timeElapsedInReplay;
+            page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(GetCurrentStrokesView(timeEquivalentInRecordedSession));
+
+            if (timeElapsedInReplay > durationOfRecordedSession)
+            {
+                StopReplay();
+            }
+        }
+        private List<InkStroke> GetCurrentStrokesView(DateTimeOffset time)
+        {
+            List<InkStroke> retStrokes = new List<InkStroke>();
+
+            // The purpose of this sample is to demonstrate the timestamp usage,
+            // not the algorithm. (The time complexity of the code is O(N^2).)
+            foreach (InkStroke stroke in strokesToReplay)
+            {
+                InkStroke s = GetPartialStroke(stroke, time);
+                if (s != null)
+                {
+                    retStrokes.Add(s);
+                }
+            }
+
+            return retStrokes;
+        }
+
+        private InkStroke GetPartialStroke(InkStroke stroke, DateTimeOffset time)
+        {
+            DateTimeOffset? startTime = stroke.StrokeStartedTime;
+            TimeSpan? duration = stroke.StrokeDuration;
+            if (!startTime.HasValue || !duration.HasValue)
+            {
+                // If a stroke does not have valid timestamp, then treat it as
+                // having been drawn before the playback started.
+                // We must return a clone of the stroke, because a single stroke cannot
+                // exist in more than one container.
+                return stroke.Clone();
+            }
+
+            if (time < startTime.Value)
+            {
+                // Stroke has not started
+                return null;
+            }
+
+            if (time >= startTime.Value + duration.Value)
+            {
+                // Stroke has already ended.
+                // We must return a clone of the stroke, because a single stroke cannot exist in more than one container.
+                return stroke.Clone();
+            }
+
+            // Stroke has started but not yet ended.
+            // Create a partial stroke on the assumption that the ink points are evenly distributed in time.
+            IReadOnlyList<InkPoint> points = stroke.GetInkPoints();
+            var portion = (time - startTime.Value).TotalMilliseconds / duration.Value.TotalMilliseconds;
+            var count = (int)((points.Count - 1) * portion) + 1;
+            InkStroke ret = strokeBuilder.CreateStrokeFromInkPoints(points.Take(count), System.Numerics.Matrix3x2.Identity, startTime, time - startTime);
+            ret.DrawingAttributes = stroke.DrawingAttributes;
+            return ret;
+        }
     }
     enum ControllerState
     {

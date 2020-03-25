@@ -25,6 +25,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch" />
         <Button
+            x:Name="toolBoxButton"
             Width="150"
             Height="150"
             Margin="30"
@@ -51,6 +52,7 @@
             Orientation="Horizontal"
             Spacing="30">
             <Button
+                x:Name="undoButton"
                 Width="150"
                 Height="150"
                 gaze:GazeInput.DwellDuration="00:00:00.4000000"
@@ -73,6 +75,7 @@
             </Button>
 
             <Button
+                x:Name="redoButton"
                 Width="150"
                 Height="150"
                 gaze:GazeInput.DwellDuration="00:00:00.4000000"
@@ -126,7 +129,7 @@
             Background="LightGray"
             BorderBrush="#cdff59"
             BorderThickness="2"
-            Click="changeDrawState"
+            Click="animationButton_Click"
             CornerRadius="5,5,5,5"
             Opacity="0.60">
             <Image

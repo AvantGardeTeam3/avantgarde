@@ -40,6 +40,7 @@ namespace avantgarde.Menus
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler undoButtonClicked;
         public event EventHandler redoButtonClicked;
+        public event EventHandler animationButtonClicked;
         public event EventHandler backgroundButtonClicked;
         public event EventHandler goHomeButtonClicked;
         public event EventHandler drawStateChanged;
@@ -251,5 +252,28 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
+        private void animationButton_Click(object sender, RoutedEventArgs e)
+        {
+            animationButtonClicked?.Invoke(this, EventArgs.Empty);
+            NotifyPropertyChanged();
+        }
+
+        public void StartReplay()
+        {
+            animationButton.IsEnabled = false;
+            undoButton.IsEnabled = false;
+            redoButton.IsEnabled = false;
+            toolBoxButton.IsEnabled = false;
+            playButton.IsEnabled = false;
+        }
+
+        public void EndReplay()
+        {
+            animationButton.IsEnabled = true;
+            undoButton.IsEnabled = true;
+            redoButton.IsEnabled = true;
+            toolBoxButton.IsEnabled = true;
+            playButton.IsEnabled = true;
+        }
     }
 }
