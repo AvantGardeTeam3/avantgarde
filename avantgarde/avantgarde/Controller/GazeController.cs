@@ -41,7 +41,7 @@ namespace avantgarde.Controller
             }
             set
             {
-                if(_paused != value)
+                if (_paused != value)
                 {
                     if (value) Pause();
                     else Resume();
@@ -68,7 +68,7 @@ namespace avantgarde.Controller
         public ColourManager colourManager;
         public InkCanvas inkCanvas { get; set; }
 
-        
+
         private List<Shape> indicators = new List<Shape>();
 
         private BezierCurve _selectedCurve = null;
@@ -203,7 +203,7 @@ namespace avantgarde.Controller
         private void IdleGazeDwell(Point point)
         {
             List<Point> controlPoints = new List<Point>();
-            if(_selectedCurve != null)
+            if (_selectedCurve != null)
             {
                 controlPoints.Add(_selectedCurve.P1);
                 controlPoints.Add(_selectedCurve.P2);
@@ -238,7 +238,7 @@ namespace avantgarde.Controller
                 ActiveVerticalJoystick = InvokeVerticalJoystick(endPoint.Value, EndPointJoystickEventHandler);
                 state = ControllerState.selectP0P3;
             }
-            else if (halfPoint.HasValue)    
+            else if (halfPoint.HasValue)
             {
                 selectedPoint = halfPoint.Value;
                 _selectedCurve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
@@ -255,20 +255,18 @@ namespace avantgarde.Controller
 
         private void Pause()
         {
-            // InkStrokeContainer container = page.GetInkCanvas().InkPresenter.StrokeContainer;
             List<BezierCurve> curves = drawingModel.getCurves();
             mandalaStrokes = new List<InkStroke>();
-            foreach(BezierCurve curve in curves)
+            foreach (BezierCurve curve in curves)
             {
-                // add all mandala stroke
                 List<InkStroke> strokes = ((Fleur)page).TransformStroke(curve.InkStroke, curve.NumOfReflection);
                 strokes.ForEach(x => x.DrawingAttributes = curve.InkStroke.DrawingAttributes);
                 page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(strokes);
                 mandalaStrokes.AddRange(strokes);
-                // container.AddStroke(curve.InkStroke.Clone());
             }
-            //backUpContainer = page.GetInkCanvas().InkPresenter.StrokeContainer;
-            //page.GetInkCanvas().InkPresenter.StrokeContainer = container;
+            if (ActiveJoystick != null) page.GetCanvas().Children.Remove(ActiveJoystick);
+            if (ActiveVerticalJoystick != null) page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+            state = ControllerState.idle;
             UpdateView();
         }
 
@@ -303,7 +301,7 @@ namespace avantgarde.Controller
             BezierCurve bezierCurve;
             if (sp.HasValue)
             {
-                bezierCurve = drawingModel.newCurve(lineStartPoint, sp.Value, ((Fleur) page).getStrokeData());
+                bezierCurve = drawingModel.newCurve(lineStartPoint, sp.Value, ((Fleur)page).getStrokeData());
             }
             else
             {
@@ -370,7 +368,7 @@ namespace avantgarde.Controller
             page.GetInkCanvas().InkPresenter.StrokeContainer.DeleteSelected();
             curve = drawingModel.moveControlPoint(selectedPoint.Value, point);
             page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(curve.InkStroke);
-            
+
             //_selectedCurve = null;
             //UpdateCanvas();
             UpdateIndicator();
@@ -430,14 +428,13 @@ namespace avantgarde.Controller
             {
                 case "UpKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     this.StartLine(joystickPosition);
                     this.state = ControllerState.drawing;
                     break;
                 case "DownKey":
-                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    //this.StartMovingP0P3(selectedPoint.Value);
-                    //this.state = ControllerState.movingP0P3;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     ActiveJoystick = InvokeJoystick(joystickPosition, MoveEndPointJoystickEventHandler);
                     break;
             }
@@ -452,10 +449,8 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
-                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    //this.StartMovingMid(selectedPoint.Value);
-                    //this.state = ControllerState.movingMid;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                     drawingModel.deleteCurve(curve);
                     curve.InkStroke.Selected = true;
@@ -466,6 +461,7 @@ namespace avantgarde.Controller
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointJoystickEventHandler);
                     break;
             }
@@ -481,13 +477,12 @@ namespace avantgarde.Controller
             {
                 case "UpKey":
                     page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     state = ControllerState.idle;
                     break;
                 case "DownKey":
-                    //this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
-                    //StartMovingControl(selectedPoint.Value);
-                    //this.state = ControllerState.movingControl;
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     ActiveJoystick = InvokeJoystick(joystickPosition, MoveControlPointJoystickEventHandler);
                     break;
             }
@@ -501,6 +496,7 @@ namespace avantgarde.Controller
             {
                 case "UpKey":
                     page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                     drawingModel.deleteCurve(curve);
                     curve.InkStroke.Selected = true;
@@ -511,6 +507,7 @@ namespace avantgarde.Controller
                     break;
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    ActiveVerticalJoystick = null;
                     this.state = ControllerState.idle;
                     break;
             }
@@ -547,7 +544,14 @@ namespace avantgarde.Controller
             };
             ActiveJoystick.RenderTransform = translateTarget;
             EndMovingP0P3(joystickPosition);
-            if(!exitFlag) this.state = ControllerState.movingP0P3;
+            if (!exitFlag)
+            {
+                this.state = ControllerState.movingP0P3;
+            }
+            else
+            {
+                ActiveJoystick = null;
+            }
             // drawingModel.moveEndPoints(selectedPoint.Value, joystickPosition);
             selectedPoint = joystickPosition;
             // UpdateCanvas();
@@ -586,13 +590,14 @@ namespace avantgarde.Controller
             };
             ActiveJoystick.RenderTransform = translateTarget;
             EndMovingMid(joystickPosition);
-            if(!exitFlag) this.state = ControllerState.movingMid;
+            if (!exitFlag) { this.state = ControllerState.movingMid; }
+            else { ActiveJoystick = null; }
             // drawingModel.moveMidPoint(selectedPoint.Value, joystickPosition);
             selectedPoint = joystickPosition;
             // UpdateCanvas();
             UpdateIndicator();
         }
-        
+
         private void MoveControlPointJoystickEventHandler(object sender, StateChangedEventArgs args)
         {
             if (args.PointerState != PointerState.Dwell) return;
@@ -625,13 +630,20 @@ namespace avantgarde.Controller
             };
             ActiveJoystick.RenderTransform = translateTarget;
             EndMovingControl(joystickPosition);
-            if(!exitFlag) this.state = ControllerState.movingControl;
+            if (!exitFlag)
+            {
+                this.state = ControllerState.movingControl;
+            }
+            else
+            {
+                ActiveJoystick = null;
+            }
             // drawingModel.moveControlPoint(selectedPoint.Value, joystickPosition);
             selectedPoint = joystickPosition;
             // UpdateCanvas();
             UpdateIndicator();
         }
-        
+
         public void Undo()
         {
             BezierCurve curve = drawingModel.undo();
@@ -687,7 +699,7 @@ namespace avantgarde.Controller
             //container.AddStrokes(drawingModel.GetStrokes());
             //page.GetInkCanvas().InkPresenter.StrokeContainer = container;
         }
-        
+
         private void UpdateView()
         {
             if (Paused)
@@ -764,7 +776,7 @@ namespace avantgarde.Controller
                 AddCurve(_selectedCurve);
             }
 
-            
+
             List<Point> points = drawingModel.GetEndPoints();
             points.ForEach(x => AddIndicator(x));
             List<Point> midPoints = drawingModel.GetMidPoints();
@@ -797,7 +809,7 @@ namespace avantgarde.Controller
             drawingModel.Clear();
             page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
             _selectedCurve = null;
-            foreach(StrokeData data in strokeDatas)
+            foreach (StrokeData data in strokeDatas)
             {
                 InkDrawingAttributes attributes;
                 if (data.brush.Equals("pencil"))
@@ -819,7 +831,7 @@ namespace avantgarde.Controller
                 page.GetInkCanvas().InkPresenter.StrokeContainer.AddStroke(curve.InkStroke);
             }
             List<BezierCurve> curves = drawingModel.getCurves();
-            if(mandalaStrokes != null) mandalaStrokes.Clear();
+            if (mandalaStrokes != null) mandalaStrokes.Clear();
             Resume();
             Pause();
         }
@@ -870,7 +882,7 @@ namespace avantgarde.Controller
             this.indicators.ForEach(x => this.page.GetCanvas().Children.Remove(x));
             this.indicators.Clear();
         }
-        
+
         private void HideIndicator()
         {
             this.indicators.ForEach(x => x.Visibility = Visibility.Collapsed);
@@ -979,12 +991,15 @@ namespace avantgarde.Controller
             inkReplayTimer?.Stop();
             page.GetInkCanvas().InkPresenter.IsInputEnabled = true;
             drawingModel.getCurves().ForEach(x => x.UpdateStroke());
-            List<InkStroke> strokes = drawingModel.GetStrokes();
             page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
-            List<InkStroke> transformedStrokes = ((Fleur)page).Transfrom(strokes);
-            mandalaStrokes = transformedStrokes;
-            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(strokes);
-            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(transformedStrokes);
+            mandalaStrokes.Clear();
+            foreach (BezierCurve curve in drawingModel.getCurves())
+            {
+                InkStroke stroke = curve.InkStroke;
+                mandalaStrokes.AddRange(((Fleur)page).TransformStroke(stroke, curve.NumOfReflection));
+            }
+            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(drawingModel.GetStrokes());
+            page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(mandalaStrokes);
         }
         private void InkReplayTimer_Tick(object sender, object e)
         {
