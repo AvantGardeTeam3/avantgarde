@@ -453,6 +453,7 @@ namespace avantgarde.Controller
                     ActiveVerticalJoystick = null;
                     BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                     drawingModel.deleteCurve(curve);
+                    if (curve == _selectedCurve) _selectedCurve = null;
                     curve.InkStroke.Selected = true;
                     container.DeleteSelected();
                     _selectedCurve = null;
@@ -499,6 +500,7 @@ namespace avantgarde.Controller
                     ActiveVerticalJoystick = null;
                     BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                     drawingModel.deleteCurve(curve);
+                    if (curve == _selectedCurve) _selectedCurve = null;
                     curve.InkStroke.Selected = true;
                     container.DeleteSelected();
                     _selectedCurve = null;
@@ -651,6 +653,10 @@ namespace avantgarde.Controller
             {
                 curve.InkStroke.Selected = true;
                 page.GetInkCanvas().InkPresenter.StrokeContainer.DeleteSelected();
+            }
+            if (curve == _selectedCurve)
+            {
+                _selectedCurve = null;
             }
             Resume();
             Pause();
