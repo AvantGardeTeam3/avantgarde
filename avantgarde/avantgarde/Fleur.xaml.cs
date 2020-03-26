@@ -120,7 +120,7 @@ namespace avantgarde
             ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
             ui.clearCanvas += new EventHandler(clearCanvas);
-            ui.saveIamgeClicked += saveIamge;
+            ui.saveImageClick += saveImage;
 
             drawingModel = new DrawingModel();
             // controller = new Controller.GazeController(this);       
@@ -134,20 +134,16 @@ namespace avantgarde
             controller.HideGrid();
         }
 
-        private async void saveIamge(object sender, EventArgs e)
+        private async void saveImage(object sender, EventArgs e)
         {
             //InkCanvas inkCanvas = ControllerFactory.gazeController.inkCanvas;
             Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
 
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
-            var savePicker = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.PicturesLibrary
-            };
-            savePicker.FileTypeChoices.Add(".jpg", new[] { ".jpg" });
-            savePicker.SuggestedFileName = "Avant Garde Project";
-            StorageFile file = await savePicker.PickSaveFileAsync();
+            StorageFolder folder = Windows.Storage.KnownFolders.PicturesLibrary;
+            String fileName = "avant-garde-" + DateTime.Now.ToString().Replace("/", "-").Replace(" ", "-").Replace(":","-") + ".jpg";
+            StorageFile file = await folder.CreateFileAsync(fileName, Windows.Storage.CreationCollisionOption.ReplaceExisting);
             using (var ds = renderTarget.CreateDrawingSession())
             {
                 ds.Clear(background);

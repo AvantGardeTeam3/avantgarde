@@ -47,7 +47,7 @@ namespace avantgarde.Menus
         public event EventHandler drawingPropertiesUpdated;
         public event EventHandler colourSelectionUpdated;
         public event EventHandler clearCanvas;
-        public event EventHandler saveIamgeClicked;
+        public event EventHandler saveImageClick;
 
         public UI()
         {
@@ -75,7 +75,7 @@ namespace avantgarde.Menus
             libreToolBox.clearCanvasButtonClicked += new EventHandler(clearCanvasButtonClicked);
             libreToolBox.popupOpened += new EventHandler(hidePlayButton);
             libreToolBox.popupClosed += new EventHandler(showPlayButton);
-            libreToolBox.saveImageClicked += new EventHandler(saveIamge);
+            libreToolBox.saveImageClicked += new EventHandler(saveImage);
 
         }
 
@@ -227,9 +227,9 @@ namespace avantgarde.Menus
             backgroundButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void saveIamge(object sender, EventArgs e)
+        private void saveImage(object sender, EventArgs e)
         {
-            saveIamgeClicked?.Invoke(this, EventArgs.Empty);
+            saveImageClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void toolboxClosed(object sender, EventArgs e) {
