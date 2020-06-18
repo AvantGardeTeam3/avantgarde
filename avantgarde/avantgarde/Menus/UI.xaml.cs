@@ -237,6 +237,7 @@ namespace avantgarde.Menus
             playButtonPosition = "Right";
             actionPanel.Visibility = Visibility.Visible;
             animationButton.Visibility = Visibility.Visible;
+            playButtonVisibility = "Visible";
             NotifyPropertyChanged();
         }
 

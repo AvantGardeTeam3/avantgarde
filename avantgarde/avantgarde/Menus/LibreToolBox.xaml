@@ -262,6 +262,7 @@
                             Spacing="10">
 
                             <Button
+                                x:Name="drawButton"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
@@ -277,6 +278,7 @@
                             </Button>
 
                             <Button
+                                x:Name="clearButton"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
@@ -305,6 +307,7 @@
                             Spacing="10">
 
                             <Button
+                                x:Name="tutorialButton"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
@@ -323,6 +326,7 @@
 
 
                             <Button
+                                x:Name="exitButton"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
@@ -349,6 +353,7 @@
                             Spacing="10">
 
                             <Button
+                                x:Name="saveButton"
                                 Width="260"
                                 Height="75"
                                 HorizontalAlignment="Center"
@@ -371,6 +376,7 @@
                             </Button>
 
                             <Button
+                                x:Name="loadButton"
                                 Width="260"
                                 Height="75"
                                 HorizontalAlignment="Center"
@@ -393,6 +399,7 @@
                             </Button>
 
                             <Button
+                                x:Name="exportButton"
                                 Width="260"
                                 Height="75"
                                 HorizontalAlignment="Center"
@@ -418,16 +425,17 @@
 
 
                             <Button
-                                Width="90"
-                                Height="90"
-                                Padding="0,0,0,10"
+                                Width="260"
+                                Height="75"
                                 HorizontalAlignment="Center"
                                 Background="Transparent"
+                                BorderBrush="#ff728e"
+                                BorderThickness="2"
                                 Click="closeToolbox"
                                 CornerRadius="5,5,5,5">
                                 <Image
-                                    Width="60"
-                                    Height="60"
+                                    Width="50"
+                                    Height="50"
                                     VerticalAlignment="Center"
                                     Source="/Assets/icons/icon_x.png" />
                             </Button>

@@ -37,6 +37,7 @@ namespace avantgarde.Menus
         private int RESTRICTED_GO_HOME = 2;
         private int RESTRICTED_SAVE = 3;
         private int RESTRICTED_LOAD = 4;
+        private int RESTRICTED_EXPORT = 5;
 
         public int selectedPalette = 0;
 
@@ -54,7 +55,7 @@ namespace avantgarde.Menus
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
-
+        private Button selectedButton;
 
         public Color colourSelection;
 
@@ -103,10 +104,10 @@ namespace avantgarde.Menus
             brushSize = 10;
             brushTool.brushSize = this.brushSize;
             brushTool.mandalaLines = this.mandalaLines;
-          
-   
-            
 
+
+
+            selectButton(tutorialButton);
             tutorial.open(1);
 
             colourManager.colourManagerClosed += new EventHandler(popupClosedEvent);
@@ -362,10 +363,12 @@ namespace avantgarde.Menus
             clearPopups();
             fileManager.open(FileManager.SAVING);
             popupOpened?.Invoke(this, EventArgs.Empty);
+            selectButton(saveButton);
         }
 
         private void save(object sender, EventArgs e) {
             clearPopups();
+            selectButton(saveButton);
             popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
             confirmTool.openConfirmTool();
@@ -377,18 +380,26 @@ namespace avantgarde.Menus
             clearPopups();
             fileManager.open(FileManager.LOADING);
             popupOpened?.Invoke(this, EventArgs.Empty);
+            selectButton(loadButton);
         }
 
         private void load(object sender, EventArgs e)
         {
             clearPopups();
+            selectButton(loadButton);
             popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to load from Slot " + fileManager.selectedSlot.ToString() + "? \n The current canvas will be lost.");
             confirmTool.openConfirmTool();
         }
         private void exportButtonClicked(object sender, RoutedEventArgs e)
         {
-            saveImageClicked?.Invoke(this, EventArgs.Empty);
+            restrictedID = RESTRICTED_EXPORT;
+            clearPopups();
+            confirmTool.setMessage("Are you sure you want to export the canvas?");
+            confirmTool.openConfirmTool();
+            // clear strokeData and user/mandala strokes
+            popupOpened?.Invoke(this, EventArgs.Empty);
+            selectButton(exportButton);
         }
 
 
@@ -410,11 +421,25 @@ namespace avantgarde.Menus
             clearPopups();
             brushTool.open();
             popupOpened?.Invoke(this, EventArgs.Empty);
+            selectButton(drawButton);
+           
         }
+
+        private void selectButton(Button b) {
+            b.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
+            selectedButton = b;
+        }
+
+
 
         public ColourManager getColourManager() {
 
             return colourManager;
+        }
+
+        private void clearButtonSelections()
+        {
+            selectedButton.Background = new SolidColorBrush(Colors.Transparent);
         }
 
         private void executeRestricted() {
@@ -437,9 +462,13 @@ namespace avantgarde.Menus
             {
                 fileManager.save();
             }
-            else if (restrictedID == RESTRICTED_LOAD) 
+            else if (restrictedID == RESTRICTED_LOAD)
             {
                 fileManager.load();
+            }
+            else if (restrictedID == RESTRICTED_EXPORT)
+            {
+                saveImageClicked?.Invoke(this, EventArgs.Empty);
             }
             
         }
@@ -477,6 +506,7 @@ namespace avantgarde.Menus
                 executeRestricted();
             }
             restrictedID = RESTRICTED_NONE;
+            clearButtonSelections();
         }
         private void updateColourSelection(object sender, EventArgs e)
         {
@@ -498,7 +528,7 @@ namespace avantgarde.Menus
             confirmTool.setMessage("Are you sure you wish to exit?");
             confirmTool.openConfirmTool();
             popupOpened?.Invoke(this, EventArgs.Empty);
-
+            selectButton(exitButton);
         }
 
         private void updateBackground(object sender, EventArgs e) {
@@ -525,6 +555,7 @@ namespace avantgarde.Menus
             confirmTool.openConfirmTool();
             // clear strokeData and user/mandala strokes
             popupOpened?.Invoke(this, EventArgs.Empty);
+            selectButton(clearButton);
         }
 
         private void editPalette(object sender, RoutedEventArgs e)
@@ -543,7 +574,9 @@ namespace avantgarde.Menus
 
         private void popupClosedEvent(object sender, EventArgs e)
         {
+            clearButtonSelections();
             popupClosed?.Invoke(this, EventArgs.Empty);
+            
         }
 
         private void initTutorial(object sender, RoutedEventArgs e)
