@@ -8,14 +8,14 @@
 
   <Identity
     Name="66388ed1-4897-4872-b83a-bc05d8cc320c"
-    Publisher="CN=15017"
+    Publisher="CN=Team3"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="66388ed1-4897-4872-b83a-bc05d8cc320c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>avantgarde</DisplayName>
-    <PublisherDisplayName>15017</PublisherDisplayName>
+    <PublisherDisplayName>Team3</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
