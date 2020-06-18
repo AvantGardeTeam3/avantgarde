@@ -95,7 +95,7 @@ namespace avantgarde.Menus
             drawingAttributes.Size = new Size(10, 10);
             brushTool.drawingAttributes = this.drawingAttributes;
 
-            autoswitchButton.Background = new SolidColorBrush(hexToColor("#a0cdff59"));
+            autoswitchButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
             updateBackgroundButton();
             initColourPalette(this.colourPaletteData);
             
@@ -334,7 +334,7 @@ namespace avantgarde.Menus
 
             if (autoswitch)
             {
-                autoswitchButton.Background = new SolidColorBrush(hexToColor("#a0cdff59"));
+                autoswitchButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
             }
             else
             {
@@ -534,7 +534,7 @@ namespace avantgarde.Menus
 
             if (editingPalette)
             {
-                editPaletteButton.Background = new SolidColorBrush(hexToColor("#a0cdff59"));
+                editPaletteButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
             }
             else {
                 editPaletteButton.Background = new SolidColorBrush(Colors.Transparent);

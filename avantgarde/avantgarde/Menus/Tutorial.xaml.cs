@@ -19,8 +19,8 @@ using Windows.UI.Xaml.Navigation;
 
 namespace avantgarde.Menus
 {
-    // Tutorial logic for switching between tutorial pages
     //Eduardo Battistini
+    // Tutorial logic for switching between tutorial pages
     public sealed partial class Tutorial : Page, INotifyPropertyChanged
     {
 

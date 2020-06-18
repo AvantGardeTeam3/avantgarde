@@ -31,6 +31,17 @@
             Grid.Column="1"
             Background="{x:Bind backgroundHex, Mode=OneWay}">
 
+
+            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0" />
+
+            <uc2:UI
+                x:Name="ui"
+                Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Canvas.ZIndex="2" />
+
             <Canvas
                 x:Name="canvas"
                 Background="Transparent"
@@ -39,7 +50,7 @@
                     x:Name="radialProgressBar"
                     Width="50"
                     Height="50"
-                    Canvas.ZIndex="3"
+                    Canvas.ZIndex="0"
                     Foreground="Black"
                     Maximum="100"
                     Minimum="0"
@@ -52,15 +63,6 @@
                     Height="200"
                     Visibility="Collapsed" />
             </Canvas>
-            <InkCanvas x:Name="inkCanvas" Canvas.ZIndex="0" />
-
-            <uc2:UI
-                x:Name="ui"
-                Grid.Column="1"
-                Grid.Row="1"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                Canvas.ZIndex="2" />
 
         </Grid>
 

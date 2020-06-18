@@ -15,6 +15,7 @@
         x:Name="libreToolBox"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
+        Canvas.ZIndex="1"
         SizeChanged="libreToolBox_SizeChanged">
 
 
@@ -34,165 +35,194 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <uc:ColourManager x:Name="colourManager" />
-            <uc:ConfirmTool x:Name="confirmTool" />
-            <uc:FileManager x:Name="fileManager" />
-            <uc:BrushTools x:Name="brushTool" />
-            <uc:Tutorial x:Name="tutorial" Background="Transparent" />
+            <uc:ColourManager x:Name="colourManager" Canvas.ZIndex="1" />
+            <uc:ConfirmTool x:Name="confirmTool" Canvas.ZIndex="1" />
+            <uc:FileManager x:Name="fileManager" Canvas.ZIndex="1" />
+            <uc:BrushTools x:Name="brushTool" Canvas.ZIndex="1" />
+            <uc:Tutorial
+                x:Name="tutorial"
+                Background="Transparent"
+                Canvas.ZIndex="1" />
 
             <Grid Grid.Column="0" Margin="30,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" MinHeight="750" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border
                     Grid.Row="1"
-                    Width="130"
+                    Width="Auto"
                     Background="Black"
                     BorderBrush="#4ffff6"
                     BorderThickness="2"
                     CornerRadius="5,5,5,5"
-                    Opacity="0.8" />
-                <Border
-                    Grid.Row="1"
-                    Width="130"
-                    Background="Transparent"
-                    BorderBrush="#4ffff6"
-                    BorderThickness="2"
-                    CornerRadius="5,5,5,5">
-                    <StackPanel
-                        Width="Auto"
-                        Margin="5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Orientation="Vertical"
-                        Spacing="5">
+                    Opacity="0.8">
 
-
-                        <Button
-                            x:Name="colourPalette0"
-                            Width="85"
-                            Height="85"
-                            Margin="5"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Width="Auto"
+                            Margin="10,10,5,0"
                             HorizontalAlignment="Center"
-                            Background="{x:Bind colourPalette[0], Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="colourPalette0Clicked"
-                            CornerRadius="5,5,5,5" />
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
 
-                        <Button
-                            x:Name="colourPalette1"
-                            Width="85"
-                            Height="85"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="{x:Bind colourPalette[1], Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="colourPalette1Clicked"
-                            CornerRadius="5,5,5,5" />
-
-                        <Button
-                            x:Name="colourPalette2"
-                            Width="85"
-                            Height="85"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="{x:Bind colourPalette[2], Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="colourPalette2Clicked"
-                            CornerRadius="5,5,5,5" />
-
-                        <Button
-                            x:Name="colourPalette3"
-                            Width="85"
-                            Height="85"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="{x:Bind colourPalette[3], Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="colourPalette3Clicked"
-                            CornerRadius="5,5,5,5" />
-
-                        <Button
-                            x:Name="colourPalette4"
-                            Width="85"
-                            Height="85"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="{x:Bind colourPalette[4], Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="colourPalette4Clicked"
-                            CornerRadius="5,5,5,5" />
-
-                        <Button
-                            x:Name="autoswitchButton"
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="toggleAutoSwitch"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
+                            <Button
+                                x:Name="colourPalette0"
+                                Width="125"
+                                Height="125"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="13"
-                                Foreground="White"
-                                Text="AutoSwitch" />
+                                Background="{x:Bind colourPalette[0], Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="colourPalette0Clicked"
+                                CornerRadius="5,5,5,5" />
 
-
-                        </Button>
-
-                        <Button
-                            x:Name="editPaletteButton"
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="editPalette"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
+                            <Button
+                                x:Name="colourPalette2"
+                                Width="125"
+                                Height="125"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="13"
-                                Foreground="White"
-                                Text="Edit Palette" />
+                                Background="{x:Bind colourPalette[2], Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="colourPalette2Clicked"
+                                CornerRadius="5,5,5,5" />
 
+                            <Button
+                                x:Name="colourPalette4"
+                                Width="125"
+                                Height="125"
+                                HorizontalAlignment="Center"
+                                Background="{x:Bind colourPalette[4], Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="colourPalette4Clicked"
+                                CornerRadius="5,5,5,5" />
 
-                        </Button>
+                        </StackPanel>
 
-
-                        <Button
-                            Width="85"
-                            Height="85"
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Width="Auto"
+                            Margin="5,10,10,0"
                             HorizontalAlignment="Center"
-                            Background="{x:Bind backgroundHex, Mode=OneWay}"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="setBackground"
-                            CornerRadius="5,5,5,5"
-                            Visibility="Visible" />
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
+
+                            <Button
+                                x:Name="colourPalette1"
+                                Width="125"
+                                Height="125"
+                                HorizontalAlignment="Center"
+                                Background="{x:Bind colourPalette[1], Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="colourPalette1Clicked"
+                                CornerRadius="5,5,5,5" />
+
+                            <Button
+                                x:Name="colourPalette3"
+                                Width="125"
+                                Height="125"
+                                HorizontalAlignment="Center"
+                                Background="{x:Bind colourPalette[3], Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="colourPalette3Clicked"
+                                CornerRadius="5,5,5,5" />
+
+                            <Button
+                                Width="125"
+                                Height="125"
+                                HorizontalAlignment="Center"
+                                Background="{x:Bind backgroundHex, Mode=OneWay}"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="setBackground"
+                                Content="Background"
+                                CornerRadius="5,5,5,5"
+                                FontFamily="Tahoma"
+                                FontSize="15"
+                                Foreground="White"
+                                Visibility="Visible" />
 
 
+                        </StackPanel>
 
-                    </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10,0,10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
+
+                            <Button
+                                x:Name="autoswitchButton"
+                                Width="260"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="toggleAutoSwitch"
+                                CornerRadius="5,5,5,5"
+                                Opacity="1">
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    Text="AutoSwitch" />
+
+
+                            </Button>
+
+                            <Button
+                                x:Name="editPaletteButton"
+                                Width="260"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="editPalette"
+                                CornerRadius="5,5,5,5"
+                                Opacity="1">
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    Text="Edit Palette" />
+
+
+                            </Button>
+
+
+                        </StackPanel>
+
+                    </Grid>
+
                 </Border>
             </Grid>
 
@@ -200,161 +230,215 @@
             <Grid Grid.Column="2" Margin="0,0,30,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" MinHeight="750" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border
                     Grid.Row="1"
-                    Width="130"
+                    Width="Auto"
                     Background="Black"
-                    CornerRadius="5,5,5,5"
-                    Opacity="0.8" />
-                <Border
-                    Grid.Row="1"
-                    Width="130"
-                    Background="Transparent"
                     BorderBrush="#4ffff6"
                     BorderThickness="2"
-                    CornerRadius="5,5,5,5">
-                    <StackPanel
-                        Width="Auto"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Orientation="Vertical"
-                        Spacing="12">
+                    CornerRadius="5,5,5,5"
+                    Opacity="0.8">
 
-                        <Button
-                            Width="90"
-                            Height="90"
-                            Padding="0,0,0,10"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Width="Auto"
+                            Margin="10,10,5,0"
                             HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="openBrushTool"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_draw.png" />
-                        </Button>
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
 
-
-                        <Button
-                            Width="95"
-                            Height="95"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="initTutorial"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_book.png" />
-                        </Button>
-
-                        <Button
-                            Width="90"
-                            Height="90"
-                            Padding="0,0,0,10"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="clearCanvas"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_trash.png" />
-                        </Button>
-
-
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="saveButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
+                            <Button
+                                Width="125"
+                                Height="125"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Save" />
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="openBrushTool"
+                                CornerRadius="5,5,5,5">
+                                <Image
+                                    Width="90"
+                                    Height="90"
+                                    Source="/Assets/icons/icon_draw.png" />
+                            </Button>
 
-
-                        </Button>
-
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="loadButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
-
-                            <TextBlock
+                            <Button
+                                Width="125"
+                                Height="125"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Load" />
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="clearCanvas"
+                                CornerRadius="5,5,5,5">
+                                <Image
+                                    Width="90"
+                                    Height="90"
+                                    Source="/Assets/icons/icon_trash.png" />
+                            </Button>
 
 
-                        </Button>
+                        </StackPanel>
 
-                        <Button
-                            Width="90"
-                            Height="50"
-                            Margin="5"
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Width="Auto"
+                            Margin="5,10,10,0"
                             HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderBrush="White"
-                            BorderThickness="2"
-                            Click="exportButtonClicked"
-                            CornerRadius="5,5,5,5"
-                            Opacity="1">
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
 
-                            <TextBlock
+                            <Button
+                                Width="125"
+                                Height="125"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontFamily="Tahoma"
-                                FontSize="16"
-                                Foreground="White"
-                                Text="Export" />
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="initTutorial"
+                                CornerRadius="5,5,5,5">
+                                <Image
+                                    Width="90"
+                                    Height="90"
+                                    Source="/Assets/icons/icon_book.png" />
+                            </Button>
 
 
-                        </Button>
 
-                        <Button
-                            Width="90"
-                            Height="90"
-                            Padding="0,0,0,10"
+
+                            <Button
+                                Width="125"
+                                Height="125"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="goHome"
+                                CornerRadius="5,5,5,5">
+                                <Image
+                                    Width="90"
+                                    Height="90"
+                                    Source="/Assets/icons/icon_exit.png" />
+                            </Button>
+
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10,0,10"
                             HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="goHome"
-                            CornerRadius="5,5,5,5">
-                            <Image Source="/Assets/icons/icon_exit.png" />
-                        </Button>
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="10">
+
+                            <Button
+                                Width="260"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="saveButtonClicked"
+                                CornerRadius="5,5,5,5"
+                                Opacity="1">
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    Text="Save" />
 
 
-                        <Button
-                            Width="90"
-                            Height="90"
-                            Padding="0,0,0,10"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="closeToolbox"
-                            CornerRadius="5,5,5,5">
-                            <Image
-                                Width="60"
-                                Height="60"
-                                VerticalAlignment="Center"
-                                Source="/Assets/icons/icon_x.png" />
-                        </Button>
+                            </Button>
+
+                            <Button
+                                Width="260"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="loadButtonClicked"
+                                CornerRadius="5,5,5,5"
+                                Opacity="1">
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    Text="Load" />
 
 
-                    </StackPanel>
+                            </Button>
+
+                            <Button
+                                Width="260"
+                                Height="75"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="White"
+                                BorderThickness="2"
+                                Click="exportButtonClicked"
+                                CornerRadius="5,5,5,5"
+                                Opacity="1">
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"
+                                    Text="Export" />
+
+
+                            </Button>
+
+
+
+
+                            <Button
+                                Width="90"
+                                Height="90"
+                                Padding="0,0,0,10"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                Click="closeToolbox"
+                                CornerRadius="5,5,5,5">
+                                <Image
+                                    Width="60"
+                                    Height="60"
+                                    VerticalAlignment="Center"
+                                    Source="/Assets/icons/icon_x.png" />
+                            </Button>
+
+
+
+                        </StackPanel>
+
+                    </Grid>
+
+
                 </Border>
             </Grid>
 
