@@ -21,7 +21,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using avantgarde.Controller;
 using static avantgarde.Menus.ColourManager;
-
+using static avantgarde.Configuration;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace avantgarde.Menus
 {
@@ -45,6 +46,7 @@ namespace avantgarde.Menus
         private int OPACITY = 2;
 
         public String brushSelection;
+        public int SelectedSlot = 1;
 
         public bool editingPalette;
         private bool autoswitch;
@@ -369,6 +371,7 @@ namespace avantgarde.Menus
             popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
             confirmTool.openConfirmTool();
+            SelectedSlot = fileManager.selectedSlot;
         }
 
         private void loadButtonClicked(object sender, RoutedEventArgs e)
@@ -436,6 +439,13 @@ namespace avantgarde.Menus
             else if (restrictedID == RESTRICTED_SAVE)
             {
                 fileManager.save();
+                Configuration.fleur.ExportScreenShot(SelectedSlot.ToString());
+                // Update image here
+                Image[] slots = fileManager.GetImages();
+                String source = ApplicationData.Current.LocalFolder.Path + "\\" + SelectedSlot.ToString() + ".png";
+                BitmapImage image = new BitmapImage(new Uri(source));
+                image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                slots[SelectedSlot - 1].Source = image;
             }
             else if (restrictedID == RESTRICTED_LOAD) 
             {

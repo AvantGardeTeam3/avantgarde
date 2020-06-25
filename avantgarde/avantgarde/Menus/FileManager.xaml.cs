@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 
@@ -75,8 +76,24 @@ namespace avantgarde.Menus
             
             loadPresets();
             this.InitializeComponent();
-
+            this.InitializeImages();
         }
+        public async void InitializeImages()
+        {
+            Image[] slots = { slot1, slot2, slot3 };
+            for(int i = 1; i < 4; i++)
+            {
+                // use thumbnails if found
+                var image = await ApplicationData.Current.LocalFolder.TryGetItemAsync(i.ToString() + ".png");
+                if(image != null)
+                {
+                    String source = ApplicationData.Current.LocalFolder.Path + "\\" + i.ToString() + ".png";
+                    BitmapImage bitmapImage = new BitmapImage(new Uri(source));
+                    slots[i - 1].Source = bitmapImage;
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(String propertyName = "")
@@ -247,13 +264,19 @@ namespace avantgarde.Menus
         private async void loadPresets()
         {
             await checkSlotsEmpty();
-
+            Image[] slots = { slot1, slot2, slot3 };
             if (!presetsLoaded) {
                 for (int i = 1; i < 4; i++)
                 {
                     selectedSlot = i;
                     await loadFileAsync(true);
                     save();
+                    // copy default thumbnails to localfolder
+                    StorageFile screenshot = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(@"Assets\data\" + i.ToString() + ".png");
+                    await screenshot.CopyAsync(ApplicationData.Current.LocalFolder);
+                    String source = ApplicationData.Current.LocalFolder.Path + "\\" +  i.ToString() + ".png";
+                    BitmapImage image = new BitmapImage(new Uri(source));
+                    slots[i - 1].Source = image;
                 }
                 presetsLoaded = true;
             }
@@ -385,7 +408,11 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
-
+        public Image[] GetImages()
+        {
+            Image[] ret = { slot1, slot2, slot3 };
+            return ret;
+        }
     }
 
 

@@ -42,6 +42,7 @@ namespace avantgarde
 {
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
+        public static InkCanvas CurrentCanvas = null;
         public List<StrokeData> getAllStrokeData() {
             List<Drawing.BezierCurve> curves = drawingModel.getCurves();
             List<StrokeData> data = new List<StrokeData>();
@@ -132,6 +133,7 @@ namespace avantgarde
             Configuration.fleur = this;
             Configuration.ui = this.GetUI();
             controller.HideGrid();
+            Fleur.CurrentCanvas = inkCanvas;
         }
 
         private async void saveImage(object sender, EventArgs e)
@@ -382,6 +384,24 @@ namespace avantgarde
         private void clearCanvas(object sender, EventArgs e)
         {
             controller.ClearCanvas();
+        }
+        
+        public async void ExportScreenShot(String name)
+        {
+            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png",
+                CreationCollisionOption.ReplaceExisting);
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
+            using (var ds = renderTarget.CreateDrawingSession())
+            {
+                ds.Clear(background);
+                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+            }
+            using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Png, 1f);
+            }
         }
     }
 }
