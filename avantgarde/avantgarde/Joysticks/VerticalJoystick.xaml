@@ -45,6 +45,7 @@
                 FontFamily="Tahoma"
                 FontSize="18"
                 Foreground="White"
+                Opacity="0.75"
                 Visibility="Visible">
 
                 <gaze:GazeInput.GazeElement>
@@ -63,6 +64,7 @@
                 FontFamily="Tahoma"
                 FontSize="18"
                 Foreground="White"
+                Opacity="0.75"
                 Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
@@ -80,6 +82,7 @@
                 FontFamily="Tahoma"
                 FontSize="18"
                 Foreground="White"
+                Opacity="0.75"
                 Visibility="Visible">
 
                 <gaze:GazeInput.GazeElement>
