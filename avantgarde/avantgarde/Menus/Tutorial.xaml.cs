@@ -42,7 +42,7 @@ namespace avantgarde.Menus
             getWindowAttributes();
             updatePage();
             this.InitializeComponent();
-            left_button.IsEnabled = false;
+            left_button.Visibility = Visibility.Collapsed;
 
         }
 
@@ -64,11 +64,13 @@ namespace avantgarde.Menus
             pageID--;
             if (pageID == 1)
             {
-                left_button.IsEnabled = false;
+                left_button.Visibility = Visibility.Collapsed;
+
             }
             if (pageID < 8)
             {
-                right_button.IsEnabled = true;
+                right_button.Visibility = Visibility.Visible;
+
             }
             updatePage();
         }
@@ -78,11 +80,11 @@ namespace avantgarde.Menus
             pageID++;
             if (pageID == 8)
             {
-                right_button.IsEnabled = false;
+                right_button.Visibility = Visibility.Collapsed;
             }
             if (pageID > 1)
             {
-                left_button.IsEnabled = true;
+                left_button.Visibility = Visibility.Visible;
             }
             updatePage();
         }
@@ -102,7 +104,11 @@ namespace avantgarde.Menus
             pageID = id;
 
             if (pageID != 1) {
-                left_button.IsEnabled = true;
+                left_button.Visibility = Visibility.Visible;
+            }
+            if (pageID != 8)
+            {
+                right_button.Visibility = Visibility.Visible;
             }
 
             updatePage();

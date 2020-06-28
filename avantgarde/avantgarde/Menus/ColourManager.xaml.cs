@@ -53,11 +53,12 @@ namespace avantgarde.Menus
         public String backgroundHex;
 
         public Color selection { get; set; }
+
+        public String selectionHex { get; set; }
         public int brightness { get; set; }
         public int opacity { get; set; }
         public int colourProfile { get; set; }
         public String colourName { get; set; }
-        public String selectionHex { get; set; }
 
         public static Color defaultColour { get; set; }
 

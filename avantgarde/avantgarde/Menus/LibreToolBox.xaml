@@ -190,7 +190,7 @@
                                     FontFamily="Tahoma"
                                     FontSize="15"
                                     Foreground="White"
-                                    Text="AutoSwitch" />
+                                    Text="AutoSwitch Colours" />
 
 
                             </Button>
@@ -316,10 +316,17 @@
                                 BorderThickness="2"
                                 Click="initTutorial"
                                 CornerRadius="5,5,5,5">
-                                <Image
-                                    Width="90"
-                                    Height="90"
+                                <StackPanel Orientation="Vertical" Spacing="2">
+                                    <Image
+                                    Width="80"
+                                    Height="80"
                                     Source="/Assets/icons/icon_book.png" />
+                                    <TextBlock Text="Tutorial"
+                                               VerticalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"/>
+                                </StackPanel>
                             </Button>
 
 

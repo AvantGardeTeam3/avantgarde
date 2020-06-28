@@ -15,53 +15,52 @@
         HorizontalOffset="{x:Bind horizontalOffset}"
         VerticalOffset="{x:Bind verticalOffset}">
 
-        <Grid>
-            <Border
-                Width="{x:Bind width}"
-                Height="{x:Bind height}"
-                Background="Black"
-                BorderBrush="#cdff59"
-                BorderThickness="2"
-                CornerRadius="5,5,5,5"
-                Opacity="0.8" />
-            <Border
-                Width="{x:Bind width}"
-                Height="{x:Bind height}"
-                Background="Transparent"
-                BorderBrush="#cdff59"
-                BorderThickness="2"
-                CornerRadius="5,5,5,5">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" />
-                        <RowDefinition Height="2*" />
-                    </Grid.RowDefinitions>
+    <Grid>
+        <Border
+            Width="{x:Bind width}"
+            Height="{x:Bind height}"
+            Background="Black"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            CornerRadius="5,5,5,5"
+            Opacity="0.8" />
+        <Border
+            Width="{x:Bind width}"
+            Height="{x:Bind height}"
+            Background="Transparent"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            CornerRadius="5,5,5,5">
+            <Grid>
 
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.ColumnSpan="3"
-                        Width="400"
-                        Height="40"
-                        Margin="0,40,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontFamily="Tahoma"
-                        FontSize="18"
-                        Foreground="White"
-                        Text="{x:Bind message, Mode=OneWay}"
-                        TextAlignment="Center" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
 
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Width="400"
+                    Height="40"
+                    Margin="0,40,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Tahoma"
+                    FontSize="18"
+                    Foreground="White"
+                    Text="{x:Bind message, Mode=OneWay}"
+                    TextAlignment="Center" />
+
+
+                <StackPanel
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="60">
                     <Button
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Width="80"
+                        Width="120"
                         Height="80"
-                        Margin="20"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Background="Transparent"
@@ -69,25 +68,22 @@
                         BorderThickness="2"
                         Click="reject"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_x.png" />
+                        <Image Height ="50" Source="/Assets/icons/icon_x.png" />
                     </Button>
                     <Button
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Width="80"
+                        Width="120"
                         Height="80"
-                        Margin="20"
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="#cdff59"
                         BorderThickness="2"
                         Click="confirm"
                         CornerRadius="5,5,5,5">
-                        <Image Source="/Assets/icons/icon_checkmark.png" />
+                        <Image Height ="60" Source="/Assets/icons/icon_checkmark.png" />
                     </Button>
-
-                </Grid>
-            </Border>
-        </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
     </Popup>
 </UserControl>

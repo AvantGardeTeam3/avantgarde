@@ -117,7 +117,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Width="80"
+                        Width="120"
                         Height="80"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

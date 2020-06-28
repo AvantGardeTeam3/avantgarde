@@ -212,6 +212,8 @@ namespace avantgarde.Controller
             Point? midPoint = Util.snapping(drawingModel.GetMidPoints(), point, Configuration.GazeSnapDistance);
             Point? endPoint = Util.snapping(drawingModel.GetEndPoints(), point, Configuration.GazeSnapDistance);
             Point? halfPoint = Util.snapping(drawingModel.GetHalfPoints(), point, Configuration.GazeSnapDistance);
+            bool isEndPoint = false;
+
             if (controlPoint.HasValue)
             {
                 // control point selected
@@ -228,14 +230,15 @@ namespace avantgarde.Controller
                 selectedPoint = midPoint.Value;
                 _selectedCurve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                 UpdateView();
-                ActiveVerticalJoystick = InvokeVerticalJoystick(midPoint.Value, MidPointJoystickEventHandler);
+                ActiveVerticalJoystick = InvokeVerticalJoystick(midPoint.Value, MidPointJoystickEventHandler, isEndPoint);
                 state = ControllerState.selectMid;
             }
             else if (endPoint.HasValue)
             {
                 // end points selected
+                isEndPoint = true;
                 selectedPoint = endPoint.Value;
-                ActiveVerticalJoystick = InvokeVerticalJoystick(endPoint.Value, EndPointJoystickEventHandler);
+                ActiveVerticalJoystick = InvokeVerticalJoystick(endPoint.Value, EndPointJoystickEventHandler, isEndPoint);
                 state = ControllerState.selectP0P3;
             }
             else if (halfPoint.HasValue)
@@ -243,7 +246,7 @@ namespace avantgarde.Controller
                 selectedPoint = halfPoint.Value;
                 _selectedCurve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
                 UpdateView();
-                ActiveVerticalJoystick = InvokeVerticalJoystick(halfPoint.Value, HalfPointJoystickEventHandler);
+                ActiveVerticalJoystick = InvokeVerticalJoystick(halfPoint.Value, HalfPointJoystickEventHandler, isEndPoint);
                 state = ControllerState.selectHalf;
             }
             else
@@ -375,14 +378,22 @@ namespace avantgarde.Controller
             //this.state = ControllerState.idle;   
         }
 
-        private VerticalJoystick InvokeVerticalJoystick(Point center, Action<object, StateChangedEventArgs> func)
+        private VerticalJoystick InvokeVerticalJoystick(Point center, Action<object, StateChangedEventArgs> func, bool isEndPoint)
         {
             joystickPosition = center;
             VerticalJoystick joystick = new VerticalJoystick
             {
-                Height = 200,
-                Width = 200
+                Height = 250,
+                Width = 250
             };
+
+            if (isEndPoint)
+            {
+                joystick.displayEndPointCommands();
+            }
+            else {
+                joystick.displayMidPointCommands();
+            }
 
             TranslateTransform translateTarget = new TranslateTransform
             {
@@ -392,8 +403,8 @@ namespace avantgarde.Controller
             joystick.RenderTransform = translateTarget;
             joystick.Visibility = Visibility.Visible;
             joystick.GazeStateChangeHandler.Add(func);
-            joystick.Width = 300;
-            joystick.Height = 300;
+            joystick.Width = 250;
+            joystick.Height = 250;
 
             this.page.GetCanvas().Children.Add(joystick);
             return joystick;
@@ -402,8 +413,8 @@ namespace avantgarde.Controller
         {
             Joystick joystick = new Joystick()
             {
-                Height = 200,
-                Width = 200
+                Height = 250,
+                Width = 250
             };
             TranslateTransform translateTarget = new TranslateTransform
             {
@@ -456,14 +467,7 @@ namespace avantgarde.Controller
                 case "UpKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
-                    BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
-                    drawingModel.deleteCurve(curve);
-                    if (curve == _selectedCurve) _selectedCurve = null;
-                    curve.InkStroke.Selected = true;
-                    container.DeleteSelected();
-                    _selectedCurve = null;
-                    UpdateView();
-                    this.state = ControllerState.idle;
+                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointJoystickEventHandler);
                     break;
                 case "MidKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
@@ -473,7 +477,14 @@ namespace avantgarde.Controller
                 case "DownKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
-                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointJoystickEventHandler);
+                    BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
+                    drawingModel.deleteCurve(curve);
+                    if (curve == _selectedCurve) _selectedCurve = null;
+                    curve.InkStroke.Selected = true;
+                    container.DeleteSelected();
+                    _selectedCurve = null;
+                    UpdateView();
+                    this.state = ControllerState.idle;
                     break;
             }
         }
@@ -511,16 +522,9 @@ namespace avantgarde.Controller
             switch (button.Name)
             {
                 case "UpKey":
-                    page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
-                    BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
-                    drawingModel.deleteCurve(curve);
-                    if (curve == _selectedCurve) _selectedCurve = null;
-                    curve.InkStroke.Selected = true;
-                    container.DeleteSelected();
-                    _selectedCurve = null;
-                    UpdateView();
-                    this.state = ControllerState.idle;
+                    ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointJoystickEventHandler);
                     break;
                 case "MidKey":
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
@@ -531,6 +535,18 @@ namespace avantgarde.Controller
                     this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
                     ActiveVerticalJoystick = null;
                     this.state = ControllerState.idle;
+                    
+                    //2-Point Curve Implementation
+                    //page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
+                    //ActiveVerticalJoystick = null;
+                    //BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
+                    //drawingModel.deleteCurve(curve);
+                    //if (curve == _selectedCurve) _selectedCurve = null;
+                    //curve.InkStroke.Selected = true;
+                    //container.DeleteSelected();
+                    //_selectedCurve = null;
+                    //UpdateView();
+                    //this.state = ControllerState.idle;
                     break;
             }
         }
@@ -802,7 +818,6 @@ namespace avantgarde.Controller
                 AddCurve(_selectedCurve);
             }
 
-
             List<Point> points = drawingModel.GetEndPoints();
             points.ForEach(x => AddIndicator(x));
             List<Point> midPoints = drawingModel.GetMidPoints();
@@ -817,8 +832,8 @@ namespace avantgarde.Controller
         private void AddIndicator(Point point)
         {
             var ellipse = new Ellipse();
-            ellipse.Width = 30;
-            ellipse.Height = 30;
+            ellipse.Width = 35;
+            ellipse.Height = 35;
             ellipse.Fill = new SolidColorBrush(ColourManager.hexToColor("#ffcdff59"));
             ellipse.Opacity = 0.5d;
             ellipse.Visibility = Visibility.Visible;
@@ -873,8 +888,8 @@ namespace avantgarde.Controller
         private void AddControlIndicator(Point point)
         {
             var rectangle = new Rectangle();
-            rectangle.Width = 20;
-            rectangle.Height = 20;
+            rectangle.Width = 30;
+            rectangle.Height = 30;
             rectangle.Fill = new SolidColorBrush(ColourManager.hexToColor("#ff4ffff6"));
             rectangle.Opacity = 0.5;
             rectangle.Visibility = Visibility.Visible;

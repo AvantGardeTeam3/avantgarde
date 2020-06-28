@@ -202,6 +202,7 @@
     <Content Include="Assets\icons\icon_play.png" />
     <Content Include="Assets\icons\icon_pause.png" />
     <Content Include="Assets\icons\icon_draw.png" />
+    <Content Include="Assets\vertical_joystick.png" />
     <Content Include="Assets\mandala1.png" />
     <Content Include="Assets\mandala2.png" />
     <Content Include="Assets\mandala3.png" />
@@ -230,7 +231,6 @@
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
-    <Content Include="Assets\vertical_joystick.png" />
     <Content Include="Assets\redo.png" />
     <Content Include="Assets\undo.png" />
     <Content Include="Properties\Default.rd.xml" />

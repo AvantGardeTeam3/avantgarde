@@ -6,8 +6,8 @@
     xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
     xmlns:local="using:avantgarde.Joysticks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="200"
-    d:DesignWidth="200"
+    d:DesignHeight="250"
+    d:DesignWidth="250"
     gaze:GazeInput.Interaction="Enabled"
     gaze:GazeInput.IsCursorVisible="false"
     mc:Ignorable="d">
@@ -15,14 +15,14 @@
 
     <Canvas>
         <Image
-            Width="200"
-            Height="200"
+            Width="250"
+            Height="250"
             Source="/Assets/joystick.png" />
 
         <Grid
             x:Name="JoystickUI"
-            Width="200"
-            Height="200"
+            Width="250"
+            Height="250"
             Loaded="JoystickUI_Loaded">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -58,12 +58,17 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="20">
+                Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
+                <Image
+                    Width="50"
+                    Opacity="0.5"
+                    Source="/Assets/icons/icon_up.png" />
+
             </Button>
             <Button
                 x:Name="DownKey"
@@ -71,12 +76,16 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="20">
+                Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
+                <Image
+                    Width="50"
+                    Opacity="0.5"
+                    Source="/Assets/icons/icon_down.png" />
             </Button>
             <Button
                 x:Name="LeftKey"
@@ -84,12 +93,16 @@
                 Grid.Column="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="20">
+                Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
+                <Image
+                    Height="50"
+                    Opacity="0.5"
+                    Source="/Assets/icons/icon_left.png" />
             </Button>
             <Button
                 x:Name="RightKey"
@@ -97,22 +110,23 @@
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible"
-                gaze:GazeInput.MaxDwellRepeatCount="20">
+                Visibility="Visible">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
+                <Image
+                    Height="50"
+                    Opacity="0.5"
+                    Source="/Assets/icons/icon_right.png" />
+
             </Button>
 
 
         </Grid>
 
 
-        <Image
-            Width="200"
-            Height="200"
-            Source="Assets/joystick.png" />
 
     </Canvas>
 

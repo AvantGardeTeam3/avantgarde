@@ -49,6 +49,18 @@ namespace avantgarde.Joysticks
         public List<Action<object, PointerRoutedEventArgs>> PointerExitedHandler { get; set; }
         public List<Action<object, StateChangedEventArgs>> GazeStateChangeHandler { get; set; }
 
+        public void displayEndPointCommands() {
+            UpKey.Content = "New Line";
+            DownKey.Content = "Move";
+            NotifyPropertyChanged();
+        }
+
+        public void displayMidPointCommands() {
+            UpKey.Content = "Curve";
+            DownKey.Content = "Delete";
+            NotifyPropertyChanged();
+        }
+
         void JoystickUI_Loaded(object sender, RoutedEventArgs e)
         {
 

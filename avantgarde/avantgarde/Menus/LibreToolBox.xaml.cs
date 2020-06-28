@@ -582,6 +582,7 @@ namespace avantgarde.Menus
         private void initTutorial(object sender, RoutedEventArgs e)
         {
             clearPopups();
+            selectButton(tutorialButton);
             tutorial.open(2);
             popupOpened?.Invoke(this, EventArgs.Empty);
         }
