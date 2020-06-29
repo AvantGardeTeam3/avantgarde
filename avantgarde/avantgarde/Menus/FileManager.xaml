@@ -166,7 +166,7 @@
                         BorderThickness="2"
                         Click="cancel"
                         CornerRadius="5,5,5,5">
-                        <Image Height="60" Source="/Assets/icons/icon_x.png" />
+                        <Image Height="50" Source="/Assets/icons/icon_x.png" />
                     </Button>
                     <Button
                         x:Name="confirmButton"

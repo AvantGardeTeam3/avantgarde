@@ -271,10 +271,17 @@
                                 BorderThickness="2"
                                 Click="openBrushTool"
                                 CornerRadius="5,5,5,5">
-                                <Image
-                                    Width="90"
-                                    Height="90"
+                                <StackPanel Orientation="Vertical" Spacing="8">
+                                    <Image
+                                    Width="75"
+                                    Height="75"
                                     Source="/Assets/icons/icon_draw.png" />
+                                    <TextBlock Text="Brush Tools"
+                                               HorizontalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"/>
+                                </StackPanel>
                             </Button>
 
                             <Button
@@ -287,10 +294,17 @@
                                 BorderThickness="2"
                                 Click="clearCanvas"
                                 CornerRadius="5,5,5,5">
-                                <Image
-                                    Width="90"
-                                    Height="90"
+                                <StackPanel Orientation="Vertical" Spacing="8">
+                                    <Image
+                                    Width="75"
+                                    Height="75"
                                     Source="/Assets/icons/icon_trash.png" />
+                                    <TextBlock Text="Clear Canvas"
+                                               HorizontalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"/>
+                                </StackPanel>
                             </Button>
 
 
@@ -316,13 +330,13 @@
                                 BorderThickness="2"
                                 Click="initTutorial"
                                 CornerRadius="5,5,5,5">
-                                <StackPanel Orientation="Vertical" Spacing="2">
+                                <StackPanel Orientation="Vertical" Spacing="8">
                                     <Image
-                                    Width="80"
-                                    Height="80"
+                                    Width="75"
+                                    Height="75"
                                     Source="/Assets/icons/icon_book.png" />
                                     <TextBlock Text="Tutorial"
-                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
                                     FontFamily="Tahoma"
                                     FontSize="15"
                                     Foreground="White"/>
@@ -342,10 +356,17 @@
                                 BorderThickness="2"
                                 Click="goHome"
                                 CornerRadius="5,5,5,5">
-                                <Image
-                                    Width="90"
-                                    Height="90"
+                                <StackPanel Orientation="Vertical" Spacing="8">
+                                    <Image
+                                    Width="75"
+                                    Height="75"
                                     Source="/Assets/icons/icon_exit.png" />
+                                    <TextBlock Text="Exit"
+                                               HorizontalAlignment="Center"
+                                    FontFamily="Tahoma"
+                                    FontSize="15"
+                                    Foreground="White"/>
+                                </StackPanel>
                             </Button>
 
                         </StackPanel>
