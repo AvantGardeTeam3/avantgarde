@@ -275,5 +275,11 @@ namespace avantgarde.Menus
             toolBoxButton.IsEnabled = true;
             playButton.IsEnabled = true;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // switch square
+            Configuration.fleur.SwitchSquare();
+        }
     }
 }
