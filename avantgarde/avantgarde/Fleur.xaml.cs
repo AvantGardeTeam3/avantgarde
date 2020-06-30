@@ -42,6 +42,7 @@ namespace avantgarde
 {
     public sealed partial class Fleur : INotifyPropertyChanged, IDrawMode
     {
+        public static InkCanvas CurrentCanvas = null;
         public List<StrokeData> getAllStrokeData() {
             List<Drawing.BezierCurve> curves = drawingModel.getCurves();
             List<StrokeData> data = new List<StrokeData>();
@@ -59,6 +60,7 @@ namespace avantgarde
         }
 
         public bool Autoswitch = true;
+        private bool IsSquare = false;
 
         private Controller.GazeController controller;
 
@@ -126,12 +128,20 @@ namespace avantgarde
             // controller = new Controller.GazeController(this);       
             Controller.ControllerFactory.MakeAController(this);
             controller = Controller.ControllerFactory.gazeController;
+            controller.x1 = 0;
+            controller.y1 = 0;
+            controller.x2 = WIDTH;
+            controller.y2 = HEIGHT;
+
+            blockGrid.ColumnDefinitions[1].Width = new GridLength(HEIGHT);
+            blockGrid.Visibility = Visibility.Collapsed;
 
             // drawingModel.curveDrawn += new EventHandler(curveDrawn);
 
             Configuration.fleur = this;
             Configuration.ui = this.GetUI();
             controller.HideGrid();
+            Fleur.CurrentCanvas = inkCanvas;
         }
 
         private async void saveImage(object sender, EventArgs e)
@@ -382,6 +392,41 @@ namespace avantgarde
         private void clearCanvas(object sender, EventArgs e)
         {
             controller.ClearCanvas();
+        }
+        
+        public void SwitchSquare()
+        {
+            if (!IsSquare)
+            {
+                controller.x1 = (inkCanvas.ActualWidth - inkCanvas.ActualHeight) / 2;
+                controller.x2 = controller.x1 + inkCanvas.ActualHeight;
+                blockGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                controller.x1 = 0;
+                controller.x2 = WIDTH;
+                blockGrid.Visibility = Visibility.Collapsed;
+            }
+            
+        }
+
+        public async void ExportScreenShot(String name)
+        {
+            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png",
+                CreationCollisionOption.ReplaceExisting);
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
+            using (var ds = renderTarget.CreateDrawingSession())
+            {
+                ds.Clear(background);
+                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+            }
+            using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Png, 1f);
+            }
         }
     }
 }

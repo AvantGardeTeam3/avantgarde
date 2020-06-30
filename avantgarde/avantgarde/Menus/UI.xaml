@@ -96,7 +96,10 @@
                     Source="/Assets/icons/icon_redo.png" />
             </Button>
 
-
+            <Button
+                Width="150"
+                Height="150" Click="Button_Click"
+            />
         </StackPanel>
 
         <Button

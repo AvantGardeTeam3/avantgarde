@@ -61,9 +61,18 @@
                     x:Name="canvasJoystick"
                     Width="200"
                     Height="200"
-                    Visibility="Collapsed" />
+                    Visibility="Collapsed"/>
             </Canvas>
 
+            <Grid x:Name="blockGrid" Grid.Column="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Canvas x:Name="leftBlock" Grid.Column="0" Visibility="Visible" Background="White"></Canvas>
+                <Canvas x:Name="rightBlock" Grid.Column="2" Visibility="Visible" Background="White"></Canvas>
+            </Grid>
         </Grid>
 
     </Grid>

@@ -54,6 +54,7 @@ namespace avantgarde.Controller
         private Point GazePoint = new Point(0, 0);
         private Point? selectedPoint;
 
+        public double x1, y1, x2, y2;
 
         private Point lineStartPoint;
 
@@ -163,6 +164,8 @@ namespace avantgarde.Controller
         }
         private void GazeDwell(Point gazePoint)
         {
+            if (gazePoint.X > x2 || gazePoint.X < x1) return;
+            if (gazePoint.Y > y2 || gazePoint.Y < y1) return;
             switch (this.state)
             {
                 case ControllerState.pause:
