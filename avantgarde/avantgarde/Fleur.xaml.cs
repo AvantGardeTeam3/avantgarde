@@ -401,12 +401,14 @@ namespace avantgarde
                 controller.x1 = (inkCanvas.ActualWidth - inkCanvas.ActualHeight) / 2;
                 controller.x2 = controller.x1 + inkCanvas.ActualHeight;
                 blockGrid.Visibility = Visibility.Visible;
+                IsSquare = !IsSquare;
             }
             else
             {
                 controller.x1 = 0;
                 controller.x2 = WIDTH;
                 blockGrid.Visibility = Visibility.Collapsed;
+                IsSquare = !IsSquare;
             }
             
         }
