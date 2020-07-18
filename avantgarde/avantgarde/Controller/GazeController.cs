@@ -482,12 +482,12 @@ namespace avantgarde.Controller
         {
             this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
             ActiveVerticalJoystick = null;
-            BezierCurve curve = drawingModel.FindCurveByHalfPoint(selectedPoint.Value);
-            drawingModel.deleteCurve(curve);
-            if (curve == _selectedCurve) _selectedCurve = null;
-            curve.InkStroke.Selected = true;
+
+            drawingModel.deleteCurve(_selectedCurve);
+            _selectedCurve.InkStroke.Selected = true;
             container.DeleteSelected();
             _selectedCurve = null;
+            
             UpdateView();
             this.state = ControllerState.idle;
         }
@@ -497,8 +497,10 @@ namespace avantgarde.Controller
         {
             this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
             ActiveVerticalJoystick = null;
-            this.state = ControllerState.idle;
-            //ActiveJoystick = InvokeJoystick(joystickPosition, MoveMidPointUpKeyInvoked, MoveMidPointDownKeyInvoked, MoveMidPointLeftkeyInvoked, MoveMidPointRightKeyInvoked, MoveMidPointMiddleKeyInvoked);
+
+            selectedPoint = _selectedCurve.MidPoint;
+            joystickPosition = selectedPoint.Value;
+            ActiveJoystick = InvokeJoystick(selectedPoint.Value, MoveMidPointUpKeyInvoked, MoveMidPointDownKeyInvoked, MoveMidPointLeftkeyInvoked, MoveMidPointRightKeyInvoked, MoveMidPointMiddleKeyInvoked);
         }
         private void HalfPointMiddleKeyInvoked(object sender, EventArgs args)
         {
@@ -510,6 +512,13 @@ namespace avantgarde.Controller
         {
             this.page.GetCanvas().Children.Remove(ActiveVerticalJoystick);
             ActiveVerticalJoystick = null;
+
+            drawingModel.deleteCurve(_selectedCurve);
+            _selectedCurve.InkStroke.Selected = true;
+            container.DeleteSelected();
+            _selectedCurve = null;
+            UpdateView();
+
             this.state = ControllerState.idle;
         }
         
@@ -573,7 +582,7 @@ namespace avantgarde.Controller
         }
         private void MoveEndPointDownKeyInvoked(object sender, EventArgs args)
         {
-            joystickPosition.Y -= Configuration.JoystickMoveDistance;
+            joystickPosition.Y += Configuration.JoystickMoveDistance;
             TranslateTransform translateTarget = new TranslateTransform
             {
                 X = joystickPosition.X - ActiveJoystick.Width / 2,
@@ -787,9 +796,6 @@ namespace avantgarde.Controller
                     container.AddStroke(stroke);
                 }
             }
-            //InkStrokeContainer container = new InkStrokeContainer();
-            //container.AddStrokes(drawingModel.GetStrokes());
-            //page.GetInkCanvas().InkPresenter.StrokeContainer = container;
         }
 
         private void UpdateView()
