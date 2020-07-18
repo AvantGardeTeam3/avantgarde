@@ -66,6 +66,8 @@ namespace avantgarde
 
         public DrawingModel drawingModel;
 
+        public Canvas Canvas { get => canvas; private set { } }
+
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         public static Color colourSelection { get; set; }
@@ -91,7 +93,6 @@ namespace avantgarde
         }
         public Fleur()
         {
-
             numberOfLines = 10;
             getWindowAttributes();
             this.InitializeComponent();
@@ -106,21 +107,22 @@ namespace avantgarde
             inkCanvasCentre.Y = canvas.ActualHeight / 2;
             inkStrokeBuilder = new InkStrokeBuilder();
 
-            colourSelection = Menus.ColourManager.defaultColour;
+            colourSelection = ui.AGColor.Color;
             radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
 
             this.DataContext = this;
 
-            backgroundHex = ui.getBackgroundHex();
+            backgroundHex = ui.BackgroundColor.Color.ToString();
 
             ui.goHomeButtonClicked += new EventHandler(goHomeButtonClicked);
             ui.drawStateChanged += new EventHandler(drawStateButtonClicked);
-            ui.drawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);
-            ui.undoButtonClicked += new EventHandler(undo);
-            ui.redoButtonClicked += new EventHandler(redo);
+            ui.DrawingPropertiesUpdated += new EventHandler(drawingPropertiesUpdated);
+            ui.undoButtonClicked += new EventHandler(Undo);
+            ui.redoButtonClicked += new EventHandler(Redo);
             ui.animationButtonClicked += new EventHandler(animationButtonClicked);
-            ui.backgroundButtonClicked += new EventHandler(backgroundColourUpdated);
-            ui.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            // Color Change
+            ui.ColorSelectionUpdated += OnColorSelectionUpdate;
+            ui.BackgroundColorUpdated += OnBackgroundColorUpdate;
             ui.clearCanvas += new EventHandler(clearCanvas);
             ui.saveImageClick += saveImage;
 
@@ -147,8 +149,7 @@ namespace avantgarde
         private async void saveImage(object sender, EventArgs e)
         {
             //InkCanvas inkCanvas = ControllerFactory.gazeController.inkCanvas;
-            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
-
+            Color background = Colors.White;
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
             StorageFolder folder = Windows.Storage.KnownFolders.PicturesLibrary;
@@ -170,18 +171,14 @@ namespace avantgarde
 
         public StrokeData getStrokeData()
         {
-            int COLOUR_PROFILE = 0;
-            int BRIGHTNESS = 1;
-            int OPACITY = 2;
-
             StrokeData newStrokeData = new StrokeData();
             newStrokeData.reflections = numberOfLines;
-            newStrokeData.colourProfile = ui.getColourAttributes(COLOUR_PROFILE);
-            newStrokeData.brightness = ui.getColourAttributes(BRIGHTNESS);
-            newStrokeData.opacity = ui.getColourAttributes(OPACITY);
+            newStrokeData.ColorProfile = ui.AGColor.Profile;
+            newStrokeData.Brightness = ui.AGColor.Brightness;
+            newStrokeData.Opactiy = ui.AGColor.Opacity;
             newStrokeData.size = drawingAttributes.Size;
 
-            if (String.Compare(ui.getBrush(), "pencil") == 0)
+            if (String.Compare(ui.Brush, "pencil") == 0)
             {
                 newStrokeData.brush = "pencil";
             }
@@ -191,42 +188,7 @@ namespace avantgarde
             }
             return newStrokeData;
         }
-
-        private void storeStrokeData() {
-            int COLOUR_PROFILE = 0;
-            int BRIGHTNESS = 1;
-            int OPACITY = 2;
-            
-            StrokeData newStrokeData = new StrokeData();
-            newStrokeData.reflections = numberOfLines;
-            newStrokeData.colourProfile = ui.getColourAttributes(COLOUR_PROFILE);
-            newStrokeData.brightness = ui.getColourAttributes(BRIGHTNESS);
-            newStrokeData.opacity = ui.getColourAttributes(OPACITY);
-            newStrokeData.size = drawingAttributes.Size;
-
-            if (String.Compare(ui.getBrush(), "pencil") == 0)
-            {
-                newStrokeData.brush = "pencil";
-            }
-            else {
-                newStrokeData.brush = "paint";
-            }
-
-            strokeData.Add(newStrokeData);
-        }
         
-        private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs e)
-        {
-            //called everytime user finishes a stroke
-            IReadOnlyList<InkStroke> strokes = e.Strokes;
-            foreach (InkStroke stroke in strokes)
-            {
-                //stroke.DrawingAttributes = toolbar.getDrawingAttributes();
-                userStrokes.Add(stroke);
-            }
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            inkCanvas.InkPresenter.StrokeContainer.AddStrokes(this.Transfrom(userStrokes));
-        }
         public List<InkStroke> Transfrom(List<InkStroke> u)
         {
             List<InkStroke> transformedStrokes = new List<InkStroke>();
@@ -320,44 +282,13 @@ namespace avantgarde
         public InkCanvas GetInkCanvas() { return inkCanvas; }
         public Canvas GetCanvas() { return this.canvas; }
 
-        public ColourManager GetColourManager() { return this.ui.UIGetColourManager(); }
-
-        private async void redo(object sender, EventArgs e)
+        private async void Redo(object sender, EventArgs e)
         {
-            //if (redoStack.Count() == 0)
-            //{
-            //    return;
-            //}
-            //userStrokes.Add(redoStack.Pop());
-            //InkCanvas_refresh();
             controller.Redo();
         }
 
-        private async void undo(object sender, EventArgs e)
+        private async void Undo(object sender, EventArgs e)
         {
-            //int containerSize = 0;
-            //var strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-            //foreach (InkStroke stroke in strokes)
-            //{
-            //    containerSize++;
-            //}
-            //if (containerSize == 0)
-            //{
-            //    return;
-            //}
-            //int index = 0;
-            //foreach (InkStroke s in strokes)
-            //{
-            //    index++;
-            //    if (index >= containerSize - (numberOfLines - 1))
-            //    {
-            //        s.Selected = true;
-            //    }
-            //}
-            //int size = userStrokes.Count();
-            //redoStack.Push(userStrokes.ElementAt(size - 1));
-            //userStrokes.RemoveAt(userStrokes.Count() - 1);
-            //inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
             controller.Undo();
         }
 
@@ -372,16 +303,16 @@ namespace avantgarde
         private void drawingPropertiesUpdated(object sender, EventArgs e)
         {
             drawingAttributes = ui.getDrawingAttributes();
-            numberOfLines = ui.getMandalaLines();
+            numberOfLines = ui.MandalaLineNumber;
         }
-        private void backgroundColourUpdated(object sender, EventArgs e)
+        private void OnBackgroundColorUpdate(object sender, Events.ColorEventArgs args)
         {
-            backgroundHex = ui.getBackgroundHex();
+            backgroundHex = args.Color.Color.ToString();
             NotifyPropertyChanged();
         }
-        private void updateColourSelection(object sender, EventArgs e)
+        private void OnColorSelectionUpdate(object sender, Events.ColorEventArgs args)
         {
-            colourSelection = ui.getColour();
+            colourSelection = args.Color.Color;
             drawingAttributes.Color = colourSelection;
             radialProgressBar.Foreground = new SolidColorBrush(colourSelection);
         }
@@ -410,12 +341,11 @@ namespace avantgarde
                 blockGrid.Visibility = Visibility.Collapsed;
                 IsSquare = !IsSquare;
             }
-            
         }
 
         public async void ExportScreenShot(String name)
         {
-            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+            Color background = Colors.White;
             StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png",
                 CreationCollisionOption.ReplaceExisting);
             CanvasDevice device = CanvasDevice.GetSharedDevice();

@@ -14,20 +14,20 @@
 
     <Popup
         x:Name="ColourPickerMenu"
-        HorizontalOffset="{Binding horizontalOffset}"
-        VerticalOffset="{Binding verticalOffset}">
+        HorizontalOffset="{x:Bind horizontalOffset, Mode=OneWay}"
+        VerticalOffset="{x:Bind verticalOffset, Mode=OneWay}">
         <Grid>
             <Border
-                Width="{Binding width}"
-                Height="{Binding height}"
+                Width="{x:Bind width, Mode=OneWay}"
+                Height="{x:Bind height, Mode=OneWay}"
                 Background="Black"
                 BorderBrush="#cdff59"
                 BorderThickness="2"
                 CornerRadius="5,5,5,5"
                 Opacity="0.8" />
             <Border
-                Width="{Binding width}"
-                Height="{Binding height}"
+                Width="{x:Bind width, Mode=OneWay}"
+                Height="{x:Bind height, Mode=OneWay}"
                 Background="Transparent"
                 BorderBrush="#cdff59"
                 BorderThickness="2"
@@ -83,6 +83,7 @@
                             </Grid.RowDefinitions>
 
                             <Button
+                                x:Name="preset0"
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Width="110"
@@ -92,9 +93,10 @@
                                 Background="#FF0000"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour0"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset1"
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Width="110"
@@ -104,9 +106,10 @@
                                 Background="#FF8000"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour1"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset2"
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Width="110"
@@ -116,9 +119,10 @@
                                 Background="#FFFF00"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour2"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset3"
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Width="110"
@@ -128,9 +132,10 @@
                                 Background="#80FF00"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour3"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset4"
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Width="110"
@@ -140,9 +145,10 @@
                                 Background="#00FF00"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour4"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset5"
                                 Grid.Row="1"
                                 Grid.Column="2"
                                 Width="110"
@@ -152,9 +158,10 @@
                                 Background="#00FF80"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour5"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset6"
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Width="110"
@@ -164,9 +171,10 @@
                                 Background="#00FFFF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour6"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset7"
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Width="110"
@@ -176,9 +184,10 @@
                                 Background="#0080FF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour7"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset8"
                                 Grid.Row="2"
                                 Grid.Column="2"
                                 Width="110"
@@ -188,9 +197,10 @@
                                 Background="#0000FF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour8"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset9"
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Width="110"
@@ -200,9 +210,10 @@
                                 Background="#7F00FF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour9"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset10"
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Width="110"
@@ -212,9 +223,10 @@
                                 Background="#FF00FF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour10"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset11"
                                 Grid.Row="3"
                                 Grid.Column="2"
                                 Width="110"
@@ -224,9 +236,10 @@
                                 Background="#FF007F"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour11"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset12"
                                 Grid.Row="4"
                                 Grid.Column="0"
                                 Width="110"
@@ -236,9 +249,10 @@
                                 Background="#000000"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour12"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset13"
                                 Grid.Row="4"
                                 Grid.Column="1"
                                 Width="110"
@@ -248,9 +262,10 @@
                                 Background="#808080"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour13"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                             <Button
+                                Name="preset14"
                                 Grid.Row="4"
                                 Grid.Column="2"
                                 Width="110"
@@ -260,7 +275,7 @@
                                 Background="#FFFFFF"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setColour14"
+                                Click="OnPresetColorClicked"
                                 CornerRadius="5,5,5,5" />
                         </Grid>
 
@@ -300,7 +315,7 @@
                                     BorderThickness="2"
                                     CornerRadius="5,5,5,5">
                                     <Border.Background>
-                                        <SolidColorBrush Color="{x:Bind selection, Mode=OneWay}" />
+                                        <SolidColorBrush Color="{x:Bind Color, Mode=OneWay}" />
                                     </Border.Background>
                                 </Border>
                             </StackPanel>
@@ -313,7 +328,7 @@
                                 <TextBlock
                                     FontSize="25"
                                     Foreground="White"
-                                    Text="{x:Bind colourName, Mode=OneWay}"
+                                    Text="{x:Bind ColorName, Mode=OneWay}"
                                     VariableSizedWrapGrid.ColumnSpan="2" />
                                 <TextBlock
                                     FontSize="18"
@@ -347,23 +362,23 @@
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="White"
-                                    Text="{x:Bind selection.ToString(), Mode=OneWay}" />
+                                    Text="{x:Bind Color.ToString(), Mode=OneWay}" />
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="White"
-                                    Text="{x:Bind selection.R, Mode=OneWay}" />
+                                    Text="{x:Bind Color.R, Mode=OneWay}" />
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="White"
-                                    Text="{x:Bind selection.G, Mode=OneWay}" />
+                                    Text="{x:Bind Color.G, Mode=OneWay}" />
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="White"
-                                    Text="{x:Bind selection.B, Mode=OneWay}" />
+                                    Text="{x:Bind Color.B, Mode=OneWay}" />
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="White"
-                                    Text="{x:Bind selection.A, Mode=OneWay}" />
+                                    Text="{x:Bind Color.A, Mode=OneWay}" />
                             </StackPanel>
 
                         </Grid>
@@ -410,7 +425,7 @@
                                 Background="Transparent"
                                 BorderBrush="DimGray"
                                 BorderThickness="2"
-                                Click="increaseBrightness"
+                                Click="OnIncreaseBrightnessButtonClicked"
                                 CornerRadius="5,5,5,5">
 
                                 <Image Source="/Assets/icons/icon_up.png" />
@@ -424,7 +439,7 @@
                                 FontSize="25"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="{x:Bind brightness, Mode=OneWay}"
+                                Text="{x:Bind _brightness, Mode=OneWay}"
                                 TextAlignment="Center" />
                             <Button
                                 Grid.Row="3"
@@ -441,7 +456,7 @@
                                 Background="Transparent"
                                 BorderBrush="DimGray"
                                 BorderThickness="2"
-                                Click="decreaseBrightness"
+                                Click="OnDecreaseBrightnessButtonClicked"
                                 CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_down.png" />
                             </Button>
@@ -472,7 +487,7 @@
                                 Background="Transparent"
                                 BorderBrush="DimGray"
                                 BorderThickness="2"
-                                Click="increaseOpacity"
+                                Click="OnIncreaseOpacityButtonClicked"
                                 CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_up.png" />
                             </Button>
@@ -485,7 +500,7 @@
                                 FontSize="25"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="{x:Bind opacity, Mode=OneWay}"
+                                Text="{x:Bind _opacity, Mode=OneWay}"
                                 TextAlignment="Center" />
                             <Button
                                 Grid.Row="4"
@@ -502,7 +517,7 @@
                                 Background="Transparent"
                                 BorderBrush="DimGray"
                                 BorderThickness="2"
-                                Click="decreaseOpacity"
+                                Click="OnDecreaseOpacityButtonClicked"
                                 CornerRadius="5,5,5,5">
                                 <Image Source="/Assets/icons/icon_down.png" />
                             </Button>
@@ -519,36 +534,30 @@
                             Orientation="Horizontal"
                             Spacing="70">
                             <Button
-                               
                                 Width="120"
                                 Height="80"
                                 HorizontalAlignment="Center"
                                 Background="Transparent"
                                 BorderBrush="#ff728e"
                                 BorderThickness="2"
-                                Click="cancelColourPick"
+                                Click="OnCancelButtonClicked"
                                 CornerRadius="5,5,5,5">
                                 <Image Height="50" Source="/Assets/icons/icon_x.png" />
                             </Button>
                             <Button
                                 x:Name="colorSelectButton"
-                       
                                 Width="120"
                                 Height="80"
                                 HorizontalAlignment="Right"
                                 Background="Transparent"
                                 BorderBrush="#cdff59"
                                 BorderThickness="2"
-                                Click="selectColour"
+                                Click="OnConfirmButtonClicked"
                                 CornerRadius="5,5,5,5">
                                 <Image Height="60" Source="/Assets/icons/icon_checkmark.png" />
                             </Button>
                         </StackPanel>
-
-
                     </Grid>
-
-
                 </Grid>
             </Border>
         </Grid>

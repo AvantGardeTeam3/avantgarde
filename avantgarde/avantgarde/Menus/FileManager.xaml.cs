@@ -133,9 +133,9 @@ namespace avantgarde.Menus
                 content.Append(Convert.ToInt32(s.halfpoint.X).ToString() + "," + Convert.ToInt32(s.halfpoint.Y).ToString() + ",");
                 content.Append(Convert.ToInt32(s.size.Width).ToString() + "," + Convert.ToInt32(s.size.Height).ToString() + ",");
                 content.Append(s.modified.ToString() + ",");
-                content.Append(s.colourProfile.ToString() + ",");
-                content.Append(s.brightness.ToString() + ",");
-                content.Append(s.opacity.ToString() + ",");
+                content.Append(s.ColorProfile.ToString() + ",");
+                content.Append(s.Brightness.ToString() + ",");
+                content.Append(s.Opactiy.ToString() + ",");
                 content.Append(s.brush + ",");
                 content.Append(s.reflections.ToString());
                 content.Append("\n");
@@ -178,9 +178,9 @@ namespace avantgarde.Menus
                 data.halfpoint = new Point(Double.Parse(vals[10] + ".0"), Double.Parse(vals[11] + ".0"));
                 data.size = new Size(Double.Parse(vals[12] + ".0"), Double.Parse(vals[13] + ".0"));
                 data.modified = "True" == vals[14];
-                data.colourProfile = Int32.Parse(vals[15]);
-                data.brightness = Int32.Parse(vals[16]);
-                data.opacity = Int32.Parse(vals[17]);
+                data.ColorProfile = Int32.Parse(vals[15]);
+                data.Brightness = Int32.Parse(vals[16]);
+                data.Opactiy = Int32.Parse(vals[17]);
                 data.brush = vals[18];
                 data.reflections = Int32.Parse(vals[19]);
 
@@ -380,33 +380,33 @@ namespace avantgarde.Menus
             NotifyPropertyChanged();
         }
 
-        private async Task saveImageAsync()
-        {
-            //method is used to create thumbnails, not implemented for this version, but will be used in future versions
+        //private async Task saveImageAsync()
+        //{
+        //    //method is used to create thumbnails, not implemented for this version, but will be used in future versions
 
-            InkCanvas inkCanvas = Controller.ControllerFactory.gazeController.inkCanvas;
-            Color background = Controller.ControllerFactory.gazeController.colourManager.backgroundSelection;
+        //    InkCanvas inkCanvas = Controller.ControllerFactory.gazeController.inkCanvas;
+        //    Color background = ui.GetColorManager().;
 
-            CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
+        //    CanvasDevice device = CanvasDevice.GetSharedDevice();
+        //    CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 96);
 
-            StorageFile file = await localFolder.CreateFileAsync("img" + selectedSlot.ToString() + ".jpg", CreationCollisionOption.ReplaceExisting);
-            using (var ds = renderTarget.CreateDrawingSession())
-            {
-                ds.Clear(background);
-                ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
-            }
-            if (file != null)
-            {
-                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Jpeg, 1f);
-                }
+        //    StorageFile file = await localFolder.CreateFileAsync("img" + selectedSlot.ToString() + ".jpg", CreationCollisionOption.ReplaceExisting);
+        //    using (var ds = renderTarget.CreateDrawingSession())
+        //    {
+        //        ds.Clear(background);
+        //        ds.DrawInk(inkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+        //    }
+        //    if (file != null)
+        //    {
+        //        using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+        //        {
+        //            await renderTarget.SaveAsync(fileStream, CanvasBitmapFileFormat.Jpeg, 1f);
+        //        }
 
 
-            }
-            NotifyPropertyChanged();
-        }
+        //    }
+        //    NotifyPropertyChanged();
+        //}
 
         public Image[] GetImages()
         {

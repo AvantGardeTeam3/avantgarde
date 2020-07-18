@@ -24,61 +24,82 @@ namespace avantgarde.Menus
     public sealed partial class UI : UserControl, INotifyPropertyChanged
 
     {
-        public bool isDrawing;
+        public bool IsDrawing;
 
         private String playButtonVisibility { get; set; }
         private String playButtonPosition { get; set; }
         private String toolBoxButtonVisibility { get; set; }
-        public String colourHex { get; set; }
+        public Utils.AGColor AGColor
+        {
+            get => libreToolBox.AGColor;
+            private set { }
+        }
+        public int MandalaLineNumber
+        {
+            get => libreToolBox.MandalaLines;
+            private set { }
+        }
+        public String Brush
+        {
+            get => libreToolBox.BrushSelection;
+            private set { }
+        }
+        public Utils.AGColor BackgroundColor
+        {
+            get => libreToolBox.BackgroundColor;
+            private set { }
+        }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
-        public bool drawState { get; set; }
-        public String drawStateIcon { get; set; }
-
-        public Color colourSelection;
+        public bool DrawState { get; set; }
+        private String DrawStateIcon { get; set; }
        
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler undoButtonClicked;
         public event EventHandler redoButtonClicked;
         public event EventHandler animationButtonClicked;
-        public event EventHandler backgroundButtonClicked;
+        
         public event EventHandler goHomeButtonClicked;
         public event EventHandler drawStateChanged;
-        public event EventHandler drawingPropertiesUpdated;
-        public event EventHandler colourSelectionUpdated;
+        
         public event EventHandler clearCanvas;
         public event EventHandler saveImageClick;
 
+        // Color
+        public event EventHandler<Events.ColorEventArgs> ColorSelectionUpdated;
+        public event EventHandler<Events.ColorEventArgs> BackgroundColorUpdated;
+        // Drawing Properties
+        public event EventHandler DrawingPropertiesUpdated;
+
         public UI()
         {
-            isDrawing = false;
+            IsDrawing = false;
             playButtonPosition = "Center";
             toolBoxButtonVisibility = "Collapsed";
             playButtonVisibility = "Collapsed";
             
-            colourHex = ColourManager.defaultColour.ToString();
+            //colourHex = ColourManager.defaultColour.ToString();
             getWindowAttributes();
             this.InitializeComponent();
             actionPanel.Visibility = Visibility.Collapsed;
             animationButton.Visibility = Visibility.Collapsed;
-            drawState = false;
-            drawStateIcon = "/Assets/icons/icon_play.png";
+            DrawState = false;
+            DrawStateIcon = "/Assets/icons/icon_play.png";
 
             
             libreToolBox.openToolbox();
 
-            libreToolBox.colourSelectionUpdated += new EventHandler(updateColourSelection);
+            libreToolBox.BackgroundColorSelectionUpdated += OnBackgroundColorSelectionUpdated;
+            libreToolBox.ColorSelectionUpdated += OnColorSelectionUpdate;
+
             libreToolBox.goHomeButtonClicked += new EventHandler(toolboxGoHomeButtonClicked);
             libreToolBox.propertiesUpdated += new EventHandler(toolboxPropertiesUpdated);
-            libreToolBox.setBackgroundButtonClicked += new EventHandler(backgroundColourUpdated);
             libreToolBox.toolboxClosed += new EventHandler(toolboxClosed);
             libreToolBox.clearCanvasButtonClicked += new EventHandler(clearCanvasButtonClicked);
             libreToolBox.popupOpened += new EventHandler(hidePlayButton);
             libreToolBox.popupClosed += new EventHandler(showPlayButton);
             libreToolBox.saveImageClicked += new EventHandler(saveImage);
-
         }
-
 
         private void NotifyPropertyChanged(String propertyName = "")
         {
@@ -91,72 +112,43 @@ namespace avantgarde.Menus
             HEIGHT = (int)Window.Current.Bounds.Height;
         }
 
-
         public InkDrawingAttributes getDrawingAttributes() {
             return libreToolBox.getDrawingAttributes();
         }
-
-        public String getBrush() {
-            return libreToolBox.brushSelection;
-        }
-        public String getBackgroundHex() {
-            return libreToolBox.getColourManager().getBackgroundColour().ToString();
-        }
-
-        public Color getColour(int profile, int brightness, int opacity)
+        
+        private void OnColorSelectionUpdate(object sender, Events.ColorEventArgs args)
         {
-            return libreToolBox.getColourManager().getColour(profile, brightness, opacity);
+            ColorSelectionUpdated(this, args);
         }
 
-        public Color getColour() {
-            return colourSelection;
+        private void OnBackgroundColorSelectionUpdated(object sender, Events.ColorEventArgs args)
+        {
+            BackgroundColorUpdated(this, args);
         }
 
-        public int getMandalaLines() {
-            return libreToolBox.mandalaLines;
-        }
-
-        public int getColourAttributes(int att) {
-            if (att == 0)
-            {
-                return libreToolBox.getColourManager().colourProfile;
-            }
-            else if (att == 1)
-            {
-                return libreToolBox.getColourManager().brightness;
-            }
-            else {
-                return libreToolBox.getColourManager().opacity;
-            }
-        }
-        public LibreToolBox getToolbox() {
-            return libreToolBox;
-        }
-
-        public ColourManager UIGetColourManager() { return libreToolBox.getColourManager(); }
         private void updateDrawStateUI() {
-            if (drawState)
+            if (DrawState)
             {
-                if (libreToolBox.isOpen()) { libreToolBox.closeToolbox(null, null); }
+                if (libreToolBox.IsOpen()) { libreToolBox.closeToolbox(null, null); }
                 playButtonPosition = "Right";
                 toolBoxButtonVisibility = "Collapsed";
                 animationButton.Visibility = Visibility.Collapsed;
                 actionPanel.Visibility = Visibility.Collapsed;
-                drawStateIcon = "/Assets/icons/icon_pause.png";
+                DrawStateIcon = "/Assets/icons/icon_pause.png";
             }
             else 
             {
                 toolBoxButtonVisibility = "Visible";
                 actionPanel.Visibility = Visibility.Visible;
                 animationButton.Visibility = Visibility.Visible;
-                drawStateIcon = "/Assets/icons/icon_play.png";
+                DrawStateIcon = "/Assets/icons/icon_play.png";
             }
         }
 
         private void changeDrawState(object sender, RoutedEventArgs e)
         {
 
-            if (isDrawing)
+            if (IsDrawing)
             {
             
                 if (String.Compare(playButtonPosition, "Right") == 0)
@@ -172,7 +164,7 @@ namespace avantgarde.Menus
             }
 
 
-            drawState = !drawState;
+            DrawState = !DrawState;
             updateDrawStateUI();
             drawStateChanged?.Invoke(this, EventArgs.Empty);
             NotifyPropertyChanged();
@@ -195,7 +187,7 @@ namespace avantgarde.Menus
 
         private void toolboxPropertiesUpdated(object sender, EventArgs e)
         {
-            drawingPropertiesUpdated?.Invoke(this, EventArgs.Empty);
+            DrawingPropertiesUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         private void initToolbox(object sender, RoutedEventArgs e)
@@ -212,19 +204,6 @@ namespace avantgarde.Menus
         {
             clearCanvas?.Invoke(this, EventArgs.Empty);
 
-        }
-
-        private void updateColourSelection(object sender, EventArgs e) {
-            colourHex = libreToolBox.getColourManager().getColour().ToString();
-            colourSelection = libreToolBox.getColourManager().getColour();
-            colourSelectionUpdated?.Invoke(this, EventArgs.Empty);
-            NotifyPropertyChanged();
-        }
-
-
-        private void backgroundColourUpdated(object sender, EventArgs e) {
-
-            backgroundButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void saveImage(object sender, EventArgs e)

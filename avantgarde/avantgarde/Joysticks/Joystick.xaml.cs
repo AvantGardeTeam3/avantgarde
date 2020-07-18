@@ -28,16 +28,18 @@ namespace avantgarde.Joysticks
         public int joystickStateX { get; set; }
         public int joystickStateY { get; set; }
 
+        public event EventHandler UpKeyInvoked;
+        public event EventHandler DownKeyInvoked;
+        public event EventHandler LeftKeyInvoked;
+        public event EventHandler RightKeyInvoked;
+
+        public event EventHandler MiddleKeyInvoked;
+
         public Joystick()
         {
             this.InitializeComponent();
             joystickStateX = 1;
             joystickStateY = 1;
-
-            PointerEnteredHandler = new List<Action<object, PointerRoutedEventArgs>>();
-            PointerExitedHandler = new List<Action<object, PointerRoutedEventArgs>>();
-
-            GazeStateChangeHandler = new List<Action<object, StateChangedEventArgs>>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -46,10 +48,6 @@ namespace avantgarde.Joysticks
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public List<Action<object, PointerRoutedEventArgs>> PointerEnteredHandler { get; private set; }
-        public List<Action<object, PointerRoutedEventArgs>> PointerExitedHandler { get; private set; }
-        public List<Action<object, StateChangedEventArgs>> GazeStateChangeHandler { get; private set; }
 
         void JoystickUI_Loaded(object sender, RoutedEventArgs e) {
 
@@ -84,19 +82,11 @@ namespace avantgarde.Joysticks
                     BallToRight();
                     break;
             }
-            foreach(Action<object, PointerRoutedEventArgs> action in PointerEnteredHandler)
-            {
-                action.Invoke(sender, e);
-            }
         }
 
         private void KeyPointerExited(object sender, PointerRoutedEventArgs e)
         {
             BallToCentre();
-            foreach(Action<object, PointerRoutedEventArgs> action in PointerExitedHandler)
-            {
-                action.Invoke(sender, e);
-            }
         }
 
         private void BallToCentre()
@@ -134,7 +124,6 @@ namespace avantgarde.Joysticks
             NotifyPropertyChanged();
         }
 
-
         private void GazeElement_StateChanged(object sender, Microsoft.Toolkit.Uwp.Input.GazeInteraction.StateChangedEventArgs e)
         {
             if (e.PointerState == PointerState.Exit)
@@ -161,9 +150,28 @@ namespace avantgarde.Joysticks
                         break;
                 }
             }
-            foreach(Action<object, StateChangedEventArgs> action in GazeStateChangeHandler)
+        }
+    
+        private void OnKeyClick(object sender, RoutedEventArgs args)
+        {
+            Button button = (Button)sender;
+            switch (button.Name)
             {
-                action.Invoke(sender, e);
+                case "UpKey":
+                    UpKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "DownKey":
+                    DownKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "LeftKey":
+                    LeftKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "RightKey":
+                    RightKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "MidKey":
+                    MiddleKeyInvoked(this, EventArgs.Empty);
+                    break;
             }
         }
     }

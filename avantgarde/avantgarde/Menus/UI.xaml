@@ -119,7 +119,7 @@
             <Image
                 Width="80"
                 Height="80"
-                Source="{x:Bind drawStateIcon, Mode=OneWay}" />
+                Source="{x:Bind DrawStateIcon, Mode=OneWay}" />
         </Button>
 
         <Button
@@ -140,6 +140,5 @@
                 Height="80"
                 Source="/Assets/icons/icon_movie.png" />
         </Button>
-
     </Grid>
 </UserControl>

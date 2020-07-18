@@ -35,7 +35,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <uc:ColourManager x:Name="colourManager" Canvas.ZIndex="1" />
+            <uc:ColourManager x:Name="colorManager" Canvas.ZIndex="1" />
             <uc:ConfirmTool x:Name="confirmTool" Canvas.ZIndex="1" />
             <uc:FileManager x:Name="fileManager" Canvas.ZIndex="1" />
             <uc:BrushTools x:Name="brushTool" Canvas.ZIndex="1" />
@@ -79,36 +79,33 @@
                             Spacing="10">
 
                             <Button
-                                x:Name="colourPalette0"
+                                x:Name="palette0"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind colourPalette[0], Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="colourPalette0Clicked"
+                                Click="PaletteClick"
                                 CornerRadius="5,5,5,5" />
 
                             <Button
-                                x:Name="colourPalette2"
+                                x:Name="palette2"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind colourPalette[2], Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="colourPalette2Clicked"
+                                Click="PaletteClick"
                                 CornerRadius="5,5,5,5" />
 
                             <Button
-                                x:Name="colourPalette4"
+                                x:Name="palette4"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind colourPalette[4], Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="colourPalette4Clicked"
+                                Click="PaletteClick"
                                 CornerRadius="5,5,5,5" />
 
                         </StackPanel>
@@ -124,35 +121,33 @@
                             Spacing="10">
 
                             <Button
-                                x:Name="colourPalette1"
+                                x:Name="palette1"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind colourPalette[1], Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="colourPalette1Clicked"
+                                Click="PaletteClick"
                                 CornerRadius="5,5,5,5" />
 
                             <Button
-                                x:Name="colourPalette3"
+                                x:Name="palette3"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind colourPalette[3], Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="colourPalette3Clicked"
+                                Click="PaletteClick"
                                 CornerRadius="5,5,5,5" />
 
                             <Button
+                                x:Name="backgroundButton"
                                 Width="125"
                                 Height="125"
                                 HorizontalAlignment="Center"
-                                Background="{x:Bind backgroundHex, Mode=OneWay}"
                                 BorderBrush="White"
                                 BorderThickness="2"
-                                Click="setBackground"
+                                Click="BackgroundClick"
                                 Content="Background"
                                 CornerRadius="5,5,5,5"
                                 FontFamily="Tahoma"

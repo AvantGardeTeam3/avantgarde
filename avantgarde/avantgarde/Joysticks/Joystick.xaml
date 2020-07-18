@@ -39,7 +39,6 @@
                 Grid.Row="{x:Bind joystickStateY, Mode=OneWay}"
                 Grid.Column="{x:Bind joystickStateX, Mode=OneWay}"
                 Source="/Assets/joystick_ball.png" />
-
             <Button
                 x:Name="MidKey"
                 Grid.Row="1"
@@ -47,7 +46,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -60,7 +60,8 @@
                 VerticalAlignment="Stretch"
                 gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -68,7 +69,6 @@
                     Width="50"
                     Opacity="0.5"
                     Source="/Assets/icons/icon_up.png" />
-
             </Button>
             <Button
                 x:Name="DownKey"
@@ -78,7 +78,8 @@
                 VerticalAlignment="Stretch"
                 gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -95,7 +96,8 @@
                 VerticalAlignment="Stretch"
                 gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -112,7 +114,8 @@
                 VerticalAlignment="Stretch"
                 gaze:GazeInput.MaxDwellRepeatCount="20"
                 Background="Transparent"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -120,14 +123,7 @@
                     Height="50"
                     Opacity="0.5"
                     Source="/Assets/icons/icon_right.png" />
-
             </Button>
-
-
         </Grid>
-
-
-
     </Canvas>
-
 </UserControl>

@@ -46,7 +46,8 @@
                 FontSize="18"
                 Foreground="White"
                 Opacity="0.75"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
 
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
@@ -65,7 +66,8 @@
                 FontSize="18"
                 Foreground="White"
                 Opacity="0.75"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />
                 </gaze:GazeInput.GazeElement>
@@ -83,7 +85,8 @@
                 FontSize="18"
                 Foreground="White"
                 Opacity="0.75"
-                Visibility="Visible">
+                Visibility="Visible"
+                Click="OnKeyClick">
 
                 <gaze:GazeInput.GazeElement>
                     <gaze:GazeElement StateChanged="GazeElement_StateChanged" />

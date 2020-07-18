@@ -1,4 +1,5 @@
-﻿using System;
+﻿using avantgarde.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -143,7 +144,7 @@ namespace avantgarde.Drawing
                 attributes = new InkDrawingAttributes();
             }
             attributes.Size = data.size;
-            attributes.Color = Configuration.ui.getColour(data.colourProfile, data.brightness, data.opacity);
+            attributes.Color = AGColor.MakeColor(data.ColorProfile, data.Brightness, data.Opactiy);
             this.DrawingAttributes = attributes;
             this.strokeData = data;
             UpdateStroke();
@@ -188,7 +189,7 @@ namespace avantgarde.Drawing
                 attributes = new InkDrawingAttributes();
             }
             attributes.Size = data.size;
-            attributes.Color = Configuration.ui.getColour(data.colourProfile, data.brightness, data.opacity);
+            attributes.Color = AGColor.MakeColor(data.ColorProfile, data.Brightness, data.Opactiy);
             stroke.DrawingAttributes = attributes;
             return stroke;
         }

@@ -40,41 +40,54 @@ namespace avantgarde.Menus
         private int RESTRICTED_LOAD = 4;
         private int RESTRICTED_EXPORT = 5;
 
-        public int selectedPalette = 0;
+        private Color highlightColor = Utils.AGColor.MakeColor("#ffcdff59");
 
-        private int BRIGHTNESS = 1;
-        private int PROFILE = 0;
-        private int OPACITY = 2;
+        private int selectedPalette = 0;
+        private Utils.AGColor[] colors;
+        public Utils.AGColor AGColor
+        {
+            get => colors[selectedPalette];
+            private set { colors[selectedPalette] = value; }
+        }
+        private Utils.AGColor backgroundColor;
+        public Utils.AGColor BackgroundColor
+        {
+            get => backgroundColor;
+            private set { backgroundColor = value; }
+        }
+        private Button[] palettes;
 
-        public String brushSelection;
+        public ColourManager ColorManager
+        {
+            get => colorManager;
+            private set { }
+        }
+
+        public String BrushSelection = "paint";
         public int SelectedSlot = 1;
 
-        public bool editingPalette;
-        private bool autoswitch;
+        private bool editingPalette = false;
+        private bool editingBackground = false;
+        private bool autoswitch = true;
 
         private double brushSize { get; set; }
-        public int mandalaLines { get; set; }
+        public int MandalaLines { get; set; }
         private int WIDTH { get; set; }
         private int HEIGHT { get; set; }
 
         private Button selectedButton;
 
-        public Color colourSelection;
-
-        public String backgroundHex { get; set; }
-        private int[,] colourPaletteData = 
-            new int[,] { { 5, 6, 100 }, { 0, 7, 100 }, { 6, 7, 100 }, { 2, 7, 100 }, { 9, 7, 100 } };
-        public String[] colourPalette { get; set; }
-        public String colourHex { get; set; }
-
         private InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler goHomeButtonClicked;
-        public event EventHandler setBackgroundButtonClicked;
+        
         public event EventHandler propertiesUpdated;
         public event EventHandler toolboxClosed;
-        public event EventHandler colourSelectionUpdated;
+        // Color
+        public event EventHandler<Events.ColorEventArgs> ColorSelectionUpdated;
+        public event EventHandler<Events.ColorEventArgs> BackgroundColorSelectionUpdated;
+
         public event EventHandler clearCanvasButtonClicked;
         public event EventHandler popupOpened;
         public event EventHandler popupClosed;
@@ -83,118 +96,61 @@ namespace avantgarde.Menus
 
         public LibreToolBox()
         {
-            autoswitch = true;
-            editingPalette = false;
-            brushSelection = "paint";
-            colourPalette = new String[5];
             getWindowAttributes();
 
-            mandalaLines = 8;
+            MandalaLines = 8;
             propertyUpdate();
             this.InitializeComponent();
-            colourPalette0.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-            colourPalette0.BorderThickness = new Thickness(5);
-            drawingAttributes.Color = ColourManager.defaultColour;
+
+            // set the top-left palette as the default selected palette
+            palettes = new Button[] { palette0, palette1, palette2, palette3, palette4 };
+            palette0.BorderBrush = new SolidColorBrush(highlightColor);
+            palette0.BorderThickness = new Thickness(5);
+            
+            // set the default colors for the color palettes and background
+            colors = new Utils.AGColor[] {
+                new Utils.AGColor(5,6,100),
+                new Utils.AGColor(0,7,100),
+                new Utils.AGColor(6,7,100),
+                new Utils.AGColor(2,7,100),
+                new Utils.AGColor(9,7,100)
+                };
+            backgroundColor = new Utils.AGColor(12, 1, 100);
+            UpdatePalettesAndBackground();
+
+            // set the default color and size for the brush
+            drawingAttributes.Color = Utils.AGColor.MakeColor(5,5,100);
             drawingAttributes.Size = new Size(10, 10);
             brushTool.drawingAttributes = this.drawingAttributes;
-
-            autoswitchButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
-            updateBackgroundButton();
-            initColourPalette(this.colourPaletteData);
-            
-            colourHex = ColourManager.defaultColour.ToString();
             brushSize = 10;
             brushTool.brushSize = this.brushSize;
-            brushTool.mandalaLines = this.mandalaLines;
+            brushTool.mandalaLines = this.MandalaLines;
 
-
-
+            autoswitchButton.Background = new SolidColorBrush(highlightColor);
+            
+            // highlight the tutorial button
             selectButton(tutorialButton);
+            // open the tutorial
             tutorial.open(1);
 
-            colourManager.colourManagerClosed += new EventHandler(popupClosedEvent);
-            colourManager.updateColourSelection += new EventHandler(updateColourSelection);
-            colourManager.backgroundSelectionChanged += new EventHandler(updateBackground);
-            colourManager.paletteEdited += new EventHandler(updatePalette);
-            colourManager.toggleAutoswitch += new EventHandler(cmToggleAutoSwitch);
+            // color manager events
+            colorManager.Confirmed += OnColorManagerConfirm;
+            colorManager.Canceled += OnColorManagerCancel;
+
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
+
+            // file manager events
             fileManager.loadRequested += new EventHandler(load);
             fileManager.saveRequested += new EventHandler(save);
             fileManager.fileLoaded += new EventHandler(fileLoaded);
             fileManager.fileManagerClosed += new EventHandler(popupClosedEvent);
+
+            // brush tool events
             brushTool.propertiesUpdated += new EventHandler(drawingAttributesUpdated);
             brushTool.menuClosed += new EventHandler(popupClosedEvent);
+
+            // tutorial events
             tutorial.tutorialClosed += new EventHandler(popupClosedEvent);
-        }
-
-        public BrushTools getBrushTool()
-        {
-            return this.brushTool;
-        }
-        private void updatePaletteSelection() {
-            colourPalette0.BorderBrush = new SolidColorBrush(Colors.White);
-            colourPalette1.BorderBrush = new SolidColorBrush(Colors.White);
-            colourPalette2.BorderBrush = new SolidColorBrush(Colors.White);
-            colourPalette3.BorderBrush = new SolidColorBrush(Colors.White);
-            colourPalette4.BorderBrush = new SolidColorBrush(Colors.White);
-            colourPalette0.BorderThickness = new Thickness(2);
-            colourPalette1.BorderThickness = new Thickness(2);
-            colourPalette2.BorderThickness = new Thickness(2);
-            colourPalette3.BorderThickness = new Thickness(2);
-            colourPalette4.BorderThickness = new Thickness(2);
-
-            if (selectedPalette == 0)
-            {
-                colourPalette0.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-                colourPalette0.BorderThickness = new Thickness(5);
-            }
-            else if (selectedPalette == 1)
-            {
-                colourPalette1.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-                colourPalette1.BorderThickness = new Thickness(5);
-            }
-            else if (selectedPalette == 2)
-            {
-                colourPalette2.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-                colourPalette2.BorderThickness = new Thickness(5);
-            }
-            else if (selectedPalette == 3)
-            {
-                colourPalette3.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-                colourPalette3.BorderThickness = new Thickness(5);
-            }
-            else if (selectedPalette == 4)
-            {
-                colourPalette4.BorderBrush = new SolidColorBrush(hexToColor("#ffcdff59"));
-                colourPalette4.BorderThickness = new Thickness(5);
-            }
-            NotifyPropertyChanged();
-        }
-       
-        private void updateBackgroundButton() {
-            backgroundHex = colourManager.backgroundSelection.ToString();
-            NotifyPropertyChanged();
-        }
-
-        private void initColourPalette(int[,] data) {
-
-
-            for (int x = 0; x < data.GetLength(0); x += 1)
-            {
-                colourPalette[x] = "#" + colourManager.getOpacityHex(data[x,OPACITY])
-                    + colourManager.getColourHex(data[x, PROFILE], data[x,BRIGHTNESS]);
-                colourManager.colourPalette[x] = hexToColor(colourPalette[x]);
-            }
-
-            colourManager.colourPaletteHex = colourPalette;
-            colourManager.colourPaletteData = data;
-            colourPaletteData = data;
-            fileManager.colourPalette = data;
-
-            
-
-            NotifyPropertyChanged();
-            
         }
 
         private void NotifyPropertyChanged(String propertyName = "")
@@ -214,120 +170,80 @@ namespace avantgarde.Menus
             return drawingAttributes;
         }
 
-        private void colourPalette0Clicked(object sender, RoutedEventArgs e)
+        private void UpdatePalettesAndBackground()
         {
-            if (editingPalette) 
+            for(int i = 0; i < 5; i++)
             {
-                colourManager.editID = 0;
-                colourManager.saveSelectionData();
-                colourManager.loadColourData();
-                popupOpened?.Invoke(this, EventArgs.Empty);
-                colourManager.openMenu();
-                colourManager.switchID = 0;
+                palettes[i].Background = new SolidColorBrush(colors[i].Color);
+            }
 
+            backgroundButton.Background = new SolidColorBrush(backgroundColor.Color);
+        }
+
+        private void PaletteClick(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            if (!button.Name.Substring(0, 7).Equals("palette")) return;
+            int num = Convert.ToInt32(button.Name.Substring(7));
+
+
+            //unhighlight the previous selected palette
+            palettes[selectedPalette].BorderBrush = new SolidColorBrush(Colors.White);
+            palettes[selectedPalette].BorderThickness = new Thickness(2);
+
+            selectedPalette = num;
+
+            //highlight the currently selected palette
+            palettes[selectedPalette].BorderBrush = new SolidColorBrush(highlightColor);
+            palettes[selectedPalette].BorderThickness = new Thickness(5);
+
+            if (editingPalette)
+            {
+                // open color manager
+                Utils.AGColor color = colors[num];
+                colorManager.Open(color);
             }
             else
             {
-                selectedPalette = 0;
-                updatePaletteSelection();
-                colourManager.updateColour(colourPaletteData[0, PROFILE], colourPaletteData[0, BRIGHTNESS], colourPaletteData[0, OPACITY]);
-            }
-        }
-
-        private void colourPalette1Clicked(object sender, RoutedEventArgs e)
-        {
-            if (editingPalette)
-            {
-                colourManager.editID = 1;
-                colourManager.saveSelectionData();
-                colourManager.loadColourData();
-                popupOpened?.Invoke(this, EventArgs.Empty);
-                colourManager.openMenu();
-            }
-            else
-            {
-                selectedPalette = 1;
-                updatePaletteSelection();
-                colourManager.switchID = 1;
-                colourManager.updateColour(colourPaletteData[1, PROFILE], colourPaletteData[1, BRIGHTNESS], colourPaletteData[1, OPACITY]);
-            }
-        }
-
-        private void colourPalette2Clicked(object sender, RoutedEventArgs e)
-        {
-            if (editingPalette)
-            {
-                colourManager.editID = 2;
-                colourManager.saveSelectionData();
-                colourManager.loadColourData();
-                popupOpened?.Invoke(this, EventArgs.Empty);
-                colourManager.openMenu();
                 
             }
-
-            else
-            {
-                selectedPalette = 2;
-                updatePaletteSelection();
-                colourManager.switchID = 2;
-                colourManager.updateColour(colourPaletteData[2, PROFILE], colourPaletteData[2, BRIGHTNESS], colourPaletteData[2, OPACITY]);
-            }
         }
-        private void colourPalette3Clicked(object sender, RoutedEventArgs e)
+
+        private void BackgroundClick(object sender, RoutedEventArgs e)
         {
-            if (editingPalette)
-            {
-                colourManager.editID = 3;
-                colourManager.saveSelectionData();
-                colourManager.loadColourData();
-                popupOpened?.Invoke(this, EventArgs.Empty);
-                colourManager.openMenu();
-                
-            }
-
-            else
-            {
-                selectedPalette = 3;
-                updatePaletteSelection();
-                colourManager.switchID = 3;
-                colourManager.updateColour(colourPaletteData[3, PROFILE], colourPaletteData[3, BRIGHTNESS], colourPaletteData[3, OPACITY]);
-            }
+            editingBackground = true;
+            colorManager.Open(backgroundColor);
         }
 
-        private void colourPalette4Clicked(object sender, RoutedEventArgs e)
+        private void OnColorManagerConfirm(object sender, Events.ColorEventArgs e)
         {
-            if (editingPalette)
+            Utils.AGColor color = e.Color;
+            if (editingBackground)
             {
-                colourManager.editID = 4;
-                colourManager.saveSelectionData();
-                colourManager.loadColourData();
-                popupOpened?.Invoke(this, EventArgs.Empty);
-                colourManager.openMenu();
-                
+                backgroundColor = color;
+                editingBackground = false;
+                UpdatePalettesAndBackground();
+                BackgroundColorSelectionUpdated(this, new Events.ColorEventArgs(color));
             }
-
             else
             {
-                selectedPalette = 4;
-                updatePaletteSelection();
-                colourManager.switchID = 4;
-                colourManager.updateColour(colourPaletteData[4, PROFILE], colourPaletteData[4, BRIGHTNESS], colourPaletteData[4, OPACITY]);
+                colors[selectedPalette] = e.Color;
+                UpdatePalettesAndBackground();
             }
+            colorManager.Close();
         }
 
-        private void updatePalette(object sender, EventArgs e) {
-            colourPalette = colourManager.colourPaletteHex;
-            
-            fileManager.colourPalette = colourManager.colourPaletteData;
-            NotifyPropertyChanged();
-        }
-
-        public void next() {
-            selectedPalette++;
-            if (selectedPalette == 5) {
-                selectedPalette = 0;
+        private void OnColorManagerCancel(object sender, EventArgs e)
+        {
+            if (editingBackground)
+            {
+                editingBackground = false;
             }
-            updatePaletteSelection();
+            else
+            {
+
+            }
+            colorManager.Close();
         }
 
         private void toggleAS() {
@@ -337,7 +253,7 @@ namespace avantgarde.Menus
 
             if (autoswitch)
             {
-                autoswitchButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
+                autoswitchButton.Background = new SolidColorBrush(new Utils.AGColor("#ffcdff59").Color);
             }
             else
             {
@@ -345,23 +261,14 @@ namespace avantgarde.Menus
             }
         }
 
-        private void cmToggleAutoSwitch(object sender, EventArgs e) {
-
-            toggleAS();
-        }
         private void toggleAutoSwitch(object sender, RoutedEventArgs e)
         {
-
             toggleAS();
         }
 
         private void saveButtonClicked(object sender, RoutedEventArgs e)
         {
             restrictedID = RESTRICTED_SAVE;
-            int[] bgProps = colourManager.getBGColour();
-            fileManager.bgProfile = bgProps[PROFILE];
-            fileManager.bgBrightness = bgProps[BRIGHTNESS];
-            fileManager.bgOpacity = bgProps[OPACITY];
             clearPopups();
             fileManager.open(FileManager.SAVING);
             popupOpened?.Invoke(this, EventArgs.Empty);
@@ -405,10 +312,10 @@ namespace avantgarde.Menus
             selectButton(exportButton);
         }
 
-
-        public bool isOpen() {
+        public bool IsOpen() {
             return libreToolBox.IsOpen;
         }
+        
         public void openToolbox() {
             if (!libreToolBox.IsOpen) { libreToolBox.IsOpen = true; }
         }
@@ -425,21 +332,13 @@ namespace avantgarde.Menus
             brushTool.open();
             popupOpened?.Invoke(this, EventArgs.Empty);
             selectButton(drawButton);
-           
         }
 
         private void selectButton(Button b) {
-            b.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
+            b.Background = new SolidColorBrush(highlightColor);
             selectedButton = b;
         }
-
-
-
-        public ColourManager getColourManager() {
-
-            return colourManager;
-        }
-
+        
         private void clearButtonSelections()
         {
             selectedButton.Background = new SolidColorBrush(Colors.Transparent);
@@ -480,13 +379,12 @@ namespace avantgarde.Menus
             {
                 saveImageClicked?.Invoke(this, EventArgs.Empty);
             }
-            
         }
 
         private void clearPopups() {
-            if (colourManager != null)
+            if (colorManager != null)
             {
-                colourManager.close();
+                colorManager.Close();
             }
             if (fileManager != null)
             {
@@ -506,7 +404,6 @@ namespace avantgarde.Menus
             }
 
             popupClosed?.Invoke(this, EventArgs.Empty);
-
         }
     
         private void confirmDecisionMade(object sender, EventArgs e)
@@ -518,14 +415,6 @@ namespace avantgarde.Menus
             restrictedID = RESTRICTED_NONE;
             clearButtonSelections();
         }
-        private void updateColourSelection(object sender, EventArgs e)
-        {
-            colourHex = colourManager.getColour().ToString();
-            colourSelection = colourManager.getColour();
-            colourSelectionUpdated?.Invoke(this, EventArgs.Empty);
-            NotifyPropertyChanged();
-        }
-
 
         private void propertyUpdate() {
             propertiesUpdated?.Invoke(this, EventArgs.Empty);
@@ -541,21 +430,12 @@ namespace avantgarde.Menus
             selectButton(exitButton);
         }
 
-        private void updateBackground(object sender, EventArgs e) {
-            setBackgroundButtonClicked?.Invoke(this, EventArgs.Empty);
-            updateBackgroundButton();
-            colourManager.selectingBackground = false;
-        }
         private void setBackground(object sender, RoutedEventArgs e)
         {
             clearPopups();
-            colourManager.selectingBackground = true;
-            colourManager.saveSelectionData();
-            colourManager.loadColourData();
-            colourManager.openMenu();
+            // TODO
             popupOpened?.Invoke(this, EventArgs.Empty);
         }
-
 
         private void clearCanvas(object sender, RoutedEventArgs e) {
             restrictedID = RESTRICTED_CLEAR_CANVAS;
@@ -571,11 +451,10 @@ namespace avantgarde.Menus
         private void editPalette(object sender, RoutedEventArgs e)
         {
             editingPalette = !editingPalette;
-            colourManager.editingPalette = editingPalette;
 
             if (editingPalette)
             {
-                editPaletteButton.Background = new SolidColorBrush(hexToColor("#ffcdff59"));
+                editPaletteButton.Background = new SolidColorBrush(highlightColor);
             }
             else {
                 editPaletteButton.Background = new SolidColorBrush(Colors.Transparent);
@@ -586,7 +465,6 @@ namespace avantgarde.Menus
         {
             clearButtonSelections();
             popupClosed?.Invoke(this, EventArgs.Empty);
-            
         }
 
         private void initTutorial(object sender, RoutedEventArgs e)
@@ -598,18 +476,25 @@ namespace avantgarde.Menus
         }
 
 
+        /// <summary>
+        /// load color palettes and background color from file, invoked when a save event occurs in file manager
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fileLoaded(object sender, EventArgs e)
         {   
-            initColourPalette(fileManager.colourPalette);
-            colourManager.setBGColour(fileManager.bgProfile, fileManager.bgBrightness, fileManager.bgOpacity);
             NotifyPropertyChanged();
         }
 
-
+        /// <summary>
+        /// update drawing attritbute
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void drawingAttributesUpdated(object sender, EventArgs e) {
             drawingAttributes = brushTool.getDrawingAttributes();
-            drawingAttributes.Color = colourManager.getColour();
-            mandalaLines = brushTool.mandalaLines;
+            drawingAttributes.Color = colors[selectedPalette].Color;
+            MandalaLines = brushTool.mandalaLines;
             propertyUpdate();
         }
 

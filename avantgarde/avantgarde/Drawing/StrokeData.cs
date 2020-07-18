@@ -19,9 +19,9 @@ namespace avantgarde
         public Point p3;
         public Point midpoint;
         public Point halfpoint;
-        public int colourProfile;
-        public int brightness;
-        public int opacity;
+        public int ColorProfile;
+        public int Brightness;
+        public int Opactiy;
         public bool modified;
         public String brush;
         public Size size;

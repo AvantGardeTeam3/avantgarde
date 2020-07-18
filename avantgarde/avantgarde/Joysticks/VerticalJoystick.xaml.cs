@@ -31,11 +31,6 @@ namespace avantgarde.Joysticks
         {
             this.InitializeComponent();
             joystickStateY = 1;
-
-            PointerEnteredHandler = new List<Action<object, PointerRoutedEventArgs>>();
-            PointerExitedHandler = new List<Action<object, PointerRoutedEventArgs>>();
-
-            GazeStateChangeHandler = new List<Action<object, StateChangedEventArgs>>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,9 +40,13 @@ namespace avantgarde.Joysticks
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public List<Action<object, PointerRoutedEventArgs>> PointerEnteredHandler { get; set; }
-        public List<Action<object, PointerRoutedEventArgs>> PointerExitedHandler { get; set; }
         public List<Action<object, StateChangedEventArgs>> GazeStateChangeHandler { get; set; }
+
+        public event EventHandler UpKeyInvoked;
+
+        public event EventHandler DownKeyInvoked;
+
+        public event EventHandler MiddleKeyInvoked;
 
         public void displayEndPointCommands() {
             UpKey.Content = "New Line";
@@ -63,13 +62,12 @@ namespace avantgarde.Joysticks
 
         void JoystickUI_Loaded(object sender, RoutedEventArgs e)
         {
-
-            //replace these events with GazeEntered and GazeExited from GazeInputSourcePreview class
-
             UpKey.PointerEntered += KeyPointerEntered;
+            MidKey.PointerEntered += KeyPointerEntered;
             DownKey.PointerEntered += KeyPointerEntered;
 
             UpKey.PointerExited += KeyPointerExited;
+            MidKey.PointerExited += KeyPointerExited;
             DownKey.PointerExited += KeyPointerExited;
         }
 
@@ -84,20 +82,15 @@ namespace avantgarde.Joysticks
                 case "DownKey":
                     BallToDown();
                     break;
-            }
-            foreach (Action<object, PointerRoutedEventArgs> action in PointerEnteredHandler)
-            {
-                action.Invoke(sender, e);
+                case "MidKey":
+                    BallToCentre();
+                    break;
             }
         }
 
         private void KeyPointerExited(object sender, PointerRoutedEventArgs e)
         {
             BallToCentre();
-            foreach (Action<object, PointerRoutedEventArgs> action in PointerExitedHandler)
-            {
-                action.Invoke(sender, e);
-            }
         }
 
         private void BallToCentre()
@@ -120,27 +113,38 @@ namespace avantgarde.Joysticks
 
         private void GazeElement_StateChanged(object sender, Microsoft.Toolkit.Uwp.Input.GazeInteraction.StateChangedEventArgs e)
         {
-            if (e.PointerState == PointerState.Exit)
-            {
-                BallToCentre();
-                return;
-            }
-            else
+            if(e.PointerState == PointerState.Dwell)
             {
                 Button button = (Button)sender;
                 switch (button.Name)
                 {
                     case "UpKey":
-                        BallToUp();
+                        UpKeyInvoked(this, EventArgs.Empty);
                         break;
                     case "DownKey":
-                        BallToDown();
+                        DownKeyInvoked(this, EventArgs.Empty);
+                        break;
+                    case "MidKey":
+                        MiddleKeyInvoked(this, EventArgs.Empty);
                         break;
                 }
             }
-            foreach (Action<object, StateChangedEventArgs> action in GazeStateChangeHandler.ToArray())
+        }
+
+        private void OnKeyClick(object sender, RoutedEventArgs args)
+        {
+            Button button = (Button)sender;
+            switch (button.Name)
             {
-                action.Invoke(sender, e);
+                case "UpKey":
+                    UpKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "DownKey":
+                    DownKeyInvoked(this, EventArgs.Empty);
+                    break;
+                case "MidKey":
+                    MiddleKeyInvoked(this, EventArgs.Empty);
+                    break;
             }
         }
     }

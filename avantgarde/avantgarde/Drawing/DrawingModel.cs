@@ -38,7 +38,6 @@ namespace avantgarde
             foreach(BezierCurve curve in curves)
             {
                 if (!curve.Modified) retPoints.Add(curve.MidPoint);
-                //retPoints.Add(curve.MidPoint);
             }
             return retPoints;
         }

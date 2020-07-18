@@ -18,8 +18,5 @@ namespace avantgarde
         DrawingModel GetDrawingModel();
         GazeInputSourcePreview GetGazeInputSourcePreview();
         Canvas GetCanvas();
-        ColourManager GetColourManager();
-
-            
     }
 }
