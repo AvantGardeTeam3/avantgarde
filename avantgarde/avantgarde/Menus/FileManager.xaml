@@ -57,7 +57,7 @@
                         FontSize="22"
                         FontWeight="Bold"
                         Foreground="White"
-                        Text="{x:Bind title, Mode=OneWay}" />
+                        Text="{x:Bind Title, Mode=OneWay}" />
 
                     <Grid Grid.Row="1" Grid.Column="1">
                         <Border

@@ -53,7 +53,10 @@ namespace avantgarde.Menus
         public Utils.AGColor BackgroundColor
         {
             get => backgroundColor;
-            private set { backgroundColor = value; }
+            private set { 
+                backgroundColor = value;
+                BackgroundColorSelectionUpdated?.Invoke(this, new Events.ColorEventArgs(value));
+            }
         }
         private Button[] palettes;
 
@@ -92,6 +95,10 @@ namespace avantgarde.Menus
         public event EventHandler popupOpened;
         public event EventHandler popupClosed;
         public event EventHandler saveImageClicked;
+
+        // file
+        private StorageFolder selectedFolder;
+        private String selectedFileName;
 
 
         public LibreToolBox()
@@ -140,10 +147,13 @@ namespace avantgarde.Menus
             confirmTool.confirmDecisionMade += new EventHandler(confirmDecisionMade);
 
             // file manager events
-            fileManager.loadRequested += new EventHandler(load);
-            fileManager.saveRequested += new EventHandler(save);
-            fileManager.fileLoaded += new EventHandler(fileLoaded);
+            //fileManager.loadRequested += new EventHandler(load);
+            //fileManager.saveRequested += new EventHandler(save);
+            //fileManager.fileLoaded += new EventHandler(fileLoaded);
+            fileManager.FileSelected += OnFileManagerConfirmed;
+            fileManager.Cancelled += OnFileManagerCancelled;
             fileManager.fileManagerClosed += new EventHandler(popupClosedEvent);
+
 
             // brush tool events
             brushTool.propertiesUpdated += new EventHandler(drawingAttributesUpdated);
@@ -270,37 +280,66 @@ namespace avantgarde.Menus
         {
             restrictedID = RESTRICTED_SAVE;
             clearPopups();
-            fileManager.open(FileManager.SAVING);
+            fileManager.Open();
+            fileManager.Title = "Save Canvas...";
             popupOpened?.Invoke(this, EventArgs.Empty);
             selectButton(saveButton);
         }
 
-        private void save(object sender, EventArgs e) {
+        private void OnFileManagerConfirmed(object sender, Events.FileSelectEventArgs args)
+        {
+            clearPopups();
+            if(restrictedID == RESTRICTED_SAVE)
+            {
+                selectButton(saveButton);
+                popupOpened?.Invoke(this, EventArgs.Empty);
+                confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
+                confirmTool.openConfirmTool();
+                SelectedSlot = fileManager.selectedSlot;
+            }
+            else if(restrictedID == RESTRICTED_LOAD)
+            {
+                selectButton(loadButton);
+                popupOpened?.Invoke(this, EventArgs.Empty);
+                confirmTool.setMessage("Are you sure you wish to load from Slot " + fileManager.selectedSlot.ToString() + "? \n The current canvas will be lost.");
+                confirmTool.openConfirmTool();
+            }
+            selectedFolder = args.Folder;
+            selectedFileName = args.FileName;
+        }
+
+        private void OnFileManagerCancelled(object sender, EventArgs e)
+        {
+
+        }
+
+        /*private void save(object sender, EventArgs e) {
             clearPopups();
             selectButton(saveButton);
             popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to save to Slot " + fileManager.selectedSlot.ToString() + "? \n The slot will be overwritten.");
             confirmTool.openConfirmTool();
             SelectedSlot = fileManager.selectedSlot;
-        }
+        }*/
 
         private void loadButtonClicked(object sender, RoutedEventArgs e)
         {
             restrictedID = RESTRICTED_LOAD;
             clearPopups();
-            fileManager.open(FileManager.LOADING);
+            fileManager.Open();
+            fileManager.Title = "Load Canvas...";
             popupOpened?.Invoke(this, EventArgs.Empty);
             selectButton(loadButton);
         }
 
-        private void load(object sender, EventArgs e)
+        /*private void load(object sender, EventArgs e)
         {
             clearPopups();
             selectButton(loadButton);
             popupOpened?.Invoke(this, EventArgs.Empty);
             confirmTool.setMessage("Are you sure you wish to load from Slot " + fileManager.selectedSlot.ToString() + "? \n The current canvas will be lost.");
             confirmTool.openConfirmTool();
-        }
+        }*/
         private void exportButtonClicked(object sender, RoutedEventArgs e)
         {
             restrictedID = RESTRICTED_EXPORT;
@@ -362,23 +401,37 @@ namespace avantgarde.Menus
             }
             else if (restrictedID == RESTRICTED_SAVE)
             {
-                fileManager.save();
+                // save here
+
+                Utils.Save save = new Utils.Save(backgroundColor, colors, Configuration.fleur.getAllStrokeData());
+                Utils.File file = new Utils.File();
+                file.SaveAsync(save, selectedFileName);
                 Configuration.fleur.ExportScreenShot(SelectedSlot.ToString());
                 // Update image here
-                Image[] slots = fileManager.GetImages();
-                String source = ApplicationData.Current.LocalFolder.Path + "\\" + SelectedSlot.ToString() + ".png";
-                BitmapImage image = new BitmapImage(new Uri(source));
-                image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                slots[SelectedSlot - 1].Source = image;
+                //Image[] slots = { fileManager.Slot1Image, fileManager.Slot2Image, fileManager.Slot3Image};
+                //String source = ApplicationData.Current.LocalFolder.Path + "\\" + SelectedSlot.ToString() + ".png";
+                //BitmapImage image = new BitmapImage(new Uri(source));
+                //image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                //slots[SelectedSlot - 1].Source = image;
             }
             else if (restrictedID == RESTRICTED_LOAD)
             {
-                fileManager.load();
+                // load here
+                Utils.File file = new Utils.File();
+                file.Loaded += OnLoaded;
+                file.LoadAsync(selectedFileName);
             }
             else if (restrictedID == RESTRICTED_EXPORT)
             {
                 saveImageClicked?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        private void OnLoaded(object sender, Events.LoadEventArgs args)
+        {
+            Utils.Save save = args.Save;
+            Controller.ControllerFactory.gazeController.Load(save.Strokes);
+            BackgroundColor = save.BackgroundColor;
         }
 
         private void clearPopups() {
@@ -388,7 +441,7 @@ namespace avantgarde.Menus
             }
             if (fileManager != null)
             {
-                fileManager.close();
+                fileManager.Close();
             }
             if (confirmTool != null)
             {

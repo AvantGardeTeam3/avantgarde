@@ -128,6 +128,8 @@
     <Compile Include="Drawing\DrawingModel.cs" />
     <Compile Include="Drawing\StrokeData.cs" />
     <Compile Include="Events\ColorEventArgs.cs" />
+    <Compile Include="Events\FileSelectEventArgs.cs" />
+    <Compile Include="Events\LoadEventArgs.cs" />
     <Compile Include="Fleur.xaml.cs">
       <DependentUpon>Fleur.xaml</DependentUpon>
     </Compile>
@@ -167,6 +169,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Utils\AGColor.cs" />
+    <Compile Include="Utils\File.cs" />
+    <Compile Include="Utils\Save.cs" />
     <Compile Include="Utils\Colors.cs" />
   </ItemGroup>
   <ItemGroup>
