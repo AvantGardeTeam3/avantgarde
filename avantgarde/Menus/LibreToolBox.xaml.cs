@@ -494,14 +494,7 @@ namespace avantgarde.Menus
             {
                 fileManager.save();
                 Configuration.fleur.ExportScreenShot(SelectedSlot.ToString(), true);
-                //fileManager.updateThumbnails();
-                
-                // Update image here
-                Image[] slots = fileManager.GetImages();
-                String source = ApplicationData.Current.LocalFolder.Path + "\\" + SelectedSlot.ToString() + ".png";
-                BitmapImage image = new BitmapImage(new Uri(source));
-                image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                slots[SelectedSlot - 1].Source = image;
+            
             }
             else if (restrictedID == RESTRICTED_LOAD)
             {
