@@ -1001,6 +1001,7 @@ namespace avantgarde.Controller
         private InkStrokeBuilder strokeBuilder = null;
         private DispatcherTimer inkReplayTimer;
         private DateTime beginTimeOfReplay;
+        private DateTimeOffset currentTimeOfReplay;
         private DateTimeOffset beginTimeOfRecordedSession;
         private DateTimeOffset endTimeOfRecordedSession;
         private TimeSpan durationOfRecordedSession;
@@ -1025,7 +1026,6 @@ namespace avantgarde.Controller
             }
             return retStrokes;
         }
-
         public void StartReplay()
         {
             page.GetUI().StartReplay();
@@ -1071,6 +1071,7 @@ namespace avantgarde.Controller
                 durationOfRecordedSession = endTimeOfRecordedSession - beginTimeOfRecordedSession;
 
                 beginTimeOfReplay = DateTime.Now;
+                currentTimeOfReplay = DateTimeOffset.Now;
                 inkReplayTimer.Start();
                 // backupContainer = page.GetInkCanvas().InkPresenter.StrokeContainer;
             }
@@ -1081,7 +1082,6 @@ namespace avantgarde.Controller
                 StopReplay();
             }
         }
-
         private void StopReplay()
         {
             page.GetUI().EndReplay();
@@ -1100,11 +1100,23 @@ namespace avantgarde.Controller
         }
         private void InkReplayTimer_Tick(object sender, object e)
         {
-            var currentTimeOfReplay = DateTimeOffset.Now;
+            for (int i = 0; i < strokesToReplay.Count;)
+            {
+                InkStroke stroke = strokesToReplay.ElementAt(i);
+                if(stroke.StrokeStartedTime.Value + stroke.StrokeDuration.Value <= beginTimeOfRecordedSession + (currentTimeOfReplay - beginTimeOfReplay))
+                {
+                    strokesToReplay.RemoveAt(i);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            currentTimeOfReplay = DateTimeOffset.Now;
             TimeSpan timeElapsedInReplay = currentTimeOfReplay - beginTimeOfReplay;
 
             DateTimeOffset timeEquivalentInRecordedSession = beginTimeOfRecordedSession + timeElapsedInReplay;
-            page.GetInkCanvas().InkPresenter.StrokeContainer.Clear();
+            page.GetInkCanvas().InkPresenter.StrokeContainer.DeleteSelected();
             page.GetInkCanvas().InkPresenter.StrokeContainer.AddStrokes(GetCurrentStrokesView(timeEquivalentInRecordedSession));
 
             if (timeElapsedInReplay > durationOfRecordedSession)
@@ -1129,7 +1141,6 @@ namespace avantgarde.Controller
 
             return retStrokes;
         }
-
         private InkStroke GetPartialStroke(InkStroke stroke, DateTimeOffset time)
         {
             DateTimeOffset? startTime = stroke.StrokeStartedTime;
@@ -1163,6 +1174,7 @@ namespace avantgarde.Controller
             var count = (int)((points.Count - 1) * portion) + 1;
             InkStroke ret = strokeBuilder.CreateStrokeFromInkPoints(points.Take(count), System.Numerics.Matrix3x2.Identity, startTime, time - startTime);
             ret.DrawingAttributes = stroke.DrawingAttributes;
+            ret.Selected = true;
             return ret;
         }
     }
