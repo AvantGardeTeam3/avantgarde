@@ -1,0 +1,170 @@
+﻿<UserControl
+    x:Class="avantgarde.Menus.UI"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gaze="using:Microsoft.Toolkit.Uwp.Input.GazeInteraction"
+    xmlns:local="using:avantgarde.Menus"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="using:avantgarde.Menus"
+    gaze:GazeInput.Interaction="Enabled"
+    gaze:GazeInput.IsCursorVisible="True"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <uc:LibreToolBox
+            x:Name="libreToolBox"
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" />
+        <Button
+            x:Name="toolBoxButton"
+            Width="150"
+            Height="150"
+            Margin="20"
+            VerticalAlignment="Top"
+            Background="LightGray"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            Click="initToolbox"
+            CornerRadius="5,5,5,5"
+            Opacity=".60"
+            Visibility="{x:Bind toolBoxButtonVisibility, Mode=OneWay}">
+
+            <Image
+                Width="80"
+                Height="80"
+                Source="/Assets/icons/icon_menu2.png" />
+        </Button>
+
+        <StackPanel
+            x:Name="actionPanel"
+            Margin="20"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Orientation="Horizontal"
+            Spacing="20">
+            <Button
+                x:Name="undoButton"
+                Width="150"
+                Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="undo"
+                CornerRadius="5,5,5,5"
+                Opacity=".60">
+
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_undo.png" />
+            </Button>
+
+            <Button
+                x:Name="redoButton"
+                Width="150"
+                Height="150"
+                gaze:GazeInput.DwellDuration="00:00:00.4000000"
+                gaze:GazeInput.DwellRepeatDuration="00:00:00.6800000"
+                gaze:GazeInput.FixationDuration="00:00:00.3500000"
+                gaze:GazeInput.MaxDwellRepeatCount="5"
+                gaze:GazeInput.RepeatDelayDuration="00:00:00.4000000"
+                gaze:GazeInput.ThresholdDuration="00:00:00.0500000"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="redo"
+                CornerRadius="5,5,5,5"
+                Opacity=".60">
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_redo.png" />
+            </Button>
+
+
+        </StackPanel>
+
+        <Button
+            x:Name="playButton"
+            Width="150"
+            Height="150"
+            Margin="20"
+            HorizontalAlignment="{x:Bind playButtonPosition, Mode=OneWay}"
+            VerticalAlignment="Bottom"
+            Background="LightGray"
+            BorderBrush="#cdff59"
+            BorderThickness="2"
+            Click="changeDrawState"
+            CornerRadius="5,5,5,5"
+            Opacity="0.60"
+            Visibility="{x:Bind playButtonVisibility, Mode=OneWay}">
+            <Image
+                Width="80"
+                Height="80"
+                Source="{x:Bind drawStateIcon, Mode=OneWay}" />
+        </Button>
+
+        <StackPanel
+            Margin="20"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal"
+            Spacing="20">
+
+
+            <Button
+                x:Name="squareButton"
+                Width="150"
+                Height="150"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="toggleSquareView"
+                CornerRadius="5,5,5,5"
+                Opacity="0.60">
+                <Button.Content>
+                    <TextBlock
+                        FontFamily="Tahoma"
+                        FontSize="25"
+                        Foreground="White"
+                        Text="Square &#x0a; View" />
+                </Button.Content>
+
+            </Button>
+
+            <Button
+                x:Name="animationButton"
+                Width="150"
+                Height="150"
+                Background="LightGray"
+                BorderBrush="#cdff59"
+                BorderThickness="2"
+                Click="animationButton_Click"
+                CornerRadius="5,5,5,5"
+                Opacity="0.60">
+                <Image
+                    Width="80"
+                    Height="80"
+                    Source="/Assets/icons/icon_movie.png" />
+            </Button>
+
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>
