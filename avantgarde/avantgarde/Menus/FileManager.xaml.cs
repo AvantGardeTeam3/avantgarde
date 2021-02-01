@@ -310,6 +310,7 @@ namespace avantgarde.Menus
         private void cancel(object sender, RoutedEventArgs e)
         {
             Cancelled(this, EventArgs.Empty);
+            Close();
             //close();
         }
 
