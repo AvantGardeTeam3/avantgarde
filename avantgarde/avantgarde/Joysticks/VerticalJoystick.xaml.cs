@@ -113,19 +113,21 @@ namespace avantgarde.Joysticks
 
         private void GazeElement_StateChanged(object sender, Microsoft.Toolkit.Uwp.Input.GazeInteraction.StateChangedEventArgs e)
         {
-            if(e.PointerState == PointerState.Dwell)
+            if (e.PointerState == PointerState.Exit)
+            {
+                BallToCentre();
+                return;
+            }
+            else
             {
                 Button button = (Button)sender;
                 switch (button.Name)
                 {
                     case "UpKey":
-                        UpKeyInvoked(this, EventArgs.Empty);
+                        BallToUp();
                         break;
                     case "DownKey":
-                        DownKeyInvoked(this, EventArgs.Empty);
-                        break;
-                    case "MidKey":
-                        MiddleKeyInvoked(this, EventArgs.Empty);
+                        BallToDown();
                         break;
                 }
             }
