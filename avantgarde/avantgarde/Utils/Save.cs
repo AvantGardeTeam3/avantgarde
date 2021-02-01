@@ -16,7 +16,7 @@ namespace avantgarde.Utils
         {
             // need to clone instead of reference!!!
             BackgroundColor = background;
-            ColorPalettes = new AGColor[ColorPalettes.Length];
+            ColorPalettes = new AGColor[colorPalettes.Length];
             for(int i = 0; i < colorPalettes.Length; i++)
             {
                 ColorPalettes[i] = colorPalettes[i];
